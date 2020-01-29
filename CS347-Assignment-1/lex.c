@@ -9,7 +9,8 @@ char* lextext = ""; /* Lexeme (not '\0'
 int lexleng   = 0;  /* Lexeme length.           */
 int lexlineno = 0;  /* Input line number        */
 
-extern char* numorid;
+char numorid[1024];
+
 int lex(void){
 
   static char input_buffer[2048];
@@ -81,6 +82,8 @@ int lex(void){
 
           char temp_buffer[lexleng+1];
           memcpy(temp_buffer, lextext, lexleng);
+          memcpy(numorid, lextext, lexleng);
+          numorid[lexleng] = '\0';
           temp_buffer[lexleng] = '\0';
 
           if(!strcmp(temp_buffer, "if")) return IF;
@@ -89,9 +92,9 @@ int lex(void){
           if(!strcmp(temp_buffer, "do")) return DO;
           if(!strcmp(temp_buffer, "begin")) return BEGIN;
           if(!strcmp(temp_buffer, "end")) return END;
-          numorid = temp_buffer;
+          
           char* temp = lextext;
-          while(isnum(*temp))
+          while(isdigit(*temp))
           {
             temp++;
           }

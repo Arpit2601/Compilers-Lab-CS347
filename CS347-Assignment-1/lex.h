@@ -23,3 +23,4 @@
 extern char *lextext;		/* in lex.c			*/
 extern int lexleng;
 extern int lexlineno;
+extern char numorid[1024];
