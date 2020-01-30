@@ -3,11 +3,11 @@
 #include <ctype.h>
 #include <limits.h>
 #include "lex.h"
+//#include "lex.c"
 
 
-int main ()
+int main (void)
 {
-
   
   // FILE* fp_global =  fopen("symb.txt", "a+");
   FILE* fp2 =  fopen("./symb.txt", "w+");
@@ -16,7 +16,7 @@ int main ()
 	int token_class;
 	int id_num = 1;
 	FILE* fp ;
-  char* temp;
+  //char* temp;
 	while((token_class =lex()) != EOI){
 
       switch(token_class)
@@ -76,7 +76,8 @@ int main ()
         fprintf(fp_token,"<const,%s>",numorid);
         break;
         case ID:
-
+        {
+          char* temp;
           fp =  fopen("./symb.txt", "r");
           temp = lextext;
           char len[1024];
@@ -108,7 +109,8 @@ int main ()
 
             fprintf(fp_token, "< ID,%s >", token);
           }
-       	break;  
+       	break;
+       	}  
         default: break;
        }
 	}

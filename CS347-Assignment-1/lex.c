@@ -2,17 +2,16 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <limits.h>
+#include <string.h>
 
-
+char numorid[1024];
 char* lextext = ""; /* Lexeme (not '\0'
                       terminated)              */
 int lexleng   = 0;  /* Lexeme length.           */
 int lexlineno = 0;  /* Input line number        */
 
-char numorid[1024];
-
 int lex(void){
-
+ 
   static char input_buffer[2048];
   char * current;
 

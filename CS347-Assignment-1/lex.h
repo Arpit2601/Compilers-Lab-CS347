@@ -24,3 +24,8 @@ extern char *lextext;		/* in lex.c			*/
 extern int lexleng;
 extern int lexlineno;
 extern char numorid[1024];
+
+/*Function definition in lex.c */
+int lex(void);
+int match(int token);
+void advance(void);
