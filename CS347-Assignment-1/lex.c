@@ -10,7 +10,7 @@ char* lextext = ""; /* Lexeme (not '\0'
 int lexleng   = 0;  /* Lexeme length.           */
 int lexlineno = 0;  /* Input line number        */
 
-int lex(void){
+int lex(FILE* fp_token){
  
   static char input_buffer[2048];
   char * current;
@@ -63,8 +63,13 @@ int lex(void){
         case '=':
           return EQUAL;
         case '\n':
+          fprintf(fp_token, "\n");
+          break;
         case '\t':
+          fprintf(fp_token, "\t");
+          break;
         case ' ' :
+          fprintf(fp_token, " ");
           break;
         default:
         if(!isalnum(*current))
@@ -115,19 +120,19 @@ int lex(void){
 
 static int Lookahead = -1; /* Lookahead token  */
 
-int match(int token){
-   /* Return true if "token" matches the
-      current lookahead symbol.                */
+// int match(int token){
+//    /* Return true if "token" matches the
+//       current lookahead symbol.                */
 
-   if(Lookahead == -1)
-      Lookahead = lex();
+//    if(Lookahead == -1)
+//       Lookahead = lex(fp_token);
 
-   return token == Lookahead;
-}
+//    return token == Lookahead;
+// }
 
-void advance(void){
-/* Advance the lookahead to the next
-   input symbol.                               */
+// void advance(void){
+// /* Advance the lookahead to the next
+//    input symbol.                               */
 
-    Lookahead = lex();
-}
+//     Lookahead = lex();
+// }

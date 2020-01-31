@@ -6,18 +6,19 @@
 //#include "lex.c"
 
 
+
 int main (void)
 {
   
   // FILE* fp_global =  fopen("symb.txt", "a+");
   FILE* fp2 =  fopen("./symb.txt", "w+");
   fclose(fp2);
-  FILE* fp_token =  fopen("./token.txt", "a+");
+  FILE* fp_token =  fopen("./token.txt", "w+");
 	int token_class;
 	int id_num = 1;
 	FILE* fp ;
   //char* temp;
-	while((token_class =lex()) != EOI){
+	while((token_class =lex(fp_token)) != EOI){
 
       switch(token_class)
       {
@@ -106,7 +107,7 @@ int main (void)
           else{
             char* token;
             token = strtok(NULL, " ");
-
+            token[strlen(token)-1] = '\0';
             fprintf(fp_token, "< ID,%s >", token);
           }
        	break;

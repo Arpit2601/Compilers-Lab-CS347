@@ -1,3 +1,4 @@
+#include <stdio.h>
 #define EOI		0	/* End of input			*/
 #define SEMI		1	/* ; 				*/
 #define PLUS 		2	/* + 				*/
@@ -26,6 +27,6 @@ extern int lexlineno;
 extern char numorid[1024];
 
 /*Function definition in lex.c */
-int lex(void);
+int lex(FILE* fp_token);
 int match(int token);
 void advance(void);
