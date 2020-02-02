@@ -1,4 +1,4 @@
-a:=1;
+a :=1;
 b :=1;
 c :=3;
 while c > 0
@@ -6,4 +6,4 @@ while c > 0
     begin
         b := c/b;
         c := c - 3;
-        end
+    end

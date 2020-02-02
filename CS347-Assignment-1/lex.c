@@ -5,8 +5,7 @@
 #include <string.h>
 
 char numorid[1024];
-char* lextext = ""; /* Lexeme (not '\0'
-                      terminated)              */
+char* lextext = ""; /* Lexeme (not '\0' terminated)*/
 int lexleng   = 0;  /* Lexeme length.           */
 int lexlineno = 0;  /* Input line number        */
 
@@ -23,17 +22,20 @@ int lex(FILE* fp_token){
   {
     while(!*current)
     {
+      // Get the input from file
       if(!fgets(input_buffer, INT_MAX,stdin)){
         *current = '\0';
         return EOI;
       }
       current = input_buffer;
       ++lexlineno;
+      // remove spaces from beginning 
       while(isspace(*current))
       {
         ++current;
       }
     }
+    // Get the token class 
     for (; *current; ++current)
     {
       lextext = current;
@@ -78,6 +80,7 @@ int lex(FILE* fp_token){
         }
         else
         {
+          // Taking current to the end of current lexeme
           while(isalnum(*current))
           {
             current++;
@@ -97,6 +100,7 @@ int lex(FILE* fp_token){
           if(!strcmp(temp_buffer, "begin")) return BEGIN;
           if(!strcmp(temp_buffer, "end")) return END;
           
+          // Differentiate between Identifier and Constant (Integer)
           char* temp = lextext;
           while(isdigit(*temp))
           {
