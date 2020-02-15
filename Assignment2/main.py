@@ -36,21 +36,27 @@ def count_comments_type2():
 	input_file  = open("input.txt","r")
 	count  = 0
 	for l in input_file:
-		if(re.match('^.*\/\*',l)):
+		if(re.match('^.*?//.*\/\*',l)
+			continue
+		if(re.match('^.*?\/\*',l)):
 			count+=1
-			if(re.match('^.*\/\*.*\*\/',l)):
+			if(re.match('^.*?\/\*.*\*\/',l)):
 				continue
 			for l2 in input_file:
-				if(re.match('^.*\*\/',l2)):
+				if(re.match('^.*?//',l2)):
+					count-=1
+				if(re.match('^.*?\*\/',l2)):
 					count+=1
 					break
+				if(re.match('^.*//',l2)):
+					count = count
 				else:
 					count+=1
 	return count
 
 def count_variables():
 	input_file  = open("input.txt","r")
-	
+
 def count_function_declarations():
 	input_file  = open("input.txt","r")
 
