@@ -16,7 +16,7 @@ saldfjsj */
 int main()
 {
  /* statement_block */
-
+   int x=1;
  return 0;
 
 }

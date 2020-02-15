@@ -2,7 +2,7 @@ import re,sys
 
 
 # output_file = open()
-
+keyword = ['else','goto','return','typedef']
 def count_lines():
 	input_file  = open("input.txt","r")
 	for i, l in enumerate(input_file):
@@ -29,14 +29,14 @@ def count_comments_type1():
 	input_file  = open("input.txt","r")
 	count = 0
 	for l in input_file:
-		if(re.match('^.*//',l)):
+		if(re.match('^.*?//',l)):
 			count+=1
 	return count
 def count_comments_type2():
 	input_file  = open("input.txt","r")
 	count  = 0
 	for l in input_file:
-		if(re.match('^.*?//.*\/\*',l)
+		if(re.match('^.*?//.*\/\*',l)):
 			continue
 		if(re.match('^.*?\/\*',l)):
 			count+=1
@@ -56,6 +56,19 @@ def count_comments_type2():
 
 def count_variables():
 	input_file  = open("input.txt","r")
+	count=0
+	for l in input_file:
+		if(re.match('\b(?:(?:auto\s*|const\s*|unsigned\s*|extern\s*|signed\s*|register\s*|volatile\s*|static\s*|void\s*|short\s*|long\s*|char\s*|int\s*|float\s*|double\s*|_Bool\s*|complex\s*)+)(?:\s+\*?\*?\s*)([a-zA-Z_][a-zA-Z0-9_]*)\s*[\[;,=)]',l)):
+			flag=0
+			for y in keyword:
+				if y in re.match('\b(?:(?:auto\s*|const\s*|unsigned\s*|extern\s*|signed\s*|register\s*|volatile\s*|static\s*|void\s*|short\s*|long\s*|char\s*|int\s*|float\s*|double\s*|_Bool\s*|complex\s*)+)(?:\s+\*?\*?\s*)([a-zA-Z_][a-zA-Z0-9_]*)\s*[\[;,=)]',l).group().split(" "):
+					flag=1
+			if flag==0:
+				count+=1
+			# print(count)
+	
+	return count
+
 
 def count_function_declarations():
 	input_file  = open("input.txt","r")
@@ -78,6 +91,9 @@ def main():
 
 	number_of_comments2 = count_comments_type2()
 	print(number_of_comments2)
+
+	number_variables = count_variables()
+	print(number_variables)
 
 if __name__  == "__main__":
 	main()	
