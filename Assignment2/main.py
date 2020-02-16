@@ -9,14 +9,12 @@ def removestrings(text):
 
 # keyword = ['else','goto','return','typedef']
 def count_lines():
-	f1 = open(sys.argv[1])
+	input_file  = open(sys.argv[1],"r")
 	count=0
-	while True:
-		line = f1.readline()
-		count+=1
-		if ("" == line):
-			break
+	for l in input_file:
+			count+=1
 
+	input_file.close()
 	return count
 
 def count_blank_lines():
@@ -133,7 +131,7 @@ def count_function_declarations():
 	input_file = input_file.splitlines()
 	lines = []
 	for l in input_file:
-		if(not re.match('^[\ \t]*#[\ \t]*define',l)):
+		if(not re.match('^[\ \t]*#',l)):
 			lines.append(l)
 	f = "".join(lines)
 	new_f = ""
