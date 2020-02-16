@@ -5,14 +5,11 @@
 #define LP 4 /* ( */
 #define RP 5 /* ) */
 #define NUM_OR_ID 6 /* Decimal Number or Identifier */
-
 extern char *yytext; /* in lex.c */
 extern int yyleng;
 extern yylineno;
-
 // int x,
 //  y ;
- 
 int main()
 {
  /* statement_block */
@@ -21,10 +18,7 @@ int main()
  char* s = "//tio ";    /**/
  // "My name"
 }
-
-temp()
+int temp()
 {
-
-
 
 }

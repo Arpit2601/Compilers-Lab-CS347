@@ -9,12 +9,15 @@ def removestrings(text):
 
 # keyword = ['else','goto','return','typedef']
 def count_lines():
-	input_file  = open(sys.argv[1],"r")
-	for i, l in enumerate(input_file):
-		pass
-	
-	input_file.close()
-	return i + 1
+	f1 = open(sys.argv[1])
+	count=0
+	while True:
+		line = f1.readline()
+		count+=1
+		if ("" == line):
+			break
+
+	return count
 
 def count_blank_lines():
 	input_file  = open(sys.argv[1],"r")
