@@ -15,6 +15,16 @@ extern yylineno;		//temp comments
 saldfjsj */
 
 
+int sum(int a, int b);
+
+int sum(int a, int b){
+	
+	int k;
+	int z;
+	return(a+b);
+}
+
+
 
 int main()
 {
