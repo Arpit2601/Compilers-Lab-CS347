@@ -7,7 +7,12 @@ def removecomments(text):
 def removestrings(text):
 	return re.sub('\'.*?\'|\".*?\"', '', text, flags=re.S|re.M)
 
-
+def get_line_num(f, index):
+    c = len(f.splitlines())
+    for x in range(0,c):
+        if len("\n".join(f.splitlines()[0:x+1])) >= index:
+            return x
+    return 0
 # output_file = open()
 keyword = ['else','goto','return','typedef']
 def count_lines():
@@ -66,7 +71,7 @@ def count_variables():
 	input_file=removestrings(input_file)
 	input_file=removecomments(input_file)
 	input_file = input_file.splitlines()
-	print (input_file)
+	# print (input_file)
 	count=0
 	for l in input_file:
 		if(re.match('^.*(auto\s*|const\s*|unsigned\s*|extern\s*|signed\s*|register\s*|volatile\s*|static\s*|void\s*|short\s*|long\s*|char\s*|int\s*|float\s*|double\s*|_Bool\s*|complex\s*)(\s+\*?\*?\s*)([a-zA-Z_][a-zA-Z0-9_]*)\s*[\[;,=)]',l)):
@@ -77,10 +82,27 @@ def count_variables():
 
 def count_function_declarations():
 	input_file  = open("input.txt","r")
+	input_file  = open("temp.c").read()
+	input_file=removestrings(input_file)
+	input_file=removecomments(input_file)
+	input_file = input_file.splitlines()
+	f = "".join(input_file)
+	
+	pattern = func_pattern_def = re.compile(r'(([a-zA-Z_][a-zA-Z_0-9]*[\ \*]*?){2,}\(([^!@#$+%^;{}]*?)\)(?!\s*;))[\s]*{', re.MULTILINE|re.DOTALL)
+	
+	return len(re.findall(pattern, f))
 
 def count_function_definitions():
-	input_file  = open("input.txt","r")
-
+	input_file  = open("temp.c").read()
+	input_file=removestrings(input_file)
+	input_file=removecomments(input_file)
+	input_file = input_file.splitlines()
+	f = "".join(input_file)
+	
+	pattern = re.compile(r'(([a-zA-Z_][a-zA-Z_0-9]*[\ \*]*?){2,}\(([^!@#$+%^;\{\}]*?)\)(?!\s*;))', re.MULTILINE|re.DOTALL)
+	pattern2 = re.compile(r'(=\s*([a-zA-Z_][a-zA-Z_0-9]*[\ \*]*?){2,}\(([^!@#$+%^;\{\}]*?)\)(?!\s*;))', re.MULTILINE|re.DOTALL)
+	return len(re.findall(pattern, f)) - len(re.findall(pattern2, f))
+	
 def main():
 	# number_of_lines = count_lines()
 	# print(number_of_lines)
@@ -99,6 +121,12 @@ def main():
 
 	number_variables = count_variables()
 	print(number_variables)
+
+	number_of_func_def = count_function_definitions()
+	print(number_of_func_def)
+
+	number_of_func_declaration = count_function_declarations()
+	print(number_of_func_declaration)
 
 if __name__  == "__main__":
 	main()	
