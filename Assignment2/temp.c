@@ -2,6 +2,9 @@
 #define EOI 0       /* End of input 
 this is to test multile comments
 //this is great */
+#define EOI 0       /* End of input    \
+      this is to test multile comments \
+      // this is great */
 #define SEMI 1      /* ; */
 #define PLUS 2      /* + */
 #define TIMES 3     /* * */
@@ -18,6 +21,14 @@ extern int yyleng;
 // int foo(
 
 // );
+
+enum week{Mon, Tue, Wed, Thur, Fri, Sat, Sun}; 
+
+int fo(int a, int b);
+
+int foo(
+    
+);
 int func(
 
 )
@@ -47,6 +58,8 @@ int main()
     char c = '\n';
 
     // int temp = fo(1, 2);
+    enum week day=Wed;
+    int temp = fo(1, 2);
     
     return 0;
 }
