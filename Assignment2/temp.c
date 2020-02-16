@@ -1,3 +1,4 @@
+#include<stdio.h>
 #define EOI 0       /* End of input    \
       this is to test multile comments \
       // this is great */
@@ -12,10 +13,12 @@ extern char *yytext; /* in lex.c */
 extern int yyleng;
 extern yylineno; //temp comments
 
+enum week{Mon, Tue, Wed, Thur, Fri, Sat, Sun}; 
+
 int fo(int a, int b);
 
 int foo(
-
+    
 );
 int func(
 
@@ -33,7 +36,7 @@ int main()
     char *k = "sdad  \
                     asd";
     char c = '\n';
-
+    enum week day=Wed;
     int temp = fo(1, 2);
     return 0;
 }
