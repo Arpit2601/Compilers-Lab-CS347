@@ -31,12 +31,20 @@ static char f1(
 );
 int main()
 {
-    /* statement_block */
-    char *s = "asdasdasdad";
-    char *k = "sdad  \
-                    asd";
+    /* statement_block */ /*fsdlfjd
+
+    fsldfjsldfj
+
+    sdfsdfklj
+
+    *//*dfljfljdkjlskdjl*//*fkdljsfksjlf*//*
+    fdskfjshfkj
+    */
+    char* s = "asdasdasdad";
+   
     char c = '\n';
     enum week day=Wed;
     int temp = fo(1, 2);
+    
     return 0;
 }

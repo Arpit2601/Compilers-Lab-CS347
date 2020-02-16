@@ -1,35 +1,30 @@
-#define EOI 0 /* End of input 
-this is to test multile comments
-//this is great */
+#define EOI 0 /* End of input */
 #define SEMI 1 /* ; */
 #define PLUS 2 /* + */
 #define TIMES 3 /* * */
 #define LP 4 /* ( */
 #define RP 5 /* ) */
 #define NUM_OR_ID 6 /* Decimal Number or Identifier */
-   // /* // /*
+
 extern char *yytext; /* in lex.c */
 extern int yyleng;
-extern yylineno;		//temp comments
-// /*
-saldfjsj */
+extern yylineno;
 
-
-int sum(int a, int b);
-
-int sum(int a, int b){
-	
-	int k;
-	int z;
-	return(a+b);
-}
-
-
-
+// int x,
+//  y ;
+ 
 int main()
 {
  /* statement_block */
-   int x=1;
+    char * * temp;
  return 0;
+ char* s = "//tio ";    /**/
+ // "My name"
+}
+
+temp()
+{
+
+
 
 }
