@@ -1,6 +1,13 @@
 import re,sys
 
 
+def removecomments(text):
+    return re.sub('//.*?\n|/\*.*?\*/', '', text, flags=re.S|re.M)
+
+def removestrings(text):
+	return re.sub('\'.*?\'|\".*?\"', '', text, flags=re.S|re.M)
+
+
 # output_file = open()
 keyword = ['else','goto','return','typedef']
 def count_lines():
@@ -55,7 +62,11 @@ def count_comments_type2():
 	return count
 
 def count_variables():
-	input_file  = open("input.txt","r")
+	input_file  = open("temp.c").read()
+	input_file=removestrings(input_file)
+	input_file=removecomments(input_file)
+	input_file = input_file.splitlines()
+	print (input_file)
 	count=0
 	for l in input_file:
 		if(re.match('\b(?:(?:auto\s*|const\s*|unsigned\s*|extern\s*|signed\s*|register\s*|volatile\s*|static\s*|void\s*|short\s*|long\s*|char\s*|int\s*|float\s*|double\s*|_Bool\s*|complex\s*)+)(?:\s+\*?\*?\s*)([a-zA-Z_][a-zA-Z0-9_]*)\s*[\[;,=)]',l)):

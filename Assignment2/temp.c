@@ -15,7 +15,10 @@ extern yylineno;		//temp comments
 int main()
 {
  /* statement_block */
-
- return 0;
+     char * s = "asdasdasdad";
+     char * k = "sdad  \
+                    asd";
+        char c = '\n';
+    return 0;
 
 }
