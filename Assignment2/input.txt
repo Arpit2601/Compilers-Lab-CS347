@@ -11,18 +11,43 @@ this is to test multile comments
 extern char *yytext; /* in lex.c */
 extern int yyleng;
 extern yylineno;		//temp comments
-// /*
-saldfjsj */
+// /* saldfjsj */ /*                      */ /* /*   */      */ 
+
+/*   ////    */  // 
+//
+
+int sum(int a, int b); 
 
 
-int sum(int a, int b);
+void temp(int k, int b);
+
+
+void temp(int k, int b){
+	int a;
+	if (a == b){
+		printf("This is the string");
+	}
+
+
+	for(int i = 0; i < 10; i++){
+		printf("Yay");
+	}
+}
+
 
 int sum(int a, int b){
 	
 	int k;
 	int z;
+
 	return(a+b);
 }
+
+				
+
+
+
+
 
 
 

@@ -114,9 +114,9 @@ def count_variables():
 	# print (input_file)
 	count=0
 	for l in input_file:
-		if(re.match('^.*(auto\s*|const\s*|unsigned\s*|extern\s*|signed\s*|register\s*|volatile\s*|static\s*|void\s*|short\s*|long\s*|char\s*|int\s*|float\s*|double\s*|_Bool\s*|complex\s*)[\s\*]*([a-zA-Z_][a-zA-Z0-9_]*)\s*[\[;,=)]',l)):
+		if(re.match('^.*(auto\s*|const\s*|unsigned\s*|extern\s*|signed\s*|register\s*|volatile\s*|static\s*|void\s*|short\s*|long\s*|char\s*|int\s*|float\s*|double\s*|_Bool\s*|complex\s*)[\s\*]*([a-zA-Z_][a-zA-Z0-9_]*)\s*[\[;,=\)]',l)):
 			count+=1
-		if (re.match('^.*(struct\s*|union\s*|enum\s*)([a-zA-Z_][a-zA-Z_0-9]*\s*)([a-zA-Z_][a-zA-Z_0-9]*\s*)[=,;]',l)):
+		if (re.match('^.*(struct\s*|union\s*|enum\s*)([a-zA-Z_][a-zA-Z_0-9]*\s*)([a-zA-Z_][a-zA-Z_0-9]*\s*)[=,;\[\)]',l)):
 			count+=1
 	return count
 
@@ -182,10 +182,10 @@ def main():
 	number_of_macros = count_macro()
 	# print(number_of_macros)
 
-	number_of_comments1 = count_comments_type1()
-	# print(number_of_comments1)
+	# number_of_comments1 = count_comments_type1()
+	# # print(number_of_comments1)
 
-	number_of_comments2 = count_comments_type2()
+	# number_of_comments2 = count_comments_type2()
 	# print(number_of_comments2)
 
 	# total_comments = number_of_comments1+number_of_comments2

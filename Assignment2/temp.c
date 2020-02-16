@@ -1,6 +1,7 @@
-#define EOI 0       /* End of input    \
-      this is to test multile comments \
-      // this is great */
+#include<stdio.h>
+#define EOI 0       /* End of input 
+this is to test multile comments
+//this is great */
 #define SEMI 1      /* ; */
 #define PLUS 2      /* + */
 #define TIMES 3     /* * */
@@ -10,13 +11,13 @@
 
 extern char *yytext; /* in lex.c */
 extern int yyleng;
-extern yylineno; //temp comments
+//extern yylineno; //temp comments
 
-int fo(int a, int b);
+// int fo(int a, int b);
 
-int foo(
+// int foo(
 
-);
+// );
 int func(
 
 )
@@ -37,11 +38,15 @@ int main()
     *//*dfljfljdkjlskdjl*//*fkdljsfksjlf*//*
     fdskfjshfkj
     */
+    int x,(y);
+    (y) = 10;
+    y=10;
+    printf("%d %d\n",(y), y );
     char* s = "asdasdasdad";
    
     char c = '\n';
 
-    int temp = fo(1, 2);
+    // int temp = fo(1, 2);
     
     return 0;
 }
