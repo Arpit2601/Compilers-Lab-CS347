@@ -170,16 +170,12 @@ def count_function_definitions():
 	input_file = input_file.splitlines()
 	f = "".join(input_file)
 	pattern = re.compile(r'(([a-zA-Z_][a-zA-Z_0-9]*[\ \*]+?)([a-zA-Z_][a-zA-Z_0-9]*[\ \*]*?){1,}\(([^!@#$+%^;\{\}\/\-\=\<\>\|\&\[\:\]]*?)\)(?!\s*;))[\s]*{', re.MULTILINE|re.DOTALL)
-	list = re.findall(pattern,f)
+	match_list = re.findall(pattern,f)
 	count = 0
-	for mt in list:
-		# if "else if" in mt
+	for mt in match_list:
 		if(not re.search(r'else\s+if', mt[0])):
 			count+=1
-	return len(re.findall(pattern, f))
-	
-# func_pattern_dec = re.compile(r'(([a-zA-Z_][a-zA-Z_0-9]*[\ \*]*?){2,}\(([^!@#$+%^;\{\}]*?)\)\s*?;)', re.MULTILINE| re.DOTALL)
-
+	return count
 
 def main():
 	
