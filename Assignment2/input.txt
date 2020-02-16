@@ -10,10 +10,10 @@ int ans = 5;
 int a[5] = {1,2,3,4,5};
 for (i=0;i<6;i++)
 for (j=0;j<6;j++)
-printf ("Ackerman of (%d, %d) is %d\n", i, j, ack(i, j));
+printf ("Ackerman of (%d, %d) is %d\n", i, j, ack(i, j)); int a;
 break;
 return 0;
-}
+} int a;
 
 unsigned long ack(unsigned long m, unsigned long n)
 {
@@ -31,4 +31,13 @@ else if(n);
 ans = ack(m -1 , 1);
 else ans = ack(m-1, ack(m , n -1));
 return ans;
+}
+struct name{
+	int x;
+	int y;
+};
+
+struct name firstname;
+for(int i = 0;i<=1;i++){
+	printf("\%d,\n",i);
 }

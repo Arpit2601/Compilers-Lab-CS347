@@ -114,13 +114,17 @@ def count_variables():
 	input_file = input_file.splitlines()
 	# print (input_file)
 	
+	pattern = re.compile(r'^\s*(auto\s*|const\s*|unsigned\s*|extern\s*|signed\s*|register\s*|volatile\s*|static\s*|void\s*|short\s*|long\s*|char\s*|int\s*|float\s*|double\s*|_Bool\s*|complex\s*|bool\s*)[\s\*]*([a-zA-Z_][a-zA-Z0-9_]*[\s\*]?)*\s*[\[;,=]')
+	pattern2 = re.compile(r'^\s*(struct\s*|union\s*|enum\s*)([a-zA-Z_][a-zA-Z_0-9]*[\s\*]?)([a-zA-Z_][a-zA-Z_0-9]*[\s\*]*)*[=,;\[]')
+	pattern3 = re.compile(r'[;\}]\s*(auto\s*|const\s*|unsigned\s*|extern\s*|signed\s*|register\s*|volatile\s*|static\s*|void\s*|short\s*|long\s*|char\s*|int\s*|float\s*|double\s*|_Bool\s*|complex\s*|bool\s*)[\s\*]*([a-zA-Z_][a-zA-Z0-9_]*[\s\*]?)*\s*[\[;,=]')
+	pattern4 = re.compile(r'[;\}]\s*(struct\s*|union\s*|enum\s*)([a-zA-Z_][a-zA-Z_0-9]*[\s\*]?)([a-zA-Z_][a-zA-Z_0-9]*[\s\*]*)*[=,;\[]')
+	pattern5 = re.compile(r'for[\ \t]*\([\ \t]*(auto\s*|const\s*|unsigned\s*|extern\s*|signed\s*|register\s*|volatile\s*|static\s*|void\s*|short\s*|long\s*|char\s*|int\s*|float\s*|double\s*|_Bool\s*|complex\s*|bool\s*)')
+	
 	count=0
 	for l in input_file:
-
-		if(re.match('^.*(auto\s*|const\s*|unsigned\s*|extern\s*|signed\s*|register\s*|volatile\s*|static\s*|void\s*|short\s*|long\s*|char\s*|int\s*|float\s*|double\s*|_Bool\s*|complex\s*|bool\s*)[\s\*]*([a-zA-Z_][a-zA-Z0-9_]*)\s*[\[;,=\)]',l)):
+		if(re.match(pattern,l) or re.match(pattern2,l) or re.search(pattern3,l) or re.search(pattern4,l) or re.search(pattern5,l)):
 			count+=1
-		if (re.match('^.*(struct\s*|union\s*|enum\s*)([a-zA-Z_][a-zA-Z_0-9]*[\s\*]*)([a-zA-Z_][a-zA-Z_0-9]*\s*)[=,;\[\)]',l)):
-			count+=1
+		
 	return count
 
 
