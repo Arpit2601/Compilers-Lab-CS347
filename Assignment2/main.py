@@ -145,7 +145,7 @@ def count_function_declarations():
 			new_f+= "\n"
 
 	new_f = new_f.splitlines()
-	pattern = re.compile(r'(([\t\ ]*[a-zA-Z_][a-zA-Z_0-9]*[\ \*]+?)([a-zA-Z_][a-zA-Z_0-9]*[\ \*]*?){1,}\(([^!@#$+%^;\{\}\*\/\-\=\<\>\|\&\[\:\]]*?)\)\s*?;)')
+	pattern = re.compile(r'(([\t\ ]*[a-zA-Z_][a-zA-Z_0-9]*[\ \*]+?)([a-zA-Z_][a-zA-Z_0-9]*[\ \*]*?){1,}\(([^!@#$+%^;\{\}\/\-\=\<\>\|\&\[\:\]]*?)\)\s*?;)')
 	count = 0
 	for l in new_f:
 		# print(l)
@@ -160,7 +160,7 @@ def count_function_definitions():
 	input_file=removecomments(input_file)
 	input_file = input_file.splitlines()
 	f = "".join(input_file)
-	pattern = re.compile(r'(([a-zA-Z_][a-zA-Z_0-9]*[\ \*]+?)([a-zA-Z_][a-zA-Z_0-9]*[\ \*]*?){1,}\(([^!@#$+%^;\{\}\*\/\-\=\<\>\|\&\[\:\]]*?)\)(?!\s*;))[\s]*{', re.MULTILINE|re.DOTALL)
+	pattern = re.compile(r'(([a-zA-Z_][a-zA-Z_0-9]*[\ \*]+?)([a-zA-Z_][a-zA-Z_0-9]*[\ \*]*?){1,}\(([^!@#$+%^;\{\}\/\-\=\<\>\|\&\[\:\]]*?)\)(?!\s*;))[\s]*{', re.MULTILINE|re.DOTALL)
 	
 
 	return len(re.findall(pattern, f))
