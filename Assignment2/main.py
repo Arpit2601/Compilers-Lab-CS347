@@ -7,7 +7,6 @@ def removecomments(text):
 def removestrings(text):
 	return re.sub('\'.*?\'|\".*?\"', '', text, flags=re.S|re.M)
 
-# keyword = ['else','goto','return','typedef']
 def count_lines():
 	input_file  = open(sys.argv[1],"r")
 	count=0
@@ -37,37 +36,7 @@ def count_macro():
 	input_file.close()
 	return count
 
-# def count_comments_type1():
-# 	input_file  = open(sys.argv[1],"r")
-# 	count = 0
-# 	for l in input_file:
-# 		if(re.match('^.*?//',l)):
-# 			count+=1
-# 	input_file.close()
-# 	return count
 
-# def count_comments_type2():
-# 	input_file  = open(sys.argv[1],"r")
-# 	count  = 0
-# 	for l in input_file:
-# 		if(re.match('^.*?//.*\/\*',l)):
-# 			continue
-# 		if(re.match('^.*?\/\*',l)):
-# 			count+=1
-# 			if(re.match('^.*?\/\*.*\*\/',l)):
-# 				continue
-# 			for l2 in input_file:
-# 				if(re.match('^.*?//',l2)):
-# 					count-=1
-# 				if(re.match('^.*?\*\/',l2)):
-# 					count+=1
-# 					break
-# 				if(re.match('^.*//',l2)):
-# 					count = count
-# 				else:
-# 					count+=1
-# 	input_file.close()
-# 	return count
 
 def count_comments():
 	with open(sys.argv[1]) as file:
@@ -186,32 +155,18 @@ def main():
 	out_file = open(sys.argv[2],'w')
 	
 	number_of_lines = count_lines()
-	# print(number_of_lines)
 
 	number_of_blank_lines = count_blank_lines()
-	# print(number_of_blank_lines)
 
 	number_of_macros = count_macro()
-	# print(number_of_macros)
-
-	# number_of_comments1 = count_comments_type1()
-
-
-	# number_of_comments2 = count_comments_type2()
-	# print(number_of_comments2)
-
-	# total_comments = number_of_comments1+number_of_comments2
 
 	total_comments = count_comments()
 
 	number_variables = count_variables()
-	# print(number_variables)
 
 	number_of_func_def = count_function_definitions()
-	# print(number_of_func_def)
 
 	number_of_func_declaration = count_function_declarations()
-	# print(number_of_func_declaration)
 
 	out_file.write("1) Source code statements : " + str(number_of_lines) + "\n")
 	out_file.write("2) Comments               : " + str(total_comments) + "\n")
