@@ -22,6 +22,10 @@ int func(
 )
 {
 }
+
+char f1(
+
+);
 int main()
 {
     /* statement_block */
