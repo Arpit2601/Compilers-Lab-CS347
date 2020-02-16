@@ -149,8 +149,14 @@ def count_function_declarations():
 	count = 0
 	for l in new_f:
 		# print(l)
+		flag = 0
 		if(re.match(pattern,l)):
-			count+=1
+			if "return" in re.match(pattern,l).group().split(" "):
+				flag = 1
+			if(re.search(r'else\s+if', l)):
+				flag = 1
+			if(flag == 0):
+				count+=1
 	return count
 	
 
@@ -161,8 +167,12 @@ def count_function_definitions():
 	input_file = input_file.splitlines()
 	f = "".join(input_file)
 	pattern = re.compile(r'(([a-zA-Z_][a-zA-Z_0-9]*[\ \*]+?)([a-zA-Z_][a-zA-Z_0-9]*[\ \*]*?){1,}\(([^!@#$+%^;\{\}\/\-\=\<\>\|\&\[\:\]]*?)\)(?!\s*;))[\s]*{', re.MULTILINE|re.DOTALL)
-	
-
+	list = re.findall(pattern,f)
+	count = 0
+	for mt in list:
+		# if "else if" in mt
+		if(not re.search(r'else\s+if', mt[0])):
+			count+=1
 	return len(re.findall(pattern, f))
 	
 # func_pattern_dec = re.compile(r'(([a-zA-Z_][a-zA-Z_0-9]*[\ \*]*?){2,}\(([^!@#$+%^;\{\}]*?)\)\s*?;)', re.MULTILINE| re.DOTALL)

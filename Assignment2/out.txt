@@ -1,7 +1,7 @@
-1) Source code statements : 28
+1) Source code statements : 34
 2) Comments               : 0
-3) Blank Lines            : 5
+3) Blank Lines            : 8
 4) Macro Definitions      : 0
-5) Variable Declarations  : 6
+5) Variable Declarations  : 7
 6) Function Declarations  : 1
 7) Function Definitions   : 2
