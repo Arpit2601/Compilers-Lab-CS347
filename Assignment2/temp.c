@@ -23,7 +23,7 @@ int func(
 {
 }
 
-char f1(
+static char f1(
 
 );
 int main()

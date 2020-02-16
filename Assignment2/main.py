@@ -87,9 +87,9 @@ def count_function_declarations():
 	input_file=removecomments(input_file)
 	input_file = input_file.splitlines()
 	f = "".join(input_file)
-	
-	pattern = re.compile(r'(([a-zA-Z_][a-zA-Z_0-9]*[\ \*]*?){2,}\(([^!@#$+%^;\{\}]*?)\)(?!\s*;))', re.MULTILINE|re.DOTALL)
-	pattern2 = re.compile(r'(=\s*([a-zA-Z_][a-zA-Z_0-9]*[\ \*]*?){2,}\(([^!@#$+%^;\{\}]*?)\)(?!\s*;))', re.MULTILINE|re.DOTALL)
+
+	pattern = re.compile(r'(([a-zA-Z_][a-zA-Z_0-9]*[\ \*]*?){2,}\(([^!@#$+%^;\{\}]*?)\)\s*?;)', re.MULTILINE| re.DOTALL)
+	pattern2 = re.compile(r'((=\s*[a-zA-Z_][a-zA-Z_0-9]*[\ \*]*?){1,}\(([^!@#$+%^;\{\}]*?)\)\s*?;)', re.MULTILINE| re.DOTALL)
 	
 	return len(re.findall(pattern, f)) - len(re.findall(pattern2, f))
 	
@@ -138,7 +138,7 @@ def main():
 	# print(number_of_func_def)
 
 	number_of_func_declaration = count_function_declarations()
-	print(number_of_func_declaration)
+	# print(number_of_func_declaration)
 
 	out_file.write("1) Source code statements : " + str(number_of_lines) + "\n")
 	out_file.write("2) Comments               : " + str(total_comments) + "\n")
