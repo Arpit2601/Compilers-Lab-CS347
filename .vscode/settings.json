@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "*.sm": "csharp",
+        "*.l": "cpp"
+    }
+}
