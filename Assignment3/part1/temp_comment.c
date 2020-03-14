@@ -1,4 +1,4 @@
-// Fibonacci Series using Recursion 
+
 #include <stdio.h> 
 int fib(int n) 
 { 
@@ -10,7 +10,7 @@ int fib(int n)
 int main() 
 { 
     int n = 9; 
-    printf("%d", fib(n)); 
+    printf(, fib(n)); 
     getchar(); 
     return 0; 
 } 

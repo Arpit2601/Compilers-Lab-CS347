@@ -47,7 +47,7 @@ sp [ ]|\t
 
 <count_macro>#[\ \t]*define	                        {no_of_macros++;}
 
-<count_variable>^{sp}*(auto{sp}*|const{sp}*|unsigned{sp}*|extern{sp}*|signed{sp}*|register{sp}*|volatile{sp}*|static{sp}*|void{sp}*|short{sp}*|long{sp}*|char{sp}*|int{sp}*|float{sp}*|double{sp}*|_Bool{sp}*|complex{sp}*|bool{sp}*)([\*]*{sp}*)*([a-zA-Z_][a-zA-Z0-9_]*([\*]*{sp}*)*)*({sp}|\n)*[\[;,=] no_of_variables++;
+<count_variable>^{sp}*(FILE{sp}*|auto{sp}*|const{sp}*|unsigned{sp}*|extern{sp}*|signed{sp}*|register{sp}*|volatile{sp}*|static{sp}*|void{sp}*|short{sp}*|long{sp}*|char{sp}*|int{sp}*|float{sp}*|double{sp}*|_Bool{sp}*|complex{sp}*|bool{sp}*)([\*]*{sp}*)*([a-zA-Z_][a-zA-Z0-9_]*([\*]*{sp}*)*)*({sp}|\n)*[\[;,=] no_of_variables++;
 <count_variable>^{sp}*(struct{sp}*|union{sp}*|enum{sp}*)([a-zA-Z_][a-zA-Z_0-9]*([\*]*{sp}*)*)([a-zA-Z_][a-zA-Z_0-9]*([\*]*{sp}*)*)*[=,;\[]     no_of_variables++;
 <count_variable>for[\ \t]*\([\ \t]*(auto{sp}*|const{sp}*|unsigned{sp}*|extern{sp}*|signed{sp}*|register{sp}*|volatile{sp}*|static{sp}*|void{sp}*|short{sp}*|long{sp}*|char{sp}*|int{sp}*|float{sp}*|double{sp}*|_Bool{sp}*|complex{sp}*|bool{sp}*)       no_of_variables++;
 
