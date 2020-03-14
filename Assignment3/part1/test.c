@@ -1,27 +1,21 @@
-#define EOI 0 /* End of input */
-#define SEMI 1 /* ; */
-/**/#define PLUS 2 /* + #define*/ // /* */
-#define TIMES 3 //
-#define LP 4   #define /*/**/ 
-#define RP 5 /* ) */
-#define NUM_OR_ID 6 /* Decimal Number or Identifier */ /**//**/
-extern char *yytext; /* in lex.c */
-extern int yyleng; 
-extern yylineno;
-// int x,
-//  y ;
-int main()
-{
- /* statement_
- 
- #define
-  block */
-    char * * temp;
- return 0;    
- // "My name"
-}
-
-int temp()
-{
-
+#include <stdio.h> 
+  
+// Declaration of union is same as structures 
+union test { 
+    int x, y; 
+}; 
+  
+int main() 
+{ 
+    // A union variable t 
+    union test t; 
+  
+    t.x = 2; // t.y also gets value 2 
+    printf("After making x = 2:\n x = %d, y = %d\n\n", 
+           t.x, t.y); 
+  
+    t.y = 10; // t.x is also updated to 10 
+    printf("After making y = 10:\n x = %d, y = %d\n\n", 
+           t.x, t.y); 
+    return 0; 
 } 

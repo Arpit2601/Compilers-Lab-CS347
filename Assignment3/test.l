@@ -2,38 +2,13 @@
 int count = 0; 
 %} 
 
-/*** Rule Section has three rules, first rule 
-matches with capital letters, second rule 
-matches with any character except newline and 
-third rule does not take input after the enter***/
 %% 
-[A-Z] {printf("%s capital letter\n", yytext); 
-	count++;} 
-.	 {printf("%s not a capital letter\n", yytext);} 
-\n {return 0;} 
+test[ ]*boy  printf("asdads"); 
 %% 
 
-/*** Code Section prints the number of 
-capital letter present in the given input***/
 int yywrap(){} 
 int main(){ 
 
-// Explanation: 
-// yywrap() - wraps the above rule section 
-/* yyin - takes the file pointer 
-		which contains the input*/
-/* yylex() - this is the main flex function 
-		which runs the Rule Section*/
-// yytext is the text in the buffer 
-
-// Uncomment the lines below 
-// to take input from file 
-// FILE *fp; 
-// char filename[50]; 
-// printf("Enter the filename: \n"); 
-// scanf("%s",filename); 
-// fp = fopen(filename,"r"); 
-// yyin = fp; 
 
 yylex(); 
 printf("\nNumber of Captial letters "
@@ -41,3 +16,10 @@ printf("\nNumber of Captial letters "
 
 return 0; 
 } 
+
+<count_variable>^{sp}*(auto{sp}*|const{sp}*|unsigned{sp}*|extern{sp}*|signed{sp}*|register{sp}*|volatile{sp}*|static{sp}*|void{sp}*|short{sp}*|long{sp}*|char{sp}*|int{sp}*|float{sp}*|double{sp}*|_Bool{sp}*|complex{sp}*|bool{sp}*)[{sp}\*]*([a-zA-Z_][a-zA-Z0-9_]*[{sp}\*]*)*{sp}*[\[;,=] no_of_variables++;
+<count_variable>^{sp}*(struct{sp}*|union{sp}*|enum{sp}*)([a-zA-Z_][a-zA-Z_0-9]*[{sp}\*]*)([a-zA-Z_][a-zA-Z_0-9]*[{sp}\*]*)*[=,;\[]     no_of_variables++;
+<count_variable>[;\}]{sp}*(auto{sp}*|const{sp}*|unsigned{sp}*|extern{sp}*|signed{sp}*|register{sp}*|volatile{sp}*|static{sp}*|void{sp}*|short{sp}*|long{sp}*|char{sp}*|int{sp}*|float{sp}*|double{sp}*|_Bool{sp}*|complex{sp}*|bool{sp}*)[{sp}\*]*([a-zA-Z_][a-zA-Z0-9_]*[{sp}\*]*)*{sp}*[\[;,=]        no_of_variables++;
+<count_variable>[;\}]{sp}*(struct{sp}*|union{sp}*|enum{sp}*)([a-zA-Z_][a-zA-Z_0-9]*[{sp}\*]*)([a-zA-Z_][a-zA-Z_0-9]*[{sp}\*]*)*[=,;\[] no_of_variables++;
+<count_variable>for[\ \t]*\([\ \t]*(auto{sp}*|const{sp}*|unsigned{sp}*|extern{sp}*|signed{sp}*|register{sp}*|volatile{sp}*|static{sp}*|void{sp}*|short{sp}*|long{sp}*|char{sp}*|int{sp}*|float{sp}*|double{sp}*|_Bool{sp}*|complex{sp}*|bool{sp}*)       no_of_variables++;
+
