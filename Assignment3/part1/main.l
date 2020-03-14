@@ -9,18 +9,22 @@
     int no_of_variables = 0;
     int no_of_func_dec = 0;
     int no_of_func_def = 0;
-    char * temp_string="";
-    int flag = 0;
+    int count=0;
     FILE *temp;
 %}
 
 sp [ ]|\t
 
 %s count_lines count_blank count_comment count_comment_initial remove_string remove_string_found 
-%s remove_comment remove_comment_found count_macro count_variable count_func_def count_func_dec
+%s remove_comment remove_comment_found count_macro count_variable count_func_def count_func_dec func_found
+%s in_comment
 %%
 
-<remove_string>\"|\'                                {BEGIN(remove_string_found);flag = 1; temp_string=temp_string+*yytext;}
+<remove_string>"/*"                                 {fwrite( yytext, (size_t) yyleng, 1, temp );BEGIN(in_comment);}
+<in_comment>"*/"                                    {fwrite( yytext, (size_t) yyleng, 1, temp );BEGIN(remove_string);}
+<in_comment>.|\n                                    {fwrite( yytext, (size_t) yyleng, 1, temp );}
+<remove_string>"//"[^\n]*                           {fwrite( yytext, (size_t) yyleng, 1, temp );}
+<remove_string>\"|\'                                {BEGIN(remove_string_found);}
 <remove_string_found>\"|\'                          {BEGIN(remove_string);}
 <remove_string_found>.                              ;
 <remove_string_found>\n                             {fwrite( yytext, (size_t) yyleng, 1, temp );}
@@ -51,7 +55,9 @@ sp [ ]|\t
 <count_variable>^{sp}*(struct{sp}*|union{sp}*|enum{sp}*)([a-zA-Z_][a-zA-Z_0-9]*([\*]*{sp}*)*)([a-zA-Z_][a-zA-Z_0-9]*([\*]*{sp}*)*)*[=,;\[]     no_of_variables++;
 <count_variable>for[\ \t]*\([\ \t]*(auto{sp}*|const{sp}*|unsigned{sp}*|extern{sp}*|signed{sp}*|register{sp}*|volatile{sp}*|static{sp}*|void{sp}*|short{sp}*|long{sp}*|char{sp}*|int{sp}*|float{sp}*|double{sp}*|_Bool{sp}*|complex{sp}*|bool{sp}*)       no_of_variables++;
 
-<count_func_def>([a-zA-Z_][a-zA-Z_0-9]*([\*]|{sp})+)([a-zA-Z_][a-zA-Z_0-9]*([\*]*{sp}*)*)+\(([^!@#$+%^;\{\}\/\-\=\<\>\|\&\[\:\]]*)\)({sp}|\n)*\{        {no_of_func_def++;}
+<count_func_def>([a-zA-Z_][a-zA-Z_0-9]*([\*]|{sp})+)([a-zA-Z_][a-zA-Z_0-9]*([\*]*{sp}*)*)+\(([^!@#$+%^;\{\}\/\-\=\<\>\|\&\[\:\]]*)\)({sp}|\n)*\{        {no_of_func_def++;BEGIN(func_found);count= 1;}
+<func_found>\{  count++;
+<func_found>\}  {count--; if(count==0) BEGIN(count_func_def);}
 
 <count_func_dec>(([\t\ ]*[a-zA-Z_][a-zA-Z_0-9]*([\*]|{sp})+)([a-zA-Z_][a-zA-Z_0-9]*([\*]|{sp})*)+\(([^!@#$+%^;\{\}\/\-\=\<\>\|\&\[\:\]]*)\)({sp}|\n)*;)           {no_of_func_dec++;}
 

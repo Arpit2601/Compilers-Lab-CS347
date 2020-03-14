@@ -1,14 +1,14 @@
 
-Number of comments in the given input - 1
+Number of comments in the given input - 27
 
-Number of lines in the given input - 17
+Number of lines in the given input - 65
 
-Number of blank lines in the given input - 1
+Number of blank lines in the given input - 17
 
-Number of macros in the given input - 0
+Number of macros in the given input - 8
 
-Number of variables in the given input - 1
+Number of variables in the given input - 7
 
 Number of function definitions in the given input - 2
 
-Number of function declaration in the given input - 0
+Number of function declaration in the given input - 3
