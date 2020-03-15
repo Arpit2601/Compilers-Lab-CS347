@@ -15,7 +15,7 @@ extern int yylineno;
 statement_list: statement NEWLINE statement_list |
 		statement|
 		ER {printf("INVALID Character here");} statement_list  |
-		error NEWLINE {printf("Syntax error in line number  %d\n",yylineno-1);} statement_list;  
+		error NEWLINE {printf("Syntax error at line no  %d\n",yylineno-1);} statement_list;  
 
 statement: SELECT L condition G LB table_name RB  {printf("Syntax is valid \n");}| 
 	   PROJECT L attr_list G LB table_name RB  {printf("Syntax is valid \n");}|
@@ -29,6 +29,7 @@ factor: CARTESIAN_PRODUCT LB table_name RB |
 
 condition_equi: table_name DOT NAME EQ table_name DOT NAME AND condition_equi |
 				table_name DOT NAME EQ table_name DOT NAME |
+				LB condition_equi RB|
 				%empty;
 
 condition: expr cond|
@@ -41,7 +42,9 @@ cond: AND condition |
 expr:   X at|
 	NUM op X|
 	STRING op2 X|
-	X op X;
+	X op X|
+	LB condition RB;
+
 X: 	NAME|
 	table_name DOT NAME;
 
