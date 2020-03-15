@@ -24,7 +24,12 @@ statement: SELECT L condition G LB table_name RB  {printf("Syntax is valid \n");
 	   
 
 factor: CARTESIAN_PRODUCT LB table_name RB |
-	EQUI_JOIN L condition G LB table_name RB ;
+	EQUI_JOIN L condition_equi G LB table_name RB ;
+
+
+condition_equi: table_name DOT NAME EQ table_name DOT NAME AND condition_equi |
+				table_name DOT NAME EQ table_name DOT NAME |
+				%empty;
 
 condition: expr cond|
 	   NOT condition;
