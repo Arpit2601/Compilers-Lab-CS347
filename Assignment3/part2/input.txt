@@ -1,4 +1,4 @@
-SELECT <    (salary<200 AND name='joghn')> (Employee)
+SELECT <(salary<200 AND name='john')> (Employee)
 SELECT < (name='John' AND salary<200 )> (Employee)
 SELECT (Employee) < salary<200 >
 PROJECT < salary> (Employee)
