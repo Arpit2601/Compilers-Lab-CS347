@@ -1,0 +1,1252 @@
+Grammar
+
+    0 $accept: statement_list $end
+
+    1 statement_list: statement NEWLINE statement_list
+    2               | statement
+
+    3 $@1: %empty
+
+    4 statement_list: ER $@1 statement_list
+
+    5 $@2: %empty
+
+    6 statement_list: error NEWLINE $@2 statement_list
+
+    7 statement: SELECT L condition G LB BRACK_NAME RB
+    8          | PROJECT L attr_list G LB BRACK_NAME RB
+    9          | LB BRACK_NAME RB CARTESIAN_PRODUCT LB BRACK_NAME RB
+   10          | LB BRACK_NAME RB EQUI_JOIN L condition_equi G LB BRACK_NAME RB
+   11          | %empty
+
+   12 condition_equi: Y EQ Y AND condition_equi
+   13               | Y EQ Y
+   14               | LB condition_equi RB
+
+   15 condition: expr AND condition
+   16          | expr OR condition
+   17          | expr
+   18          | NOT condition
+
+   19 expr: X at
+   20     | BRACK_NUM op X
+   21     | BRACK_NUM op2 X
+   22     | BRACK_STRING op2 X
+   23     | X op X
+   24     | X op2 X
+   25     | LB condition RB
+
+   26 at: op BRACK_NUM
+   27   | op2 BRACK_NUM
+   28   | op2 BRACK_STRING
+
+   29 op: L
+   30   | G
+   31   | LE
+   32   | GE
+
+   33 op2: EQ
+   34    | NEQ
+
+   35 attr_list: BRACK_NAME COMMA attr_list
+   36          | Y COMMA attr_list
+   37          | BRACK_NAME
+   38          | Y
+
+   39 X: BRACK_NAME
+   40  | Y
+
+   41 Y: BRACK_NAME DOT BRACK_NAME
+   42  | LB Y RB
+
+   43 BRACK_NAME: NAME
+   44           | LB BRACK_NAME RB
+
+   45 BRACK_NUM: NUM
+   46          | LB BRACK_NUM RB
+
+   47 BRACK_STRING: STRING
+   48             | LB BRACK_STRING RB
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256) 6
+    SELECT (258) 7
+    PROJECT (259) 8
+    CARTESIAN_PRODUCT (260) 9
+    EQUI_JOIN (261) 10
+    L (262) 7 8 10 29
+    G (263) 7 8 10 30
+    LE (264) 31
+    GE (265) 32
+    EQ (266) 12 13 33
+    NEQ (267) 34
+    LB (268) 7 8 9 10 14 25 42 44 46 48
+    RB (269) 7 8 9 10 14 25 42 44 46 48
+    AND (270) 12 15
+    OR (271) 16
+    NOT (272) 18
+    COMMA (273) 35 36
+    DOT (274) 41
+    NAME <str> (275) 43
+    STRING <str> (276) 47
+    NUM <num> (277) 45
+    NEWLINE (278) 1 6
+    ER (279) 4
+
+
+Nonterminals, with rules where they appear
+
+    $accept (25)
+        on left: 0
+    statement_list (26)
+        on left: 1 2 4 6
+        on right: 0 1 4 6
+    $@1 (27)
+        on left: 3
+        on right: 4
+    $@2 (28)
+        on left: 5
+        on right: 6
+    statement (29)
+        on left: 7 8 9 10 11
+        on right: 1 2
+    condition_equi <tree> (30)
+        on left: 12 13 14
+        on right: 10 12 14
+    condition <tree> (31)
+        on left: 15 16 17 18
+        on right: 7 15 16 18 25
+    expr <tree> (32)
+        on left: 19 20 21 22 23 24 25
+        on right: 15 16 17
+    at <tree> (33)
+        on left: 26 27 28
+        on right: 19
+    op <operator_type> (34)
+        on left: 29 30 31 32
+        on right: 20 23 26
+    op2 <operator_type> (35)
+        on left: 33 34
+        on right: 21 22 24 27 28
+    attr_list <list> (36)
+        on left: 35 36 37 38
+        on right: 8 35 36
+    X <tree> (37)
+        on left: 39 40
+        on right: 19 20 21 22 23 24
+    Y <tree> (38)
+        on left: 41 42
+        on right: 12 13 36 38 40 42
+    BRACK_NAME <tree> (39)
+        on left: 43 44
+        on right: 7 8 9 10 35 37 39 41 44
+    BRACK_NUM <tree> (40)
+        on left: 45 46
+        on right: 20 21 26 27 46
+    BRACK_STRING <tree> (41)
+        on left: 47 48
+        on right: 22 28 48
+
+
+State 0
+
+    0 $accept: . statement_list $end
+
+    error    shift, and go to state 1
+    SELECT   shift, and go to state 2
+    PROJECT  shift, and go to state 3
+    LB       shift, and go to state 4
+    ER       shift, and go to state 5
+
+    $end     reduce using rule 11 (statement)
+    NEWLINE  reduce using rule 11 (statement)
+
+    statement_list  go to state 6
+    statement       go to state 7
+
+
+State 1
+
+    6 statement_list: error . NEWLINE $@2 statement_list
+
+    NEWLINE  shift, and go to state 8
+
+
+State 2
+
+    7 statement: SELECT . L condition G LB BRACK_NAME RB
+
+    L  shift, and go to state 9
+
+
+State 3
+
+    8 statement: PROJECT . L attr_list G LB BRACK_NAME RB
+
+    L  shift, and go to state 10
+
+
+State 4
+
+    9 statement: LB . BRACK_NAME RB CARTESIAN_PRODUCT LB BRACK_NAME RB
+   10          | LB . BRACK_NAME RB EQUI_JOIN L condition_equi G LB BRACK_NAME RB
+
+    LB    shift, and go to state 11
+    NAME  shift, and go to state 12
+
+    BRACK_NAME  go to state 13
+
+
+State 5
+
+    4 statement_list: ER . $@1 statement_list
+
+    $default  reduce using rule 3 ($@1)
+
+    $@1  go to state 14
+
+
+State 6
+
+    0 $accept: statement_list . $end
+
+    $end  shift, and go to state 15
+
+
+State 7
+
+    1 statement_list: statement . NEWLINE statement_list
+    2               | statement .
+
+    NEWLINE  shift, and go to state 16
+
+    $default  reduce using rule 2 (statement_list)
+
+
+State 8
+
+    6 statement_list: error NEWLINE . $@2 statement_list
+
+    $default  reduce using rule 5 ($@2)
+
+    $@2  go to state 17
+
+
+State 9
+
+    7 statement: SELECT L . condition G LB BRACK_NAME RB
+
+    LB      shift, and go to state 18
+    NOT     shift, and go to state 19
+    NAME    shift, and go to state 12
+    STRING  shift, and go to state 20
+    NUM     shift, and go to state 21
+
+    condition     go to state 22
+    expr          go to state 23
+    X             go to state 24
+    Y             go to state 25
+    BRACK_NAME    go to state 26
+    BRACK_NUM     go to state 27
+    BRACK_STRING  go to state 28
+
+
+State 10
+
+    8 statement: PROJECT L . attr_list G LB BRACK_NAME RB
+
+    LB    shift, and go to state 29
+    NAME  shift, and go to state 12
+
+    attr_list   go to state 30
+    Y           go to state 31
+    BRACK_NAME  go to state 32
+
+
+State 11
+
+   44 BRACK_NAME: LB . BRACK_NAME RB
+
+    LB    shift, and go to state 11
+    NAME  shift, and go to state 12
+
+    BRACK_NAME  go to state 33
+
+
+State 12
+
+   43 BRACK_NAME: NAME .
+
+    $default  reduce using rule 43 (BRACK_NAME)
+
+
+State 13
+
+    9 statement: LB BRACK_NAME . RB CARTESIAN_PRODUCT LB BRACK_NAME RB
+   10          | LB BRACK_NAME . RB EQUI_JOIN L condition_equi G LB BRACK_NAME RB
+
+    RB  shift, and go to state 34
+
+
+State 14
+
+    4 statement_list: ER $@1 . statement_list
+
+    error    shift, and go to state 1
+    SELECT   shift, and go to state 2
+    PROJECT  shift, and go to state 3
+    LB       shift, and go to state 4
+    ER       shift, and go to state 5
+
+    $end     reduce using rule 11 (statement)
+    NEWLINE  reduce using rule 11 (statement)
+
+    statement_list  go to state 35
+    statement       go to state 7
+
+
+State 15
+
+    0 $accept: statement_list $end .
+
+    $default  accept
+
+
+State 16
+
+    1 statement_list: statement NEWLINE . statement_list
+
+    error    shift, and go to state 1
+    SELECT   shift, and go to state 2
+    PROJECT  shift, and go to state 3
+    LB       shift, and go to state 4
+    ER       shift, and go to state 5
+
+    $end     reduce using rule 11 (statement)
+    NEWLINE  reduce using rule 11 (statement)
+
+    statement_list  go to state 36
+    statement       go to state 7
+
+
+State 17
+
+    6 statement_list: error NEWLINE $@2 . statement_list
+
+    error    shift, and go to state 1
+    SELECT   shift, and go to state 2
+    PROJECT  shift, and go to state 3
+    LB       shift, and go to state 4
+    ER       shift, and go to state 5
+
+    $end     reduce using rule 11 (statement)
+    NEWLINE  reduce using rule 11 (statement)
+
+    statement_list  go to state 37
+    statement       go to state 7
+
+
+State 18
+
+   25 expr: LB . condition RB
+   42 Y: LB . Y RB
+   44 BRACK_NAME: LB . BRACK_NAME RB
+   46 BRACK_NUM: LB . BRACK_NUM RB
+   48 BRACK_STRING: LB . BRACK_STRING RB
+
+    LB      shift, and go to state 18
+    NOT     shift, and go to state 19
+    NAME    shift, and go to state 12
+    STRING  shift, and go to state 20
+    NUM     shift, and go to state 21
+
+    condition     go to state 38
+    expr          go to state 23
+    X             go to state 24
+    Y             go to state 39
+    BRACK_NAME    go to state 40
+    BRACK_NUM     go to state 41
+    BRACK_STRING  go to state 42
+
+
+State 19
+
+   18 condition: NOT . condition
+
+    LB      shift, and go to state 18
+    NOT     shift, and go to state 19
+    NAME    shift, and go to state 12
+    STRING  shift, and go to state 20
+    NUM     shift, and go to state 21
+
+    condition     go to state 43
+    expr          go to state 23
+    X             go to state 24
+    Y             go to state 25
+    BRACK_NAME    go to state 26
+    BRACK_NUM     go to state 27
+    BRACK_STRING  go to state 28
+
+
+State 20
+
+   47 BRACK_STRING: STRING .
+
+    $default  reduce using rule 47 (BRACK_STRING)
+
+
+State 21
+
+   45 BRACK_NUM: NUM .
+
+    $default  reduce using rule 45 (BRACK_NUM)
+
+
+State 22
+
+    7 statement: SELECT L condition . G LB BRACK_NAME RB
+
+    G  shift, and go to state 44
+
+
+State 23
+
+   15 condition: expr . AND condition
+   16          | expr . OR condition
+   17          | expr .
+
+    AND  shift, and go to state 45
+    OR   shift, and go to state 46
+
+    $default  reduce using rule 17 (condition)
+
+
+State 24
+
+   19 expr: X . at
+   23     | X . op X
+   24     | X . op2 X
+
+    L    shift, and go to state 47
+    G    shift, and go to state 48
+    LE   shift, and go to state 49
+    GE   shift, and go to state 50
+    EQ   shift, and go to state 51
+    NEQ  shift, and go to state 52
+
+    at   go to state 53
+    op   go to state 54
+    op2  go to state 55
+
+
+State 25
+
+   40 X: Y .
+
+    $default  reduce using rule 40 (X)
+
+
+State 26
+
+   39 X: BRACK_NAME .
+   41 Y: BRACK_NAME . DOT BRACK_NAME
+
+    DOT  shift, and go to state 56
+
+    $default  reduce using rule 39 (X)
+
+
+State 27
+
+   20 expr: BRACK_NUM . op X
+   21     | BRACK_NUM . op2 X
+
+    L    shift, and go to state 47
+    G    shift, and go to state 48
+    LE   shift, and go to state 49
+    GE   shift, and go to state 50
+    EQ   shift, and go to state 51
+    NEQ  shift, and go to state 52
+
+    op   go to state 57
+    op2  go to state 58
+
+
+State 28
+
+   22 expr: BRACK_STRING . op2 X
+
+    EQ   shift, and go to state 51
+    NEQ  shift, and go to state 52
+
+    op2  go to state 59
+
+
+State 29
+
+   42 Y: LB . Y RB
+   44 BRACK_NAME: LB . BRACK_NAME RB
+
+    LB    shift, and go to state 29
+    NAME  shift, and go to state 12
+
+    Y           go to state 60
+    BRACK_NAME  go to state 61
+
+
+State 30
+
+    8 statement: PROJECT L attr_list . G LB BRACK_NAME RB
+
+    G  shift, and go to state 62
+
+
+State 31
+
+   36 attr_list: Y . COMMA attr_list
+   38          | Y .
+
+    COMMA  shift, and go to state 63
+
+    $default  reduce using rule 38 (attr_list)
+
+
+State 32
+
+   35 attr_list: BRACK_NAME . COMMA attr_list
+   37          | BRACK_NAME .
+   41 Y: BRACK_NAME . DOT BRACK_NAME
+
+    COMMA  shift, and go to state 64
+    DOT    shift, and go to state 56
+
+    $default  reduce using rule 37 (attr_list)
+
+
+State 33
+
+   44 BRACK_NAME: LB BRACK_NAME . RB
+
+    RB  shift, and go to state 65
+
+
+State 34
+
+    9 statement: LB BRACK_NAME RB . CARTESIAN_PRODUCT LB BRACK_NAME RB
+   10          | LB BRACK_NAME RB . EQUI_JOIN L condition_equi G LB BRACK_NAME RB
+
+    CARTESIAN_PRODUCT  shift, and go to state 66
+    EQUI_JOIN          shift, and go to state 67
+
+
+State 35
+
+    4 statement_list: ER $@1 statement_list .
+
+    $default  reduce using rule 4 (statement_list)
+
+
+State 36
+
+    1 statement_list: statement NEWLINE statement_list .
+
+    $default  reduce using rule 1 (statement_list)
+
+
+State 37
+
+    6 statement_list: error NEWLINE $@2 statement_list .
+
+    $default  reduce using rule 6 (statement_list)
+
+
+State 38
+
+   25 expr: LB condition . RB
+
+    RB  shift, and go to state 68
+
+
+State 39
+
+   40 X: Y .
+   42 Y: LB Y . RB
+
+    RB  shift, and go to state 69
+
+    $default  reduce using rule 40 (X)
+
+
+State 40
+
+   39 X: BRACK_NAME .
+   41 Y: BRACK_NAME . DOT BRACK_NAME
+   44 BRACK_NAME: LB BRACK_NAME . RB
+
+    RB   shift, and go to state 65
+    DOT  shift, and go to state 56
+
+    $default  reduce using rule 39 (X)
+
+
+State 41
+
+   20 expr: BRACK_NUM . op X
+   21     | BRACK_NUM . op2 X
+   46 BRACK_NUM: LB BRACK_NUM . RB
+
+    L    shift, and go to state 47
+    G    shift, and go to state 48
+    LE   shift, and go to state 49
+    GE   shift, and go to state 50
+    EQ   shift, and go to state 51
+    NEQ  shift, and go to state 52
+    RB   shift, and go to state 70
+
+    op   go to state 57
+    op2  go to state 58
+
+
+State 42
+
+   22 expr: BRACK_STRING . op2 X
+   48 BRACK_STRING: LB BRACK_STRING . RB
+
+    EQ   shift, and go to state 51
+    NEQ  shift, and go to state 52
+    RB   shift, and go to state 71
+
+    op2  go to state 59
+
+
+State 43
+
+   18 condition: NOT condition .
+
+    $default  reduce using rule 18 (condition)
+
+
+State 44
+
+    7 statement: SELECT L condition G . LB BRACK_NAME RB
+
+    LB  shift, and go to state 72
+
+
+State 45
+
+   15 condition: expr AND . condition
+
+    LB      shift, and go to state 18
+    NOT     shift, and go to state 19
+    NAME    shift, and go to state 12
+    STRING  shift, and go to state 20
+    NUM     shift, and go to state 21
+
+    condition     go to state 73
+    expr          go to state 23
+    X             go to state 24
+    Y             go to state 25
+    BRACK_NAME    go to state 26
+    BRACK_NUM     go to state 27
+    BRACK_STRING  go to state 28
+
+
+State 46
+
+   16 condition: expr OR . condition
+
+    LB      shift, and go to state 18
+    NOT     shift, and go to state 19
+    NAME    shift, and go to state 12
+    STRING  shift, and go to state 20
+    NUM     shift, and go to state 21
+
+    condition     go to state 74
+    expr          go to state 23
+    X             go to state 24
+    Y             go to state 25
+    BRACK_NAME    go to state 26
+    BRACK_NUM     go to state 27
+    BRACK_STRING  go to state 28
+
+
+State 47
+
+   29 op: L .
+
+    $default  reduce using rule 29 (op)
+
+
+State 48
+
+   30 op: G .
+
+    $default  reduce using rule 30 (op)
+
+
+State 49
+
+   31 op: LE .
+
+    $default  reduce using rule 31 (op)
+
+
+State 50
+
+   32 op: GE .
+
+    $default  reduce using rule 32 (op)
+
+
+State 51
+
+   33 op2: EQ .
+
+    $default  reduce using rule 33 (op2)
+
+
+State 52
+
+   34 op2: NEQ .
+
+    $default  reduce using rule 34 (op2)
+
+
+State 53
+
+   19 expr: X at .
+
+    $default  reduce using rule 19 (expr)
+
+
+State 54
+
+   23 expr: X op . X
+   26 at: op . BRACK_NUM
+
+    LB    shift, and go to state 75
+    NAME  shift, and go to state 12
+    NUM   shift, and go to state 21
+
+    X           go to state 76
+    Y           go to state 25
+    BRACK_NAME  go to state 26
+    BRACK_NUM   go to state 77
+
+
+State 55
+
+   24 expr: X op2 . X
+   27 at: op2 . BRACK_NUM
+   28   | op2 . BRACK_STRING
+
+    LB      shift, and go to state 78
+    NAME    shift, and go to state 12
+    STRING  shift, and go to state 20
+    NUM     shift, and go to state 21
+
+    X             go to state 79
+    Y             go to state 25
+    BRACK_NAME    go to state 26
+    BRACK_NUM     go to state 80
+    BRACK_STRING  go to state 81
+
+
+State 56
+
+   41 Y: BRACK_NAME DOT . BRACK_NAME
+
+    LB    shift, and go to state 11
+    NAME  shift, and go to state 12
+
+    BRACK_NAME  go to state 82
+
+
+State 57
+
+   20 expr: BRACK_NUM op . X
+
+    LB    shift, and go to state 29
+    NAME  shift, and go to state 12
+
+    X           go to state 83
+    Y           go to state 25
+    BRACK_NAME  go to state 26
+
+
+State 58
+
+   21 expr: BRACK_NUM op2 . X
+
+    LB    shift, and go to state 29
+    NAME  shift, and go to state 12
+
+    X           go to state 84
+    Y           go to state 25
+    BRACK_NAME  go to state 26
+
+
+State 59
+
+   22 expr: BRACK_STRING op2 . X
+
+    LB    shift, and go to state 29
+    NAME  shift, and go to state 12
+
+    X           go to state 85
+    Y           go to state 25
+    BRACK_NAME  go to state 26
+
+
+State 60
+
+   42 Y: LB Y . RB
+
+    RB  shift, and go to state 69
+
+
+State 61
+
+   41 Y: BRACK_NAME . DOT BRACK_NAME
+   44 BRACK_NAME: LB BRACK_NAME . RB
+
+    RB   shift, and go to state 65
+    DOT  shift, and go to state 56
+
+
+State 62
+
+    8 statement: PROJECT L attr_list G . LB BRACK_NAME RB
+
+    LB  shift, and go to state 86
+
+
+State 63
+
+   36 attr_list: Y COMMA . attr_list
+
+    LB    shift, and go to state 29
+    NAME  shift, and go to state 12
+
+    attr_list   go to state 87
+    Y           go to state 31
+    BRACK_NAME  go to state 32
+
+
+State 64
+
+   35 attr_list: BRACK_NAME COMMA . attr_list
+
+    LB    shift, and go to state 29
+    NAME  shift, and go to state 12
+
+    attr_list   go to state 88
+    Y           go to state 31
+    BRACK_NAME  go to state 32
+
+
+State 65
+
+   44 BRACK_NAME: LB BRACK_NAME RB .
+
+    $default  reduce using rule 44 (BRACK_NAME)
+
+
+State 66
+
+    9 statement: LB BRACK_NAME RB CARTESIAN_PRODUCT . LB BRACK_NAME RB
+
+    LB  shift, and go to state 89
+
+
+State 67
+
+   10 statement: LB BRACK_NAME RB EQUI_JOIN . L condition_equi G LB BRACK_NAME RB
+
+    L  shift, and go to state 90
+
+
+State 68
+
+   25 expr: LB condition RB .
+
+    $default  reduce using rule 25 (expr)
+
+
+State 69
+
+   42 Y: LB Y RB .
+
+    $default  reduce using rule 42 (Y)
+
+
+State 70
+
+   46 BRACK_NUM: LB BRACK_NUM RB .
+
+    $default  reduce using rule 46 (BRACK_NUM)
+
+
+State 71
+
+   48 BRACK_STRING: LB BRACK_STRING RB .
+
+    $default  reduce using rule 48 (BRACK_STRING)
+
+
+State 72
+
+    7 statement: SELECT L condition G LB . BRACK_NAME RB
+
+    LB    shift, and go to state 11
+    NAME  shift, and go to state 12
+
+    BRACK_NAME  go to state 91
+
+
+State 73
+
+   15 condition: expr AND condition .
+
+    $default  reduce using rule 15 (condition)
+
+
+State 74
+
+   16 condition: expr OR condition .
+
+    $default  reduce using rule 16 (condition)
+
+
+State 75
+
+   42 Y: LB . Y RB
+   44 BRACK_NAME: LB . BRACK_NAME RB
+   46 BRACK_NUM: LB . BRACK_NUM RB
+
+    LB    shift, and go to state 75
+    NAME  shift, and go to state 12
+    NUM   shift, and go to state 21
+
+    Y           go to state 60
+    BRACK_NAME  go to state 61
+    BRACK_NUM   go to state 92
+
+
+State 76
+
+   23 expr: X op X .
+
+    $default  reduce using rule 23 (expr)
+
+
+State 77
+
+   26 at: op BRACK_NUM .
+
+    $default  reduce using rule 26 (at)
+
+
+State 78
+
+   42 Y: LB . Y RB
+   44 BRACK_NAME: LB . BRACK_NAME RB
+   46 BRACK_NUM: LB . BRACK_NUM RB
+   48 BRACK_STRING: LB . BRACK_STRING RB
+
+    LB      shift, and go to state 78
+    NAME    shift, and go to state 12
+    STRING  shift, and go to state 20
+    NUM     shift, and go to state 21
+
+    Y             go to state 60
+    BRACK_NAME    go to state 61
+    BRACK_NUM     go to state 92
+    BRACK_STRING  go to state 93
+
+
+State 79
+
+   24 expr: X op2 X .
+
+    $default  reduce using rule 24 (expr)
+
+
+State 80
+
+   27 at: op2 BRACK_NUM .
+
+    $default  reduce using rule 27 (at)
+
+
+State 81
+
+   28 at: op2 BRACK_STRING .
+
+    $default  reduce using rule 28 (at)
+
+
+State 82
+
+   41 Y: BRACK_NAME DOT BRACK_NAME .
+
+    $default  reduce using rule 41 (Y)
+
+
+State 83
+
+   20 expr: BRACK_NUM op X .
+
+    $default  reduce using rule 20 (expr)
+
+
+State 84
+
+   21 expr: BRACK_NUM op2 X .
+
+    $default  reduce using rule 21 (expr)
+
+
+State 85
+
+   22 expr: BRACK_STRING op2 X .
+
+    $default  reduce using rule 22 (expr)
+
+
+State 86
+
+    8 statement: PROJECT L attr_list G LB . BRACK_NAME RB
+
+    LB    shift, and go to state 11
+    NAME  shift, and go to state 12
+
+    BRACK_NAME  go to state 94
+
+
+State 87
+
+   36 attr_list: Y COMMA attr_list .
+
+    $default  reduce using rule 36 (attr_list)
+
+
+State 88
+
+   35 attr_list: BRACK_NAME COMMA attr_list .
+
+    $default  reduce using rule 35 (attr_list)
+
+
+State 89
+
+    9 statement: LB BRACK_NAME RB CARTESIAN_PRODUCT LB . BRACK_NAME RB
+
+    LB    shift, and go to state 11
+    NAME  shift, and go to state 12
+
+    BRACK_NAME  go to state 95
+
+
+State 90
+
+   10 statement: LB BRACK_NAME RB EQUI_JOIN L . condition_equi G LB BRACK_NAME RB
+
+    LB    shift, and go to state 96
+    NAME  shift, and go to state 12
+
+    condition_equi  go to state 97
+    Y               go to state 98
+    BRACK_NAME      go to state 99
+
+
+State 91
+
+    7 statement: SELECT L condition G LB BRACK_NAME . RB
+
+    RB  shift, and go to state 100
+
+
+State 92
+
+   46 BRACK_NUM: LB BRACK_NUM . RB
+
+    RB  shift, and go to state 70
+
+
+State 93
+
+   48 BRACK_STRING: LB BRACK_STRING . RB
+
+    RB  shift, and go to state 71
+
+
+State 94
+
+    8 statement: PROJECT L attr_list G LB BRACK_NAME . RB
+
+    RB  shift, and go to state 101
+
+
+State 95
+
+    9 statement: LB BRACK_NAME RB CARTESIAN_PRODUCT LB BRACK_NAME . RB
+
+    RB  shift, and go to state 102
+
+
+State 96
+
+   14 condition_equi: LB . condition_equi RB
+   42 Y: LB . Y RB
+   44 BRACK_NAME: LB . BRACK_NAME RB
+
+    LB    shift, and go to state 96
+    NAME  shift, and go to state 12
+
+    condition_equi  go to state 103
+    Y               go to state 104
+    BRACK_NAME      go to state 61
+
+
+State 97
+
+   10 statement: LB BRACK_NAME RB EQUI_JOIN L condition_equi . G LB BRACK_NAME RB
+
+    G  shift, and go to state 105
+
+
+State 98
+
+   12 condition_equi: Y . EQ Y AND condition_equi
+   13               | Y . EQ Y
+
+    EQ  shift, and go to state 106
+
+
+State 99
+
+   41 Y: BRACK_NAME . DOT BRACK_NAME
+
+    DOT  shift, and go to state 56
+
+
+State 100
+
+    7 statement: SELECT L condition G LB BRACK_NAME RB .
+
+    $default  reduce using rule 7 (statement)
+
+
+State 101
+
+    8 statement: PROJECT L attr_list G LB BRACK_NAME RB .
+
+    $default  reduce using rule 8 (statement)
+
+
+State 102
+
+    9 statement: LB BRACK_NAME RB CARTESIAN_PRODUCT LB BRACK_NAME RB .
+
+    $default  reduce using rule 9 (statement)
+
+
+State 103
+
+   14 condition_equi: LB condition_equi . RB
+
+    RB  shift, and go to state 107
+
+
+State 104
+
+   12 condition_equi: Y . EQ Y AND condition_equi
+   13               | Y . EQ Y
+   42 Y: LB Y . RB
+
+    EQ  shift, and go to state 106
+    RB  shift, and go to state 69
+
+
+State 105
+
+   10 statement: LB BRACK_NAME RB EQUI_JOIN L condition_equi G . LB BRACK_NAME RB
+
+    LB  shift, and go to state 108
+
+
+State 106
+
+   12 condition_equi: Y EQ . Y AND condition_equi
+   13               | Y EQ . Y
+
+    LB    shift, and go to state 29
+    NAME  shift, and go to state 12
+
+    Y           go to state 109
+    BRACK_NAME  go to state 99
+
+
+State 107
+
+   14 condition_equi: LB condition_equi RB .
+
+    $default  reduce using rule 14 (condition_equi)
+
+
+State 108
+
+   10 statement: LB BRACK_NAME RB EQUI_JOIN L condition_equi G LB . BRACK_NAME RB
+
+    LB    shift, and go to state 11
+    NAME  shift, and go to state 12
+
+    BRACK_NAME  go to state 110
+
+
+State 109
+
+   12 condition_equi: Y EQ Y . AND condition_equi
+   13               | Y EQ Y .
+
+    AND  shift, and go to state 111
+
+    $default  reduce using rule 13 (condition_equi)
+
+
+State 110
+
+   10 statement: LB BRACK_NAME RB EQUI_JOIN L condition_equi G LB BRACK_NAME . RB
+
+    RB  shift, and go to state 112
+
+
+State 111
+
+   12 condition_equi: Y EQ Y AND . condition_equi
+
+    LB    shift, and go to state 96
+    NAME  shift, and go to state 12
+
+    condition_equi  go to state 113
+    Y               go to state 98
+    BRACK_NAME      go to state 99
+
+
+State 112
+
+   10 statement: LB BRACK_NAME RB EQUI_JOIN L condition_equi G LB BRACK_NAME RB .
+
+    $default  reduce using rule 10 (statement)
+
+
+State 113
+
+   12 condition_equi: Y EQ Y AND condition_equi .
+
+    $default  reduce using rule 12 (condition_equi)

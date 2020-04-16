@@ -51,7 +51,7 @@ statement_list: statement NEWLINE statement_list |
 
 statement: SELECT L condition G LB BRACK_NAME RB 
 		{
-			printf("Syntax is valid \n");
+			printf("Syntax is valid \n\n");
 
 
 		// check if the table exist
@@ -86,6 +86,7 @@ statement: SELECT L condition G LB BRACK_NAME RB
 				int i = 0;
 				while(field != NULL){
 					variable[i] = strdup(field);
+					// printf("%s\n", variable[i]);
 					i++;
 					field = strtok(NULL, ",");				
 				}
@@ -97,7 +98,7 @@ statement: SELECT L condition G LB BRACK_NAME RB
 					memset(temp, 0, 200);
 					
 					sprintf(temp, "%s.%s", $6->data.str, variable[i]);
-					
+					// printf("%s\n", temp);
 					variable[i+num_of_fields] = strdup(temp);
 
 				}
@@ -110,6 +111,7 @@ statement: SELECT L condition G LB BRACK_NAME RB
 				i = 0;				
 				while(field != NULL){
 					char* temp = strdup(field);
+					// printf("%s\n", temp);
 	
 					if(strcmp(temp, "int") == 0){
 						type[i] = 0;
@@ -133,7 +135,7 @@ statement: SELECT L condition G LB BRACK_NAME RB
 
 				}
 				
-				printf("\n");
+				printf("\n\n");
 
 				memset(read, 0, 2000);	
 
@@ -201,7 +203,8 @@ statement: SELECT L condition G LB BRACK_NAME RB
 				}
 				
 				if (error == 1 && num_of_results > 0){
-					printf("Number of matches: %d \n", num_of_results);
+					printf("\nNumber of matches: %d \n", num_of_results);
+					printf("\n--------------------------------------\n\n");
 				}
 
 		
@@ -214,7 +217,7 @@ statement: SELECT L condition G LB BRACK_NAME RB
 
 		{
 		
-			printf("Syntax is valid \n");
+			printf("Syntax is valid \n\n");
 
 //			printattrlist($3);
 
@@ -330,7 +333,7 @@ statement: SELECT L condition G LB BRACK_NAME RB
 						start = start->next;
 
 					}
-					printf("\n");
+					printf("\n\n");
 
 					
 					memset(read, 0, 2000);	
@@ -384,7 +387,8 @@ statement: SELECT L condition G LB BRACK_NAME RB
 				
 					}
 
-					printf("Total number of results: %d \n", num_of_results);
+					printf("\nTotal number of results: %d \n", num_of_results);
+					printf("\n--------------------------------------\n\n");
 				}	
 
 
@@ -397,7 +401,101 @@ statement: SELECT L condition G LB BRACK_NAME RB
 
 
 		}
-		|LB BRACK_NAME RB CARTESIAN_PRODUCT LB BRACK_NAME RB  {printf("Syntax is valid \n");} 
+		|LB BRACK_NAME RB CARTESIAN_PRODUCT LB BRACK_NAME RB  
+		{
+			printf("Syntax is valid \n\n");
+			char filename1[100], filename2[100];
+			memset(filename1, 0, 100);
+			memset(filename2, 0, 100);
+			sprintf(filename1, "tables/%s.csv", $2->data.str);
+			sprintf(filename2, "tables/%s.csv", $6->data.str);
+			if (!if_file_exist(filename1)){
+				printf("%s : No such file exists.\n", filename1);
+			}
+			else if (!if_file_exist(filename2)){
+				printf("%s : No such file exists.\n", filename2);
+			}
+			else
+			{
+
+				FILE* file1 = fopen(filename1, "r");
+				FILE* file2 = fopen(filename2, "r");
+				
+				char read1[2000];
+				char read2[2000];
+				memset(read1, 0, 2000);
+				memset(read2, 0, 2000);
+				fgets(read1, 2000, file1);
+				fgets(read2, 2000, file2);
+				read1[strcspn(read1, "\n")] = 0;				
+				read2[strcspn(read2, "\n")] = 0;
+
+
+				// printing all the fields of both the files
+				char *field1 = strtok(read1, ",");
+				
+				while(field1 != NULL)
+				{
+					// printf("%s	", field1);
+					printf("%s.%s,",$2->data.str, field1);
+					field1 = strtok(NULL, ",");				
+				}
+
+				char *field2 = strtok(read2, ",");
+				while(field2!=NULL)
+				{
+					printf("%s.%s,", $6->data.str, field2);
+					field2 = strtok(NULL, ",");
+				}
+				printf("\n\n");
+
+				// Now print the catesian product
+				// Take a row of 1st file then 
+				char * line1 = NULL, *line2=NULL;
+    			size_t len1 = 0, len2=0;
+    			ssize_t read_file1, read_file2;
+				int count1=0, count2=0;
+				int total_records=0;
+				while ((read_file1 = getline(&line1, &len1, file1)) != -1) 
+				{
+					if(count1==0)
+					{
+
+					}
+					else
+					{
+						// restarting the file2 
+						count2=0;
+						line2=NULL;
+						len2=0;
+						read_file2=0;
+						fseek(file2, 0, SEEK_SET);
+						while((read_file2 = getline(&line2, &len2, file2)) != -1)
+						{
+							if(count2==0 || count2==1){count2++;}
+							else
+							{
+								// printf("%c",line1[strlen(line1)-1]);
+								line1[strlen(line1)-1]='\0';
+								printf("%s", line1);printf(",");printf("%s", line2);
+								total_records++;
+							}
+							
+						}
+						printf("\n");
+						
+
+					}
+					count1++;
+					
+				}
+				printf("\nTotal records: %d\n", total_records);
+				printf("\n--------------------------------------\n\n");
+			}
+			
+		} 
+
+
 		|LB BRACK_NAME RB EQUI_JOIN L condition_equi G LB BRACK_NAME RB  {printf("Syntax is valid \n");} |
 		%empty; 
 	   
