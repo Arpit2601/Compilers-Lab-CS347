@@ -2,7 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "ast.h"
+#include "files.h"
 
 extern int yyparse();
 extern int yylex();
@@ -50,8 +52,161 @@ statement_list: statement NEWLINE statement_list |
 statement: SELECT L condition G LB BRACK_NAME RB 
 		{
 			printf("Syntax is valid \n");
-			printf("peak node %d \n", $3->nodetype);
-			printinorder($3);
+
+
+		// check if the table exist
+
+			char filename[100];
+			memset(filename, 0, 100);
+			
+			sprintf(filename, "tables/%s.csv", $6->data.str);
+			
+			if (!if_file_exist(filename)){
+				printf("No file name of the specified type \n");
+				
+
+			}
+			else{
+
+		// create a table of variables and their corresponding values  for each row of the tables 
+		
+				char* variable[100];
+				char* value[100]; 
+				int type[100];
+
+
+				FILE * file = fopen(filename, "r");
+				
+				char read[2000];
+				memset(read, 0, 2000);
+				fgets(read, 2000, file);
+				read[strcspn(read, "\n")] = 0;				
+				
+				char * field = strtok(read, ",");
+				int i = 0;
+				while(field != NULL){
+					variable[i] = strdup(field);
+					i++;
+					field = strtok(NULL, ",");				
+				}
+				
+				int num_of_fields = i;
+				
+				for(int i = 0; i < num_of_fields; i++){
+					char  temp[200];
+					memset(temp, 0, 200);
+					
+					sprintf(temp, "%s.%s", $6->data.str, variable[i]);
+					
+					variable[i+num_of_fields] = strdup(temp);
+
+				}
+
+				memset(read, 0, 2000);
+				fgets(read, 2000, file);
+				read[strcspn(read, "\n")] = 0;
+
+				field = strtok(read, ",");
+				i = 0;				
+				while(field != NULL){
+					char* temp = strdup(field);
+	
+					if(strcmp(temp, "int") == 0){
+						type[i] = 0;
+					}
+					if(strcmp(temp, "str") == 0){
+						type[i] = 1;
+					}
+					i++;
+					field = strtok(NULL, ",");
+				}
+				for(int i = 0; i < num_of_fields; i++){
+
+					type[num_of_fields+i] = type[i];
+				}
+
+// now take a walk through the ast and check if the ast evaluates to true. If yes than print the line else leave the line 				
+				int error = 1;
+
+				for(int i = 0; i < num_of_fields; i++){
+					printf("%s ", variable[i]);
+
+				}
+				
+				printf("\n");
+
+				memset(read, 0, 2000);	
+
+				int num_of_results = 0;
+				while(fgets (read, 2000, file)){
+					read[strcspn(read, "\n")] = 0;					
+					field = strtok(read, ",");
+					
+					int i = 0;					
+					while(field !=  NULL){
+						if (type[i] == 0){
+							value[i] = strdup(field);
+							value[i+num_of_fields] = value[i];
+
+						}
+
+						else {
+							char * temp = strdup(field);
+							temp[strlen(temp)-1] = '\0';
+							value[i] = strdup(temp+1);
+							value[i+num_of_fields] = value[i];
+
+						}
+						i++;
+						field = strtok(NULL, ",");
+					}
+
+					// now value has the current value for each of the field 
+
+					int currentrow  = ast_eval($3, variable, value, type, num_of_fields, &error);
+
+					if (error != 1){
+						break;
+					}
+					
+					if(currentrow){
+
+						num_of_results++;
+						for(int i = 0; i < num_of_fields; i++){
+							printf("%s ", value[i]);
+
+						}
+						
+						printf("\n");
+					}
+					memset(read, 0, 2000);	
+
+				}
+
+				if (error != 1){
+					printf("There is some error in the query error code %d . It means:", error);
+					if(error == 0){
+						printf("Invalid arguement in evaluate function");
+					}
+					if(error == 2){
+						printf("Variable in condition is not in the table");
+					}
+					if(error == 3){
+						printf("Type mismatch inbetween two quantities");
+					}				
+				}
+
+				if(error == 1 && num_of_results == 0){
+					printf("There were no successful matches \n");
+				}
+				
+				if (error == 1 && num_of_results > 0){
+					printf("Number of matches: %d \n", num_of_results);
+				}
+
+		
+			}			
+			
 			
 		}
 				
@@ -61,7 +216,185 @@ statement: SELECT L condition G LB BRACK_NAME RB
 		
 			printf("Syntax is valid \n");
 
-			printattrlist($3);
+//			printattrlist($3);
+
+
+			char filename[100];
+			memset(filename, 0, 100);
+			
+			sprintf(filename, "tables/%s.csv", $6->data.str);
+			
+			if (!if_file_exist(filename)){
+				printf("No file name of the specified type \n");
+				
+
+			}
+			else{
+
+
+// first fill variable with variable names, value with the variable values and type with the variable type
+				char* variable[100];
+				char* value[100]; 
+				int type[100];
+
+
+				FILE * file = fopen(filename, "r");
+				
+				char read[2000];
+				memset(read, 0, 2000);
+				fgets(read, 2000, file);
+				read[strcspn(read, "\n")] = 0;				
+				
+				char * field = strtok(read, ",");
+				int i = 0;
+				while(field != NULL){
+					variable[i] = strdup(field);
+					i++;
+					field = strtok(NULL, ",");				
+				}
+				
+				int num_of_fields = i;
+				
+				for(int i = 0; i < num_of_fields; i++){
+					char  temp[200];
+					memset(temp, 0, 200);
+					
+					sprintf(temp, "%s.%s", $6->data.str, variable[i]);
+					
+					variable[i+num_of_fields] = strdup(temp);
+
+				}
+	
+				memset(read, 0, 2000);
+				fgets(read, 2000, file);
+				read[strcspn(read, "\n")] = 0;
+				field = strtok(read, ",");
+				i = 0;				
+				while(field != NULL){
+					char* temp = strdup(field);
+					if(strcmp(temp, "int") == 0){
+						type[i] = 0;
+					}
+					if(strcmp(temp, "str") == 0){
+						type[i] = 1;
+					}
+					i++;
+					field = strtok(NULL, ",");
+				}
+				for(int i = 0; i < num_of_fields; i++){
+
+					type[num_of_fields+i] = type[i];
+				}
+
+
+
+				// check all the fields in the attr_list
+				// reverse the ll first 
+				
+				
+				reverseattrlist($3);
+				struct attr * start = $3->first;
+				
+				
+				int flag;
+				while(start != NULL){
+					flag = 0;	
+					for(int i = 0; i < 2 * num_of_fields; i++){
+						if(strcmp(variable[i], start->str) == 0){
+							flag = 1;
+
+						}
+
+					}
+					
+					if (flag == 0){
+						break;
+					}
+
+					start = start->next;
+				}
+
+
+				if (flag == 0){
+
+					printf("Something wrong in the attribute list \n");
+					
+
+				}
+
+				else{
+					start = $3->first;
+
+					while(start != NULL){
+						printf("%s ", start->str);
+						start = start->next;
+
+					}
+					printf("\n");
+
+					
+					memset(read, 0, 2000);	
+
+					int num_of_results = 0;														
+
+
+					while(fgets (read, 2000, file)){
+						read[strcspn(read, "\n")] = 0;
+						
+						field = strtok(read, ",");
+						
+						int i = 0;					
+						while(field !=  NULL){
+							if (type[i] == 0){
+								value[i] = strdup(field);
+								value[i+num_of_fields] = value[i];
+
+							}
+
+							else {
+								char * temp = strdup(field);
+								temp[strlen(temp)-1] = '\0';
+								value[i] = strdup(temp+1);
+								value[i+num_of_fields] = value[i];
+
+							}
+							i++;
+							field = strtok(NULL, ",");
+						}
+
+						start = $3->first;
+
+						while(start != NULL){
+								
+							for(int i = 0; i < 2 * num_of_fields ; i++){
+								if(strcmp(start->str, variable[i]) == 0){
+									printf("%s ", value[i]);
+									break;		
+								}
+							}
+							start = start->next;
+
+						}
+						printf("\n");
+						memset(read, 0, 2000);
+
+						num_of_results++;
+
+																
+				
+					}
+
+					printf("Total number of results: %d \n", num_of_results);
+				}	
+
+
+
+
+			}
+
+
+// print only the columns with the the names in the attribute list 
+
 
 		}
 		|LB BRACK_NAME RB CARTESIAN_PRODUCT LB BRACK_NAME RB  {printf("Syntax is valid \n");} 
@@ -89,7 +422,8 @@ condition_equi: Y EQ Y AND condition_equi
 
 
 
-condition: expr AND condition
+condition: 
+	expr AND condition
 	{
 		union Ast_data data;
 		$$ = new_ast(15, data, $1, $3);
@@ -103,6 +437,7 @@ condition: expr AND condition
 	{
 		$$ = $1;
 	}
+
 	|NOT condition
 	{
 		union Ast_data data;
@@ -145,8 +480,7 @@ expr:   X at
 	{
 
 		$$ = $2;
-	}
-	;
+	};
 
 
 
@@ -180,7 +514,9 @@ op: L
 | LE
 	{
 		$$ = 8;
+
 	}
+
 | GE 
 	{
 		$$ = 9;

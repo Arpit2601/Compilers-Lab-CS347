@@ -57,11 +57,18 @@ struct attr_list{
 
 struct ast_tree * new_ast(int nodetype, union Ast_data data_value, struct ast_tree * l, struct ast_tree * r);
 
+int evaluatenum(int nodetype, int left, int right, int * flag);
+
+int evaluatestr(int nodetype, char * strleft, char * strright, int *flag);
+
+int ast_eval(struct ast_tree * tree, char ** variable, char ** value, int * type, int num_of_fields, int * flag);
+
 
 void printinorder(struct ast_tree* node);
 
 void printattrlist(struct attr_list* list);
 
+void reverseattrlist(struct attr_list* list);
 
 
 
