@@ -496,8 +496,23 @@ statement: SELECT L condition G LB BRACK_NAME RB
 		} 
 
 
-		|LB BRACK_NAME RB EQUI_JOIN L condition_equi G LB BRACK_NAME RB  {printf("Syntax is valid \n");} |
-		%empty; 
+		|LB BRACK_NAME RB EQUI_JOIN L condition_equi G LB BRACK_NAME RB  {
+			
+			printf("Syntax is valid \n");
+			
+			//Check if tables exist
+			char filename1[100],filename2[100];
+			memset(filename1,0,100);
+			memset(filename2,0,100);
+			sprintf(filename1,"tables/%s.csv",$2->data.str);
+			sprintf(filename2,"tables/%s.csv",$9->data.str);
+			if(!is_file_exist(filename1)){
+				printf("%s : No such file exists.\n", filename1);
+			}else if(!is_file_exist(filename)){
+				printf("%s : No such file exists.\n", filename1);
+			}
+		} 
+		|%empty; 
 	   
 
 
