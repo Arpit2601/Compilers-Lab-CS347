@@ -54,14 +54,14 @@ statement: SELECT L condition G LB BRACK_NAME RB
 			printf("Syntax is valid \n\n");
 
 
-		// check if the table exist
+
 
 			char filename[100];
 			memset(filename, 0, 100);
 			
-			sprintf(filename, "tables/%s.csv", $6->data.str);
+			sprintf(filename, "tables/%s.csv", $6->data.str);  // tables folder will hold all the csv files
 			
-			if (!if_file_exist(filename)){
+			if (!if_file_exist(filename)){  // check if the table exist
 				printf("No file name of the specified type \n");
 				
 
@@ -70,9 +70,9 @@ statement: SELECT L condition G LB BRACK_NAME RB
 
 		// create a table of variables and their corresponding values  for each row of the tables 
 		
-				char* variable[100];
-				char* value[100]; 
-				int type[100];
+				char* variable[100];  // will hold the attribute name of the table
+				char* value[100];   // will hold the corresponding value of the attributes in string format 
+				int type[100];      // type of the attribute 
 
 
 				FILE * file = fopen(filename, "r");
@@ -84,6 +84,8 @@ statement: SELECT L condition G LB BRACK_NAME RB
 				
 				char * field = strtok(read, ",");
 				int i = 0;
+
+				// store the attribute name in variable[100]
 				while(field != NULL){
 					variable[i] = strdup(field);
 					// printf("%s\n", variable[i]);
@@ -93,7 +95,7 @@ statement: SELECT L condition G LB BRACK_NAME RB
 				
 				int num_of_fields = i;
 				
-				for(int i = 0; i < num_of_fields; i++){
+				for(int i = 0; i < num_of_fields; i++){     // store the  names in the form tablename.attribute
 					char  temp[200];
 					memset(temp, 0, 200);
 					
@@ -104,12 +106,13 @@ statement: SELECT L condition G LB BRACK_NAME RB
 				}
 
 				memset(read, 0, 2000);
-				fgets(read, 2000, file);
+
+				fgets(read, 2000, file);   // reads the attribute type from the file
 				read[strcspn(read, "\n")] = 0;
 
 				field = strtok(read, ",");
 				i = 0;				
-				while(field != NULL){
+				while(field != NULL){       // store the attribute type 
 					char* temp = strdup(field);
 					// printf("%s\n", temp);
 	
@@ -122,15 +125,14 @@ statement: SELECT L condition G LB BRACK_NAME RB
 					i++;
 					field = strtok(NULL, ",");
 				}
-				for(int i = 0; i < num_of_fields; i++){
+				for(int i = 0; i < num_of_fields; i++){   // store the attribute type of attributes of form tablename.attribute
 
 					type[num_of_fields+i] = type[i];
 				}
+			
+				int error = 1;   // will store the error code if the error occurs 
 
-// now take a walk through the ast and check if the ast evaluates to true. If yes than print the line else leave the line 				
-				int error = 1;
-
-				for(int i = 0; i < num_of_fields; i++){
+				for(int i = 0; i < num_of_fields; i++){   // print the attribute names
 					printf("%s ", variable[i]);
 
 				}
@@ -140,19 +142,19 @@ statement: SELECT L condition G LB BRACK_NAME RB
 				memset(read, 0, 2000);	
 
 				int num_of_results = 0;
-				while(fgets (read, 2000, file)){
+				while(fgets (read, 2000, file)){    // start reading the data rows 
 					read[strcspn(read, "\n")] = 0;					
 					field = strtok(read, ",");
 					
 					int i = 0;					
-					while(field !=  NULL){
-						if (type[i] == 0){
-							value[i] = strdup(field);
+					while(field !=  NULL){    // stores the attribute value in value array 
+						if (type[i] == 0){  // number type 
+							value[i] = strdup(field);    
 							value[i+num_of_fields] = value[i];
 
 						}
 
-						else {
+						else {    // string type 
 							char * temp = strdup(field);
 							temp[strlen(temp)-1] = '\0';
 							value[i] = strdup(temp+1);
@@ -163,15 +165,15 @@ statement: SELECT L condition G LB BRACK_NAME RB
 						field = strtok(NULL, ",");
 					}
 
-					// now value has the current value for each of the field 
+					// now value has the current data row value  
 
-					int currentrow  = ast_eval($3, variable, value, type, num_of_fields, &error);
+					int currentrow  = ast_eval($3, variable, value, type, num_of_fields, &error);   // call the ast function
 
-					if (error != 1){
+					if (error != 1){    // if error is changed inside ast_eval 
 						break;
 					}
 					
-					if(currentrow){
+					if(currentrow){    // if ast_eval return 1 pritn the current data row
 
 						num_of_results++;
 						for(int i = 0; i < num_of_fields; i++){
@@ -185,7 +187,7 @@ statement: SELECT L condition G LB BRACK_NAME RB
 
 				}
 
-				if (error != 1){
+				if (error != 1){  // there is a error 
 					printf("There is some error in the query error code %d . It means:", error);
 					if(error == 0){
 						printf("Invalid arguement in evaluate function");
@@ -290,17 +292,16 @@ statement: SELECT L condition G LB BRACK_NAME RB
 				}
 
 
-
-				// check all the fields in the attr_list
-				// reverse the ll first 
+ 
 				
 				
-				reverseattrlist($3);
+				reverseattrlist($3);   // to bring the list in proper format 
 				struct attr * start = $3->first;
 				
 				
 				int flag;
-				while(start != NULL){
+
+				while(start != NULL){   // checks if all the attributes in the list are in correct 
 					flag = 0;	
 					for(int i = 0; i < 2 * num_of_fields; i++){
 						if(strcmp(variable[i], start->str) == 0){
@@ -340,7 +341,7 @@ statement: SELECT L condition G LB BRACK_NAME RB
 
 					int num_of_results = 0;														
 
-
+					// read the data lines in csv 
 					while(fgets (read, 2000, file)){
 						read[strcspn(read, "\n")] = 0;
 						
@@ -498,7 +499,7 @@ statement: SELECT L condition G LB BRACK_NAME RB
 
 		|LB BRACK_NAME RB EQUI_JOIN L condition_equi G LB BRACK_NAME RB  {
 			
-			printf("Syntax is valid \n");
+			/*printf("Syntax is valid \n");
 			
 			//Check if tables exist
 			char filename1[100],filename2[100];
@@ -510,7 +511,7 @@ statement: SELECT L condition G LB BRACK_NAME RB
 				printf("%s : No such file exists.\n", filename1);
 			}else if(!is_file_exist(filename)){
 				printf("%s : No such file exists.\n", filename1);
-			}
+			}  */
 		} 
 		|%empty; 
 	   
