@@ -13,18 +13,27 @@ union Ast_data{
 };
 
 
-// 0 for leaf node with int value;
-// 1 for leaf node with string value;
-// 2 for leaf node with column name;
+
+// value of nodetype for different types of node 
+
+
+// 0 for leaf node with int value;  NULL  in both "left" and "right" pointers  
+// 1 for leaf node with string value;  NULL  in both "left" and "right" pointers
+// 2 for leaf node with attribute(variable);  NULL  in both "left" and "right" pointers
+// 6(<) , 7(>), 8(<=), 9(>=), 10(==) , 11(!=) for operator nodes, "left" and "right" will point toward leaf nodes 
+// 15 means condition node(AND); left and right will pint towards operator nodes or other condition node;
+// 16 means condition node(OR); left and right will pint towards operator nodes or other condition node;
+// 17 means condition node(NOT); left  operator nodes or other condition node right will be NULL;
 
 
 
 
+// ast tree data structure 
 struct ast_tree{
 
-	int nodetype;     // 0, 1 , 2 for leaf nodes  and other values for operators
+	int nodetype;     
 
-	union Ast_data data;
+	union Ast_data data;  // store the data of the node, used only when nodetype is 0, 1, 2 
 
 	struct ast_tree * left;
 
@@ -34,7 +43,7 @@ struct ast_tree{
 
 
 
-
+// attribute node 
 struct attr{
 	
 	char * str;
@@ -42,6 +51,8 @@ struct attr{
 
 };
 
+
+// attribute list
 struct attr_list{
 
 	struct attr * first;
@@ -69,7 +80,6 @@ void printinorder(struct ast_tree* node);
 void printattrlist(struct attr_list* list);
 
 void reverseattrlist(struct attr_list* list);
-
 
 
 
