@@ -9,7 +9,7 @@
 
 
 
-int evaluatenum(int nodetype, int left, int right, int * flag){
+int evaluatenum(int nodetype, int left, int right, int * flag){  // evaluates number
 
 	if (nodetype < 6 || nodetype > 11){     // invalid arguements in function
 		*(flag) = 0;
@@ -47,7 +47,7 @@ int evaluatenum(int nodetype, int left, int right, int * flag){
 
 }
 
-int evaluatestr(int nodetype, char * strleft, char * strright, int *flag){
+int evaluatestr(int nodetype, char * strleft, char * strright, int *flag){   // eavluates strings 
 
 	if (nodetype < 10 || nodetype > 11){     // invalid arguements in evaluate function
 		*(flag) = 0;
@@ -75,14 +75,14 @@ int evaluatestr(int nodetype, char * strleft, char * strright, int *flag){
 }
 
 
-int ast_eval(struct ast_tree * tree, char ** variable, char ** value, int * type, int num_of_fields, int* flag){
+int ast_eval(struct ast_tree * tree, char ** variable, char ** value, int * type, int num_of_fields, int* flag){   // evaluates the ast tree 
 
 	if (tree == NULL){
 		return(0);
 
 	}
 
-	if (tree->nodetype <= 2){    
+	if (tree->nodetype <= 2){    // this piece of code was written to handle the cases when strings or numbers can itself evaluate to boolean values for condition but due to conflicts in grammar it was not pursued 
 
 		/* if(tree->nodetype == 1){
 			return(1);
@@ -125,18 +125,17 @@ int ast_eval(struct ast_tree * tree, char ** variable, char ** value, int * type
 	}
 
  
-	else if (tree->nodetype >= 6 && tree->nodetype <=  11){
+	else if (tree->nodetype >= 6 && tree->nodetype <=  11){   // opertor node 
 
-		// now we have the comparision operators
 
-		if (tree->left->nodetype == 2 && tree->right->nodetype == 2){
+		if (tree->left->nodetype == 2 && tree->right->nodetype == 2){   // if both the left child and right child are leafs of variable(not constant) type 
 
 			char * strleft;
 			char * strright;
 			int typeleft;
 			int typeright;
 			int tempflag = 2;
-			for(int i = 0; i < 2 * num_of_fields; i++){
+			for(int i = 0; i < 2 * num_of_fields; i++){     
 				if (strcmp(variable[i], tree->left->data.str) == 0){
 					strleft = value[i];
 					typeleft = type[i];
@@ -160,32 +159,32 @@ int ast_eval(struct ast_tree * tree, char ** variable, char ** value, int * type
 				return (0);
 			}
 			else {
-				if(typeright == 0){
+				if(typeright == 0){   // both are numbers 
 					return(evaluatenum(tree->nodetype, atoi(strleft), atoi(strright), flag)) ;
 				}
-				else{
+				else{     // both are strings 
 					return(evaluatestr(tree->nodetype, strleft, strright, flag));
 				}				
 
 			}
 
 		}
-		else if (tree->left->nodetype != 2 && tree->right->nodetype != 2){
+		else if (tree->left->nodetype != 2 && tree->right->nodetype != 2){     // both left and right child are leafs with constant values 
 			if(tree->left->nodetype != tree->right->nodetype){    // type mismatch 
 				*(flag) = 3;
 				return(0);
 
 			}
 			else {
-				if(tree->left->nodetype == 1){
+				if(tree->left->nodetype == 1){  // both are numbers 
 					return(evaluatestr(tree->nodetype, tree->left->data.str, tree->right->data.str, flag));
 				}
-				else{
+				else{    // both are strings 
 					return(evaluatenum(tree->nodetype, tree->left->data.num, tree->right->data.num, flag));
 				}
 			}
 		}
-		else{
+		else{    // either left or right leaf is a variable and other is constant
 			
 			if (tree->left->nodetype == 2){    // left node is a variable
 				char * strleft;
@@ -211,10 +210,10 @@ int ast_eval(struct ast_tree * tree, char ** variable, char ** value, int * type
 
 				}
 				
-				if(typeleft == 0){
+				if(typeleft == 0){   // both are numbers
 					return(evaluatenum(tree->nodetype, atoi(strleft), tree->right->data.num, flag));
 				}
-				else{
+				else{  // both are strings 
 
 					return(evaluatestr(tree->nodetype, strleft , tree->right->data.str, flag));
 				}				
@@ -261,17 +260,17 @@ int ast_eval(struct ast_tree * tree, char ** variable, char ** value, int * type
 		
 
 	}
-	else if (tree->nodetype >= 15 && tree->nodetype <= 17){
+	else if (tree->nodetype >= 15 && tree->nodetype <= 17){   // condition node
 
-		if (tree->nodetype == 15){
+		if (tree->nodetype == 15){  // AND node
 			return(ast_eval(tree->left, variable, value, type, num_of_fields, flag) && ast_eval(tree->right, variable, value, type, num_of_fields, flag));
 		}
 		
-		if (tree->nodetype == 16){
+		if (tree->nodetype == 16){  // OR node
 			return(ast_eval(tree->left, variable, value, type, num_of_fields, flag) || ast_eval(tree->right, variable, value, type, num_of_fields, flag));
 		}
 
-		if (tree->nodetype == 17){
+		if (tree->nodetype == 17){  // NOT node
 			return(!ast_eval(tree->left, variable, value, type, num_of_fields, flag));
 		}
 
@@ -283,7 +282,7 @@ int ast_eval(struct ast_tree * tree, char ** variable, char ** value, int * type
 
 
 
-struct ast_tree * new_ast(int nodetype, union Ast_data data_value, struct ast_tree * l, struct ast_tree * r){
+struct ast_tree * new_ast(int nodetype, union Ast_data data_value, struct ast_tree * l, struct ast_tree * r){   // creates an ast tree bottom up 
 
 	struct ast_tree * ab = malloc(sizeof(struct ast_tree));
 
@@ -311,7 +310,7 @@ struct ast_tree * new_ast(int nodetype, union Ast_data data_value, struct ast_tr
 
 
 
-void printinorder(struct ast_tree* node){
+void printinorder(struct ast_tree* node){   // prints inorder traversal 
 
 	if (node == NULL){
 		return;
@@ -336,7 +335,7 @@ void printinorder(struct ast_tree* node){
 }
 
 
-void printattrlist(struct attr_list* list){
+void printattrlist(struct attr_list* list){   // print attribute list
 	
 	if (!list->first){
 		return;	
@@ -353,7 +352,7 @@ void printattrlist(struct attr_list* list){
 }
 
 
-void reverseattrlist(struct attr_list* list){
+void reverseattrlist(struct attr_list* list){  // reverse attribute list
 
 	if(list->first == list->last){
 		
@@ -384,7 +383,6 @@ void reverseattrlist(struct attr_list* list){
 
 
 }
-
 
 
 
