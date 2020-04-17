@@ -507,18 +507,18 @@ statement: SELECT L condition G LB BRACK_NAME RB
 			memset(filename2,0,100);
 			sprintf(filename1,"tables/%s.csv",$2->data.str);
 			sprintf(filename2,"tables/%s.csv",$9->data.str);
-			if(!is_file_exist(filename1)){
+			if(!if_file_exist(filename1)){
 				printf("%s : No such file exists.\n", filename1);
-			}else if(!is_file_exist(filename)){
+			}else if(!if_file_exist(filename2)){
 				printf("%s : No such file exists.\n", filename1);
 			} else{
-				FILE* file1=fopen(filename1,'r');
-				FILE* file2=fopen(filename2,'r');
+				FILE* file1 = fopen(filename1, "r");
+				FILE* file2 = fopen(filename2, "r");
 
 				char* variable1[100];
 				char* variable2[100];
-				char type1[100];
-				char type2[100];
+				int type1[100];
+				int type2[100];
 				char* value1[100];
 				char* value2[100];
 
@@ -610,6 +610,7 @@ statement: SELECT L condition G LB BRACK_NAME RB
 					printf("%s ",variable2[i]);
 				}
 				printf("\n");
+				int num_of_results = 0;
 				while(fgets (read1, 2000, file1)){    // start reading the data rows
 					read1[strcspn(read1, "\n")] = 0;
 					field1 = strtok(read1, ",");
@@ -647,7 +648,7 @@ statement: SELECT L condition G LB BRACK_NAME RB
 
 						//now we have got the required values,types etc for both the tables, now check the condition
 
-						int currentrow  = ast_eval2($3, variable1,variable2, value1,value2, type1,type2, num_of_fields1,num_of_fields2, &error,$2->data.str,$9->data.str);   // call the ast function
+						int currentrow  = ast_eval2($6, variable1,variable2, value1,value2, type1,type2, num_of_fields1,num_of_fields2, &error,$2->data.str,$9->data.str);   // call the ast function
 						if (error != 1){    // if error is changed inside ast_eval
 							break;
 						}

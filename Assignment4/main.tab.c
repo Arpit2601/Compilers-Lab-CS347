@@ -1,9 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.4.1.  */
+/* A Bison parser, made by GNU Bison 3.0.4.  */
 
 /* Bison implementation for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2019 Free Software Foundation,
-   Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,14 +40,11 @@
    define necessary library symbols; they are noted "INFRINGES ON
    USER NAME SPACE" below.  */
 
-/* Undocumented macros, especially those whose name start with YY_,
-   are private implementation details.  Do not rely on them.  */
-
 /* Identify Bison output.  */
 #define YYBISON 1
 
 /* Bison version.  */
-#define YYBISON_VERSION "3.4.1"
+#define YYBISON_VERSION "3.0.4"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -65,8 +61,8 @@
 
 
 
-/* First part of user prologue.  */
-#line 1 "main.y"
+/* Copy the first part of user declarations.  */
+#line 1 "main.y" /* yacc.c:339  */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -80,17 +76,13 @@ extern int yylex();
 void yyerror(char* s);
 extern int yylineno;
 
-#line 84 "main.tab.c"
+#line 80 "main.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
-#  if defined __cplusplus
-#   if 201103L <= __cplusplus
-#    define YY_NULLPTR nullptr
-#   else
-#    define YY_NULLPTR 0
-#   endif
+#  if defined __cplusplus && 201103L <= __cplusplus
+#   define YY_NULLPTR nullptr
 #  else
-#   define YY_NULLPTR ((void*)0)
+#   define YY_NULLPTR 0
 #  endif
 # endif
 
@@ -102,8 +94,8 @@ extern int yylineno;
 # define YYERROR_VERBOSE 0
 #endif
 
-/* Use api.header.include to #include this header
-   instead of duplicating it here.  */
+/* In a future release of Bison, this section will be replaced
+   by #include "main.tab.h".  */
 #ifndef YY_YY_MAIN_TAB_H_INCLUDED
 # define YY_YY_MAIN_TAB_H_INCLUDED
 /* Debug traces.  */
@@ -146,9 +138,10 @@ extern int yydebug;
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
+
 union YYSTYPE
 {
-#line 15 "main.y"
+#line 15 "main.y" /* yacc.c:355  */
 
 
 	struct ast_tree * tree;
@@ -157,9 +150,9 @@ union YYSTYPE
 	char* str;
 	struct attr_list * list;
 
-#line 161 "main.tab.c"
-
+#line 154 "main.tab.c" /* yacc.c:355  */
 };
+
 typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
@@ -172,7 +165,9 @@ int yyparse (void);
 
 #endif /* !YY_YY_MAIN_TAB_H_INCLUDED  */
 
+/* Copy the second part of user declarations.  */
 
+#line 171 "main.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -193,13 +188,13 @@ typedef signed char yytype_int8;
 #ifdef YYTYPE_UINT16
 typedef YYTYPE_UINT16 yytype_uint16;
 #else
-typedef unsigned short yytype_uint16;
+typedef unsigned short int yytype_uint16;
 #endif
 
 #ifdef YYTYPE_INT16
 typedef YYTYPE_INT16 yytype_int16;
 #else
-typedef short yytype_int16;
+typedef short int yytype_int16;
 #endif
 
 #ifndef YYSIZE_T
@@ -211,7 +206,7 @@ typedef short yytype_int16;
 #  include <stddef.h> /* INFRINGES ON USER NAME SPACE */
 #  define YYSIZE_T size_t
 # else
-#  define YYSIZE_T unsigned
+#  define YYSIZE_T unsigned int
 # endif
 #endif
 
@@ -247,6 +242,15 @@ typedef short yytype_int16;
 # define YY_ATTRIBUTE_UNUSED YY_ATTRIBUTE ((__unused__))
 #endif
 
+#if !defined _Noreturn \
+     && (!defined __STDC_VERSION__ || __STDC_VERSION__ < 201112)
+# if defined _MSC_VER && 1200 <= _MSC_VER
+#  define _Noreturn __declspec (noreturn)
+# else
+#  define _Noreturn YY_ATTRIBUTE ((__noreturn__))
+# endif
+#endif
+
 /* Suppress unused-variable warnings by "using" E.  */
 #if ! defined lint || defined __GNUC__
 # define YYUSE(E) ((void) (E))
@@ -254,7 +258,7 @@ typedef short yytype_int16;
 # define YYUSE(E) /* empty */
 #endif
 
-#if defined __GNUC__ && ! defined __ICC && 407 <= __GNUC__ * 100 + __GNUC_MINOR__
+#if defined __GNUC__ && 407 <= __GNUC__ * 100 + __GNUC_MINOR__
 /* Suppress an incorrect diagnostic about yylval being uninitialized.  */
 # define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN \
     _Pragma ("GCC diagnostic push") \
@@ -273,8 +277,6 @@ typedef short yytype_int16;
 # define YY_INITIAL_VALUE(Value) /* Nothing. */
 #endif
 
-
-#define YY_ASSERT(E) ((void) (0 && (E)))
 
 #if ! defined yyoverflow || YYERROR_VERBOSE
 
@@ -418,16 +420,16 @@ union yyalloc
 /* YYNSTATES -- Number of states.  */
 #define YYNSTATES  114
 
+/* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
+   by yylex, with out-of-bounds checking.  */
 #define YYUNDEFTOK  2
 #define YYMAXUTOK   279
 
-/* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
-   as returned by yylex, with out-of-bounds checking.  */
 #define YYTRANSLATE(YYX)                                                \
-  ((unsigned) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
+  ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
 
 /* YYTRANSLATE[TOKEN-NUM] -- Symbol number corresponding to TOKEN-NUM
-   as returned by yylex.  */
+   as returned by yylex, without out-of-bounds checking.  */
 static const yytype_uint8 yytranslate[] =
 {
        0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -464,11 +466,11 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    47,    47,    48,    49,    49,    50,    50,    52,   216,
-     404,   499,   500,   504,   510,   515,   524,   529,   534,   539,
-     547,   552,   557,   562,   567,   572,   577,   585,   590,   595,
-     604,   608,   612,   618,   624,   628,   637,   644,   652,   662,
-     676,   681,   688,   706,   713,   722,   730,   738,   744,   753
+       0,    47,    47,    48,    49,    49,    50,    50,    52,   218,
+     405,   500,   697,   701,   707,   712,   721,   726,   731,   736,
+     744,   749,   754,   759,   764,   769,   774,   782,   787,   792,
+     801,   805,   809,   815,   821,   825,   834,   841,   849,   859,
+     873,   878,   885,   903,   910,   919,   927,   935,   941,   950
 };
 #endif
 
@@ -650,22 +652,22 @@ static const yytype_uint8 yyr2[] =
 
 #define YYRECOVERING()  (!!yyerrstatus)
 
-#define YYBACKUP(Token, Value)                                    \
-  do                                                              \
-    if (yychar == YYEMPTY)                                        \
-      {                                                           \
-        yychar = (Token);                                         \
-        yylval = (Value);                                         \
-        YYPOPSTACK (yylen);                                       \
-        yystate = *yyssp;                                         \
-        goto yybackup;                                            \
-      }                                                           \
-    else                                                          \
-      {                                                           \
-        yyerror (YY_("syntax error: cannot back up")); \
-        YYERROR;                                                  \
-      }                                                           \
-  while (0)
+#define YYBACKUP(Token, Value)                                  \
+do                                                              \
+  if (yychar == YYEMPTY)                                        \
+    {                                                           \
+      yychar = (Token);                                         \
+      yylval = (Value);                                         \
+      YYPOPSTACK (yylen);                                       \
+      yystate = *yyssp;                                         \
+      goto yybackup;                                            \
+    }                                                           \
+  else                                                          \
+    {                                                           \
+      yyerror (YY_("syntax error: cannot back up")); \
+      YYERROR;                                                  \
+    }                                                           \
+while (0)
 
 /* Error token number */
 #define YYTERROR        1
@@ -705,37 +707,37 @@ do {                                                                      \
 } while (0)
 
 
-/*-----------------------------------.
-| Print this symbol's value on YYO.  |
-`-----------------------------------*/
+/*----------------------------------------.
+| Print this symbol's value on YYOUTPUT.  |
+`----------------------------------------*/
 
 static void
-yy_symbol_value_print (FILE *yyo, int yytype, YYSTYPE const * const yyvaluep)
+yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep)
 {
-  FILE *yyoutput = yyo;
-  YYUSE (yyoutput);
+  FILE *yyo = yyoutput;
+  YYUSE (yyo);
   if (!yyvaluep)
     return;
 # ifdef YYPRINT
   if (yytype < YYNTOKENS)
-    YYPRINT (yyo, yytoknum[yytype], *yyvaluep);
+    YYPRINT (yyoutput, yytoknum[yytype], *yyvaluep);
 # endif
   YYUSE (yytype);
 }
 
 
-/*---------------------------.
-| Print this symbol on YYO.  |
-`---------------------------*/
+/*--------------------------------.
+| Print this symbol on YYOUTPUT.  |
+`--------------------------------*/
 
 static void
-yy_symbol_print (FILE *yyo, int yytype, YYSTYPE const * const yyvaluep)
+yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep)
 {
-  YYFPRINTF (yyo, "%s %s (",
+  YYFPRINTF (yyoutput, "%s %s (",
              yytype < YYNTOKENS ? "token" : "nterm", yytname[yytype]);
 
-  yy_symbol_value_print (yyo, yytype, yyvaluep);
-  YYFPRINTF (yyo, ")");
+  yy_symbol_value_print (yyoutput, yytype, yyvaluep);
+  YYFPRINTF (yyoutput, ")");
 }
 
 /*------------------------------------------------------------------.
@@ -769,7 +771,7 @@ do {                                                            \
 static void
 yy_reduce_print (yytype_int16 *yyssp, YYSTYPE *yyvsp, int yyrule)
 {
-  unsigned long yylno = yyrline[yyrule];
+  unsigned long int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
   int yyi;
   YYFPRINTF (stderr, "Reducing stack by rule %d (line %lu):\n",
@@ -780,7 +782,7 @@ yy_reduce_print (yytype_int16 *yyssp, YYSTYPE *yyvsp, int yyrule)
       YYFPRINTF (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr,
                        yystos[yyssp[yyi + 1 - yynrhs]],
-                       &yyvsp[(yyi + 1) - (yynrhs)]
+                       &(yyvsp[(yyi + 1) - (yynrhs)])
                                               );
       YYFPRINTF (stderr, "\n");
     }
@@ -884,10 +886,7 @@ yytnamerr (char *yyres, const char *yystr)
           case '\\':
             if (*++yyp != '\\')
               goto do_not_strip_quotes;
-            else
-              goto append;
-
-          append:
+            /* Fall through.  */
           default:
             if (yyres)
               yyres[yyn] = *yyp;
@@ -905,7 +904,7 @@ yytnamerr (char *yyres, const char *yystr)
   if (! yyres)
     return yystrlen (yystr);
 
-  return (YYSIZE_T) (yystpcpy (yyres, yystr) - yyres);
+  return yystpcpy (yyres, yystr) - yyres;
 }
 # endif
 
@@ -983,10 +982,10 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
                 yyarg[yycount++] = yytname[yyx];
                 {
                   YYSIZE_T yysize1 = yysize + yytnamerr (YY_NULLPTR, yytname[yyx]);
-                  if (yysize <= yysize1 && yysize1 <= YYSTACK_ALLOC_MAXIMUM)
-                    yysize = yysize1;
-                  else
+                  if (! (yysize <= yysize1
+                         && yysize1 <= YYSTACK_ALLOC_MAXIMUM))
                     return 2;
+                  yysize = yysize1;
                 }
               }
         }
@@ -998,7 +997,6 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
       case N:                               \
         yyformat = S;                       \
       break
-    default: /* Avoid compiler warnings. */
       YYCASE_(0, YY_("syntax error"));
       YYCASE_(1, YY_("syntax error, unexpected %s"));
       YYCASE_(2, YY_("syntax error, unexpected %s, expecting %s"));
@@ -1010,10 +1008,9 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
 
   {
     YYSIZE_T yysize1 = yysize + yystrlen (yyformat);
-    if (yysize <= yysize1 && yysize1 <= YYSTACK_ALLOC_MAXIMUM)
-      yysize = yysize1;
-    else
+    if (! (yysize <= yysize1 && yysize1 <= YYSTACK_ALLOC_MAXIMUM))
       return 2;
+    yysize = yysize1;
   }
 
   if (*yymsg_alloc < yysize)
@@ -1139,33 +1136,23 @@ yyparse (void)
   yychar = YYEMPTY; /* Cause a token to be read.  */
   goto yysetstate;
 
-
 /*------------------------------------------------------------.
-| yynewstate -- push a new state, which is found in yystate.  |
+| yynewstate -- Push a new state, which is found in yystate.  |
 `------------------------------------------------------------*/
-yynewstate:
+ yynewstate:
   /* In all cases, when you get here, the value and location stacks
      have just been pushed.  So pushing a state here evens the stacks.  */
   yyssp++;
 
-
-/*--------------------------------------------------------------------.
-| yynewstate -- set current state (the top of the stack) to yystate.  |
-`--------------------------------------------------------------------*/
-yysetstate:
-  YYDPRINTF ((stderr, "Entering state %d\n", yystate));
-  YY_ASSERT (0 <= yystate && yystate < YYNSTATES);
-  *yyssp = (yytype_int16) yystate;
+ yysetstate:
+  *yyssp = yystate;
 
   if (yyss + yystacksize - 1 <= yyssp)
-#if !defined yyoverflow && !defined YYSTACK_RELOCATE
-    goto yyexhaustedlab;
-#else
     {
       /* Get the current used size of the three stacks, in elements.  */
-      YYSIZE_T yysize = (YYSIZE_T) (yyssp - yyss + 1);
+      YYSIZE_T yysize = yyssp - yyss + 1;
 
-# if defined yyoverflow
+#ifdef yyoverflow
       {
         /* Give user a chance to reallocate the stack.  Use copies of
            these so that the &'s don't force the real ones into
@@ -1181,10 +1168,14 @@ yysetstate:
                     &yyss1, yysize * sizeof (*yyssp),
                     &yyvs1, yysize * sizeof (*yyvsp),
                     &yystacksize);
+
         yyss = yyss1;
         yyvs = yyvs1;
       }
-# else /* defined YYSTACK_RELOCATE */
+#else /* no yyoverflow */
+# ifndef YYSTACK_RELOCATE
+      goto yyexhaustedlab;
+# else
       /* Extend the stack our own way.  */
       if (YYMAXDEPTH <= yystacksize)
         goto yyexhaustedlab;
@@ -1200,33 +1191,35 @@ yysetstate:
           goto yyexhaustedlab;
         YYSTACK_RELOCATE (yyss_alloc, yyss);
         YYSTACK_RELOCATE (yyvs_alloc, yyvs);
-# undef YYSTACK_RELOCATE
+#  undef YYSTACK_RELOCATE
         if (yyss1 != yyssa)
           YYSTACK_FREE (yyss1);
       }
 # endif
+#endif /* no yyoverflow */
 
       yyssp = yyss + yysize - 1;
       yyvsp = yyvs + yysize - 1;
 
       YYDPRINTF ((stderr, "Stack size increased to %lu\n",
-                  (unsigned long) yystacksize));
+                  (unsigned long int) yystacksize));
 
       if (yyss + yystacksize - 1 <= yyssp)
         YYABORT;
     }
-#endif /* !defined yyoverflow && !defined YYSTACK_RELOCATE */
+
+  YYDPRINTF ((stderr, "Entering state %d\n", yystate));
 
   if (yystate == YYFINAL)
     YYACCEPT;
 
   goto yybackup;
 
-
 /*-----------.
 | yybackup.  |
 `-----------*/
 yybackup:
+
   /* Do appropriate processing given the current state.  Read a
      lookahead token if we need one and don't already have one.  */
 
@@ -1284,6 +1277,7 @@ yybackup:
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
   *++yyvsp = yylval;
   YY_IGNORE_MAYBE_UNINITIALIZED_END
+
   goto yynewstate;
 
 
@@ -1298,7 +1292,7 @@ yydefault:
 
 
 /*-----------------------------.
-| yyreduce -- do a reduction.  |
+| yyreduce -- Do a reduction.  |
 `-----------------------------*/
 yyreduce:
   /* yyn is the number of a rule to reduce with.  */
@@ -1318,67 +1312,69 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 4:
-#line 49 "main.y"
+        case 4:
+#line 49 "main.y" /* yacc.c:1646  */
     {printf("INVALID Character here");}
-#line 1325 "main.tab.c"
+#line 1319 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 50 "main.y"
+#line 50 "main.y" /* yacc.c:1646  */
     {printf("Syntax error at line no  %d\n",yylineno-1);}
-#line 1331 "main.tab.c"
+#line 1325 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 53 "main.y"
+#line 53 "main.y" /* yacc.c:1646  */
     {
 			printf("Syntax is valid \n\n");
 
 
-		// check if the table exist
+
 
 			char filename[100];
 			memset(filename, 0, 100);
-			
-			sprintf(filename, "tables/%s.csv", (yyvsp[-1].tree)->data.str);
-			
-			if (!if_file_exist(filename)){
+
+			sprintf(filename, "tables/%s.csv", (yyvsp[-1].tree)->data.str);  // tables folder will hold all the csv files
+
+			if (!if_file_exist(filename)){  // check if the table exist
 				printf("No file name of the specified type \n");
-				
+
 
 			}
 			else{
 
-		// create a table of variables and their corresponding values  for each row of the tables 
-		
-				char* variable[100];
-				char* value[100]; 
-				int type[100];
+		// create a table of variables and their corresponding values  for each row of the tables
+
+				char* variable[100];  // will hold the attribute name of the table
+				char* value[100];   // will hold the corresponding value of the attributes in string format
+				int type[100];      // type of the attribute
 
 
 				FILE * file = fopen(filename, "r");
-				
+
 				char read[2000];
 				memset(read, 0, 2000);
 				fgets(read, 2000, file);
-				read[strcspn(read, "\n")] = 0;				
-				
+				read[strcspn(read, "\n")] = 0;
+
 				char * field = strtok(read, ",");
 				int i = 0;
+
+				// store the attribute name in variable[100]
 				while(field != NULL){
 					variable[i] = strdup(field);
 					// printf("%s\n", variable[i]);
 					i++;
-					field = strtok(NULL, ",");				
+					field = strtok(NULL, ",");
 				}
-				
+
 				int num_of_fields = i;
-				
-				for(int i = 0; i < num_of_fields; i++){
+
+				for(int i = 0; i < num_of_fields; i++){     // store the  names in the form tablename.attribute
 					char  temp[200];
 					memset(temp, 0, 200);
-					
+
 					sprintf(temp, "%s.%s", (yyvsp[-1].tree)->data.str, variable[i]);
 					// printf("%s\n", temp);
 					variable[i+num_of_fields] = strdup(temp);
@@ -1386,15 +1382,16 @@ yyreduce:
 				}
 
 				memset(read, 0, 2000);
-				fgets(read, 2000, file);
+
+				fgets(read, 2000, file);   // reads the attribute type from the file
 				read[strcspn(read, "\n")] = 0;
 
 				field = strtok(read, ",");
-				i = 0;				
-				while(field != NULL){
+				i = 0;
+				while(field != NULL){       // store the attribute type
 					char* temp = strdup(field);
 					// printf("%s\n", temp);
-	
+
 					if(strcmp(temp, "int") == 0){
 						type[i] = 0;
 					}
@@ -1404,37 +1401,36 @@ yyreduce:
 					i++;
 					field = strtok(NULL, ",");
 				}
-				for(int i = 0; i < num_of_fields; i++){
+				for(int i = 0; i < num_of_fields; i++){   // store the attribute type of attributes of form tablename.attribute
 
 					type[num_of_fields+i] = type[i];
 				}
 
-// now take a walk through the ast and check if the ast evaluates to true. If yes than print the line else leave the line 				
-				int error = 1;
+				int error = 1;   // will store the error code if the error occurs
 
-				for(int i = 0; i < num_of_fields; i++){
+				for(int i = 0; i < num_of_fields; i++){   // print the attribute names
 					printf("%s ", variable[i]);
 
 				}
-				
+
 				printf("\n\n");
 
-				memset(read, 0, 2000);	
+				memset(read, 0, 2000);
 
 				int num_of_results = 0;
-				while(fgets (read, 2000, file)){
-					read[strcspn(read, "\n")] = 0;					
+				while(fgets (read, 2000, file)){    // start reading the data rows
+					read[strcspn(read, "\n")] = 0;
 					field = strtok(read, ",");
-					
-					int i = 0;					
-					while(field !=  NULL){
-						if (type[i] == 0){
+
+					int i = 0;
+					while(field !=  NULL){    // stores the attribute value in value array
+						if (type[i] == 0){  // number type
 							value[i] = strdup(field);
 							value[i+num_of_fields] = value[i];
 
 						}
 
-						else {
+						else {    // string type
 							char * temp = strdup(field);
 							temp[strlen(temp)-1] = '\0';
 							value[i] = strdup(temp+1);
@@ -1445,29 +1441,29 @@ yyreduce:
 						field = strtok(NULL, ",");
 					}
 
-					// now value has the current value for each of the field 
+					// now value has the current data row value
 
-					int currentrow  = ast_eval((yyvsp[-4].tree), variable, value, type, num_of_fields, &error);
+					int currentrow  = ast_eval((yyvsp[-4].tree), variable, value, type, num_of_fields, &error);   // call the ast function
 
-					if (error != 1){
+					if (error != 1){    // if error is changed inside ast_eval
 						break;
 					}
-					
-					if(currentrow){
+
+					if(currentrow){    // if ast_eval return 1 pritn the current data row
 
 						num_of_results++;
 						for(int i = 0; i < num_of_fields; i++){
 							printf("%s ", value[i]);
 
 						}
-						
+
 						printf("\n");
 					}
-					memset(read, 0, 2000);	
+					memset(read, 0, 2000);
 
 				}
 
-				if (error != 1){
+				if (error != 1){  // there is a error
 					printf("There is some error in the query error code %d . It means:", error);
 					if(error == 0){
 						printf("Invalid arguement in evaluate function");
@@ -1477,30 +1473,30 @@ yyreduce:
 					}
 					if(error == 3){
 						printf("Type mismatch inbetween two quantities");
-					}				
+					}
 				}
 
 				if(error == 1 && num_of_results == 0){
 					printf("There were no successful matches \n");
 				}
-				
+
 				if (error == 1 && num_of_results > 0){
 					printf("\nNumber of matches: %d \n", num_of_results);
 					printf("\n--------------------------------------\n\n");
 				}
 
-		
-			}			
-			
-			
+
+			}
+
+
 		}
-#line 1498 "main.tab.c"
+#line 1494 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 218 "main.y"
+#line 220 "main.y" /* yacc.c:1646  */
     {
-		
+
 			printf("Syntax is valid \n\n");
 
 //			printattrlist($3);
@@ -1508,12 +1504,12 @@ yyreduce:
 
 			char filename[100];
 			memset(filename, 0, 100);
-			
+
 			sprintf(filename, "tables/%s.csv", (yyvsp[-1].tree)->data.str);
-			
+
 			if (!if_file_exist(filename)){
 				printf("No file name of the specified type \n");
-				
+
 
 			}
 			else{
@@ -1521,42 +1517,42 @@ yyreduce:
 
 // first fill variable with variable names, value with the variable values and type with the variable type
 				char* variable[100];
-				char* value[100]; 
+				char* value[100];
 				int type[100];
 
 
 				FILE * file = fopen(filename, "r");
-				
+
 				char read[2000];
 				memset(read, 0, 2000);
 				fgets(read, 2000, file);
-				read[strcspn(read, "\n")] = 0;				
-				
+				read[strcspn(read, "\n")] = 0;
+
 				char * field = strtok(read, ",");
 				int i = 0;
 				while(field != NULL){
 					variable[i] = strdup(field);
 					i++;
-					field = strtok(NULL, ",");				
+					field = strtok(NULL, ",");
 				}
-				
+
 				int num_of_fields = i;
-				
+
 				for(int i = 0; i < num_of_fields; i++){
 					char  temp[200];
 					memset(temp, 0, 200);
-					
+
 					sprintf(temp, "%s.%s", (yyvsp[-1].tree)->data.str, variable[i]);
-					
+
 					variable[i+num_of_fields] = strdup(temp);
 
 				}
-	
+
 				memset(read, 0, 2000);
 				fgets(read, 2000, file);
 				read[strcspn(read, "\n")] = 0;
 				field = strtok(read, ",");
-				i = 0;				
+				i = 0;
 				while(field != NULL){
 					char* temp = strdup(field);
 					if(strcmp(temp, "int") == 0){
@@ -1575,17 +1571,16 @@ yyreduce:
 
 
 
-				// check all the fields in the attr_list
-				// reverse the ll first 
-				
-				
-				reverseattrlist((yyvsp[-4].list));
+
+
+				reverseattrlist((yyvsp[-4].list));   // to bring the list in proper format
 				struct attr * start = (yyvsp[-4].list)->first;
-				
-				
+
+
 				int flag;
-				while(start != NULL){
-					flag = 0;	
+
+				while(start != NULL){   // checks if all the attributes in the list are in correct
+					flag = 0;
 					for(int i = 0; i < 2 * num_of_fields; i++){
 						if(strcmp(variable[i], start->str) == 0){
 							flag = 1;
@@ -1593,7 +1588,7 @@ yyreduce:
 						}
 
 					}
-					
+
 					if (flag == 0){
 						break;
 					}
@@ -1605,7 +1600,7 @@ yyreduce:
 				if (flag == 0){
 
 					printf("Something wrong in the attribute list \n");
-					
+
 
 				}
 
@@ -1619,18 +1614,18 @@ yyreduce:
 					}
 					printf("\n\n");
 
-					
-					memset(read, 0, 2000);	
 
-					int num_of_results = 0;														
+					memset(read, 0, 2000);
 
+					int num_of_results = 0;
 
+					// read the data lines in csv
 					while(fgets (read, 2000, file)){
 						read[strcspn(read, "\n")] = 0;
-						
+
 						field = strtok(read, ",");
-						
-						int i = 0;					
+
+						int i = 0;
 						while(field !=  NULL){
 							if (type[i] == 0){
 								value[i] = strdup(field);
@@ -1652,11 +1647,11 @@ yyreduce:
 						start = (yyvsp[-4].list)->first;
 
 						while(start != NULL){
-								
+
 							for(int i = 0; i < 2 * num_of_fields ; i++){
 								if(strcmp(start->str, variable[i]) == 0){
 									printf("%s ", value[i]);
-									break;		
+									break;
 								}
 							}
 							start = start->next;
@@ -1667,13 +1662,13 @@ yyreduce:
 
 						num_of_results++;
 
-																
-				
+
+
 					}
 
 					printf("\nTotal number of results: %d \n", num_of_results);
 					printf("\n--------------------------------------\n\n");
-				}	
+				}
 
 
 
@@ -1681,15 +1676,15 @@ yyreduce:
 			}
 
 
-// print only the columns with the the names in the attribute list 
+// print only the columns with the the names in the attribute list
 
 
 		}
-#line 1689 "main.tab.c"
+#line 1684 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 405 "main.y"
+#line 406 "main.y" /* yacc.c:1646  */
     {
 			printf("Syntax is valid \n\n");
 			char filename1[100], filename2[100];
@@ -1708,25 +1703,25 @@ yyreduce:
 
 				FILE* file1 = fopen(filename1, "r");
 				FILE* file2 = fopen(filename2, "r");
-				
+
 				char read1[2000];
 				char read2[2000];
 				memset(read1, 0, 2000);
 				memset(read2, 0, 2000);
 				fgets(read1, 2000, file1);
 				fgets(read2, 2000, file2);
-				read1[strcspn(read1, "\n")] = 0;				
+				read1[strcspn(read1, "\n")] = 0;
 				read2[strcspn(read2, "\n")] = 0;
 
 
 				// printing all the fields of both the files
 				char *field1 = strtok(read1, ",");
-				
+
 				while(field1 != NULL)
 				{
 					// printf("%s	", field1);
 					printf("%s.%s,",(yyvsp[-5].tree)->data.str, field1);
-					field1 = strtok(NULL, ",");				
+					field1 = strtok(NULL, ",");
 				}
 
 				char *field2 = strtok(read2, ",");
@@ -1738,13 +1733,13 @@ yyreduce:
 				printf("\n\n");
 
 				// Now print the catesian product
-				// Take a row of 1st file then 
+				// Take a row of 1st file then
 				char * line1 = NULL, *line2=NULL;
     			size_t len1 = 0, len2=0;
     			ssize_t read_file1, read_file2;
 				int count1=0, count2=0;
 				int total_records=0;
-				while ((read_file1 = getline(&line1, &len1, file1)) != -1) 
+				while ((read_file1 = getline(&line1, &len1, file1)) != -1)
 				{
 					if(count1==0)
 					{
@@ -1752,7 +1747,7 @@ yyreduce:
 					}
 					else
 					{
-						// restarting the file2 
+						// restarting the file2
 						count2=0;
 						line2=NULL;
 						len2=0;
@@ -1768,393 +1763,588 @@ yyreduce:
 								printf("%s", line1);printf(",");printf("%s", line2);
 								total_records++;
 							}
-							
+
 						}
 						printf("\n");
-						
+
 
 					}
 					count1++;
-					
+
 				}
 				printf("\nTotal records: %d\n", total_records);
 				printf("\n--------------------------------------\n\n");
 			}
-			
+
 		}
-#line 1786 "main.tab.c"
+#line 1781 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 499 "main.y"
-    {printf("Syntax is valid \n");}
-#line 1792 "main.tab.c"
+#line 500 "main.y" /* yacc.c:1646  */
+    {
+
+			printf("Syntax is valid \n");
+
+			//Check if tables exist
+			char filename1[100],filename2[100];
+			memset(filename1,0,100);
+			memset(filename2,0,100);
+			sprintf(filename1,"tables/%s.csv",(yyvsp[-8].tree)->data.str);
+			sprintf(filename2,"tables/%s.csv",(yyvsp[-1].tree)->data.str);
+			if(!if_file_exist(filename1)){
+				printf("%s : No such file exists.\n", filename1);
+			}else if(!if_file_exist(filename2)){
+				printf("%s : No such file exists.\n", filename1);
+			} else{
+				FILE* file1 = fopen(filename1, "r");
+				FILE* file2 = fopen(filename2, "r");
+
+				char* variable1[100];
+				char* variable2[100];
+				int type1[100];
+				int type2[100];
+				char* value1[100];
+				char* value2[100];
+
+				char read1[2000];
+				memset(read1,0,2000);
+				char read2[1000];
+				memset(read2,0,1000);
+
+				fgets(read1,2000,file1);
+				fgets(read2,2000,file2);
+				read1[strcspn(read1,"\n")]=0;
+				read2[strcspn(read2,"\n")]=0;
+
+				char * field1 = strtok(read1, ",");
+				int i = 0;
+
+				// store the tablename.attribute name in variable1[100]
+				while(field1 != NULL){
+					char  temp[200];
+					memset(temp, 0, 200);
+					sprintf(temp, "%s.%s", (yyvsp[-8].tree)->data.str, strdup(field1));
+					// printf("%s\n", variable1[i]);
+					variable1[i]=strdup(temp);
+					i++;
+					field1 = strtok(NULL, ",");
+				}
+
+				int num_of_fields1 = i;
+
+				memset(read1, 0, 2000);
+				fgets(read1, 2000, file1);   // reads the attribute type from the file
+				read1[strcspn(read1, "\n")] = 0;
+
+				field1 = strtok(read1, ",");
+				i = 0;
+				while(field1 != NULL){       // store the tablename.attribute type
+					char* temp = strdup(field1);
+					if(strcmp(temp, "int") == 0){
+						type1[i] = 0;
+					}
+					if(strcmp(temp, "str") == 0){
+						type1[i] = 1;
+					}
+					i++;
+					field1 = strtok(NULL, ",");
+				}
+
+				//Do the same work as above for table2
+				char * field2 = strtok(read2, ",");
+				int k = 0;
+
+				// store the names in variable2[100] in the form of tablename.attr
+				while(field2 != NULL){
+					char  temp[200];
+					memset(temp, 0, 200);
+					sprintf(temp, "%s.%s", (yyvsp[-1].tree)->data.str, strdup(field2));
+					variable2[k]=strdup(temp);
+					// printf("%s\n", variable[i]);
+					k++;
+					field2 = strtok(NULL, ",");
+				}
+
+				int num_of_fields2 = k;
+
+				memset(read2, 0, 2000);
+				fgets(read2, 2000, file2);   // reads the attribute type from the file
+				read2[strcspn(read2, "\n")] = 0;
+
+				field2 = strtok(read2, ",");
+				k = 0;
+				while(field2 != NULL){       // store the tablename.attribute type
+					char* temp = strdup(field2);
+						if(strcmp(temp, "int") == 0){
+						type2[k] = 0;
+					}
+					if(strcmp(temp, "str") == 0){
+						type2[k] = 1;
+					}
+					k++;
+					field2 = strtok(NULL, ",");
+				}
+				printf("\n");
+				int error=1; //flag to store if an error has occurred
+				//print all the fields
+				for(int i=0;i<num_of_fields1;i++){
+					printf("%s ",variable1[i]);
+				}
+				for(int i=0;i<num_of_fields2;i++){
+					printf("%s ",variable2[i]);
+				}
+				printf("\n");
+				int num_of_results = 0;
+				while(fgets (read1, 2000, file1)){    // start reading the data rows
+					read1[strcspn(read1, "\n")] = 0;
+					field1 = strtok(read1, ",");
+					int i = 0;
+					while(field1 !=  NULL){    // stores the attribute value in value array
+						if (type1[i] == 0){  // number type
+							value1[i] = strdup(field1);
+						}
+						else {    // string type
+							char * temp = strdup(field1);
+							temp[strlen(temp)-1] = '\0';
+							value1[i] = strdup(temp+1);
+						}
+						i++;
+						field1 = strtok(NULL, ",");
+					}
+					// now value has the current data row value for table 1
+					fseek(file2,0,SEEK_SET); //to reset file2 to point at beginning of file
+					while(fgets(read2,2000,file2)){
+						read2[strcspn(read2, "\n")] = 0;
+						field2 = strtok(read2, ",");
+						int i = 0;
+						while(field2 !=  NULL){    // stores the attribute value in value array
+							if (type2[i] == 0){  // number type
+								value2[i] = strdup(field2);
+							}
+							else {    // string type
+								char * temp = strdup(field2);
+								temp[strlen(temp)-1] = '\0';
+								value2[i] = strdup(temp+1);
+							}
+							i++;
+							field2 = strtok(NULL, ",");
+						}
+
+						//now we have got the required values,types etc for both the tables, now check the condition
+
+						int currentrow  = ast_eval2((yyvsp[-4].tree), variable1,variable2, value1,value2, type1,type2, num_of_fields1,num_of_fields2, &error,(yyvsp[-8].tree)->data.str,(yyvsp[-1].tree)->data.str);   // call the ast function
+						if (error != 1){    // if error is changed inside ast_eval
+							break;
+						}
+						if(currentrow){    // if ast_eval return 1 print the current data row for both the tables
+							num_of_results++;
+							for(int i = 0; i < num_of_fields1; i++){
+								printf("%s ", value1[i]);
+							}
+							for(int i = 0; i < num_of_fields2; i++){
+								printf("%s ", value2[i]);
+							}
+							printf("\n");
+						}
+							memset(read2, 0, 2000);
+					}
+					memset(read1,0,2000);
+				}
+
+				if (error != 1){  // there is a error
+					printf("There is some error in the query error code %d . It means:", error);
+					if(error == 0){
+						printf("Invalid arguement in evaluate function");
+					}
+					if(error == 2){
+						printf("Variable in condition is not in the table");
+					}
+					if(error == 3){
+						printf("Type mismatch inbetween two quantities");
+					}
+					if(error ==4){
+						printf("Cannot have the table names on the both sides of = condition equal");
+					}
+				}
+
+				if(error == 1 && num_of_results == 0){
+					printf("There were no successful matches \n");
+				}
+
+				if (error == 1 && num_of_results > 0){
+					printf("\nNumber of matches: %d \n", num_of_results);
+					printf("\n--------------------------------------\n\n");
+				}
+
+			}
+		}
+#line 1983 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 505 "main.y"
+#line 702 "main.y" /* yacc.c:1646  */
     {
 			union Ast_data data;
 			struct ast_tree* tr = new_ast(10, data, (yyvsp[-4].tree), (yyvsp[-2].tree));
-			(yyval.tree) = new_ast(15, data, tr, (yyvsp[0].tree));	
+			(yyval.tree) = new_ast(15, data, tr, (yyvsp[0].tree));
 		}
-#line 1802 "main.tab.c"
+#line 1993 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 511 "main.y"
+#line 708 "main.y" /* yacc.c:1646  */
     {
 			union Ast_data data;
 			(yyval.tree) = new_ast(10, data, (yyvsp[-2].tree), (yyvsp[0].tree));
 		}
-#line 1811 "main.tab.c"
+#line 2002 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 516 "main.y"
+#line 713 "main.y" /* yacc.c:1646  */
     {
 			(yyval.tree) = (yyvsp[-1].tree);
 		}
-#line 1819 "main.tab.c"
+#line 2010 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 525 "main.y"
+#line 722 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		(yyval.tree) = new_ast(15, data, (yyvsp[-2].tree), (yyvsp[0].tree));
 	}
-#line 1828 "main.tab.c"
+#line 2019 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 530 "main.y"
+#line 727 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		(yyval.tree) = new_ast(16, data, (yyvsp[-2].tree), (yyvsp[0].tree));
 	}
-#line 1837 "main.tab.c"
+#line 2028 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 535 "main.y"
+#line 732 "main.y" /* yacc.c:1646  */
     {
 		(yyval.tree) = (yyvsp[0].tree);
 	}
-#line 1845 "main.tab.c"
+#line 2036 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 540 "main.y"
+#line 737 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		(yyval.tree) = new_ast(17, data, (yyvsp[0].tree), NULL);
 	}
-#line 1854 "main.tab.c"
+#line 2045 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 548 "main.y"
+#line 745 "main.y" /* yacc.c:1646  */
     {
 		((yyvsp[0].tree))->left = (yyvsp[-1].tree);
-		(yyval.tree) = (yyvsp[0].tree); 
+		(yyval.tree) = (yyvsp[0].tree);
 	}
-#line 1863 "main.tab.c"
+#line 2054 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 553 "main.y"
+#line 750 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
-		(yyval.tree) = new_ast((yyvsp[-1].operator_type), data, (yyvsp[-2].tree), (yyvsp[0].tree));			
+		(yyval.tree) = new_ast((yyvsp[-1].operator_type), data, (yyvsp[-2].tree), (yyvsp[0].tree));
 	}
-#line 1872 "main.tab.c"
+#line 2063 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 558 "main.y"
+#line 755 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		(yyval.tree) = new_ast((yyvsp[-1].operator_type), data, (yyvsp[-2].tree), (yyvsp[0].tree));
 	}
-#line 1881 "main.tab.c"
+#line 2072 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 563 "main.y"
+#line 760 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		(yyval.tree) = new_ast((yyvsp[-1].operator_type), data, (yyvsp[-2].tree), (yyvsp[0].tree));
 	}
-#line 1890 "main.tab.c"
+#line 2081 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 568 "main.y"
+#line 765 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		(yyval.tree) = new_ast((yyvsp[-1].operator_type), data, (yyvsp[-2].tree), (yyvsp[0].tree));
 	}
-#line 1899 "main.tab.c"
+#line 2090 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 573 "main.y"
+#line 770 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		(yyval.tree) = new_ast((yyvsp[-1].operator_type), data, (yyvsp[-2].tree), (yyvsp[0].tree));
 	}
-#line 1908 "main.tab.c"
+#line 2099 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 578 "main.y"
+#line 775 "main.y" /* yacc.c:1646  */
     {
 
 		(yyval.tree) = (yyvsp[-1].tree);
 	}
-#line 1917 "main.tab.c"
+#line 2108 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 586 "main.y"
+#line 783 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
-		(yyval.tree) = new_ast((yyvsp[-1].operator_type), data, NULL, (yyvsp[0].tree));		
+		(yyval.tree) = new_ast((yyvsp[-1].operator_type), data, NULL, (yyvsp[0].tree));
 	}
-#line 1926 "main.tab.c"
+#line 2117 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 591 "main.y"
+#line 788 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		(yyval.tree) = new_ast((yyvsp[-1].operator_type), data, NULL, (yyvsp[0].tree));
 	}
-#line 1935 "main.tab.c"
+#line 2126 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 596 "main.y"
+#line 793 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		(yyval.tree) = new_ast((yyvsp[-1].operator_type), data, NULL, (yyvsp[0].tree));
-				
+
 	}
-#line 1945 "main.tab.c"
+#line 2136 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 605 "main.y"
+#line 802 "main.y" /* yacc.c:1646  */
     {
 		(yyval.operator_type) = 6;
 	}
-#line 1953 "main.tab.c"
+#line 2144 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 609 "main.y"
+#line 806 "main.y" /* yacc.c:1646  */
     {
 		(yyval.operator_type) = 7;
 	}
-#line 1961 "main.tab.c"
+#line 2152 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 613 "main.y"
+#line 810 "main.y" /* yacc.c:1646  */
     {
 		(yyval.operator_type) = 8;
 
 	}
-#line 1970 "main.tab.c"
+#line 2161 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 619 "main.y"
+#line 816 "main.y" /* yacc.c:1646  */
     {
 		(yyval.operator_type) = 9;
 	}
-#line 1978 "main.tab.c"
+#line 2169 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 625 "main.y"
+#line 822 "main.y" /* yacc.c:1646  */
     {
 		(yyval.operator_type) = 10;
 	}
-#line 1986 "main.tab.c"
+#line 2177 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 629 "main.y"
+#line 826 "main.y" /* yacc.c:1646  */
     {
 		(yyval.operator_type) = 11;
 	}
-#line 1994 "main.tab.c"
+#line 2185 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 638 "main.y"
-    {		
+#line 835 "main.y" /* yacc.c:1646  */
+    {
 			(yyvsp[0].list)->last->next = malloc(sizeof(struct attr));
 			(yyvsp[0].list)->last->next->str = strdup((yyvsp[-2].tree)->data.str);
 			(yyvsp[0].list)->last =   (yyvsp[0].list)->last->next;
 			(yyval.list) = (yyvsp[0].list);
 		}
-#line 2005 "main.tab.c"
+#line 2196 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 645 "main.y"
+#line 842 "main.y" /* yacc.c:1646  */
     {
 			(yyvsp[0].list)->last->next = malloc(sizeof(struct attr));
 			(yyvsp[0].list)->last->next->str = strdup((yyvsp[-2].tree)->data.str);
 			(yyvsp[0].list)->last =   (yyvsp[0].list)->last->next;
 			(yyval.list) = (yyvsp[0].list);
 		}
-#line 2016 "main.tab.c"
+#line 2207 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 653 "main.y"
+#line 850 "main.y" /* yacc.c:1646  */
     {
 			(yyval.list) = malloc(sizeof(struct attr_list));
 			(yyval.list)->first = malloc(sizeof(struct attr));
 			(yyval.list)->last = (yyval.list)->first;
 			(yyval.list)->first->next = NULL;
-			(yyval.list)->first->str = strdup((yyvsp[0].tree)->data.str); 	
-				
+			(yyval.list)->first->str = strdup((yyvsp[0].tree)->data.str);
+
 		}
-#line 2029 "main.tab.c"
+#line 2220 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 663 "main.y"
+#line 860 "main.y" /* yacc.c:1646  */
     {
 			(yyval.list) = malloc(sizeof(struct attr_list));
 			(yyval.list)->first = malloc(sizeof(struct attr));
 			(yyval.list)->last = (yyval.list)->first;
 			(yyval.list)->first->next = NULL;
-			(yyval.list)->first->str = strdup((yyvsp[0].tree)->data.str); 	
-				
+			(yyval.list)->first->str = strdup((yyvsp[0].tree)->data.str);
+
 		}
-#line 2042 "main.tab.c"
+#line 2233 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 677 "main.y"
+#line 874 "main.y" /* yacc.c:1646  */
     {
 		(yyval.tree) = (yyvsp[0].tree);
-	
+
 	}
-#line 2051 "main.tab.c"
+#line 2242 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 682 "main.y"
+#line 879 "main.y" /* yacc.c:1646  */
     {
-	
+
 		(yyval.tree) = (yyvsp[0].tree);
 	}
-#line 2060 "main.tab.c"
+#line 2251 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 689 "main.y"
+#line 886 "main.y" /* yacc.c:1646  */
     {
-	
+
 		union Ast_data data;
 		data.str = malloc(400);
 		memset(data.str, 0, 400);
 		for(int i = 0; i < strlen((yyvsp[-2].tree)->data.str); i++){
-			data.str[i] =  (yyvsp[-2].tree)->data.str[i]; 		
+			data.str[i] =  (yyvsp[-2].tree)->data.str[i];
 		}
 		data.str[strlen((yyvsp[-2].tree)->data.str)] = '.';
-		
+
 		for(int i = 0; i < strlen((yyvsp[-2].tree)->data.str); i++){
-			data.str[i+1+strlen((yyvsp[-2].tree)->data.str)] =  (yyvsp[0].tree)->data.str[i]; 
+			data.str[i+1+strlen((yyvsp[-2].tree)->data.str)] =  (yyvsp[0].tree)->data.str[i];
 		}
-		
+
 		(yyval.tree) = new_ast(2, data, NULL, NULL);
 
 	}
-#line 2082 "main.tab.c"
+#line 2273 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 707 "main.y"
+#line 904 "main.y" /* yacc.c:1646  */
     {
-		(yyval.tree) = (yyvsp[-1].tree);	
+		(yyval.tree) = (yyvsp[-1].tree);
 	}
-#line 2090 "main.tab.c"
+#line 2281 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 714 "main.y"
+#line 911 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		data.str = strdup((yyvsp[0].str));
-		
-		(yyval.tree) = new_ast(2, data, NULL, NULL);		
-		
+
+		(yyval.tree) = new_ast(2, data, NULL, NULL);
+
 
 	}
-#line 2103 "main.tab.c"
+#line 2294 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 723 "main.y"
+#line 920 "main.y" /* yacc.c:1646  */
     {
-		(yyval.tree) = (yyvsp[-1].tree);	
+		(yyval.tree) = (yyvsp[-1].tree);
 	}
-#line 2111 "main.tab.c"
+#line 2302 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 731 "main.y"
+#line 928 "main.y" /* yacc.c:1646  */
     {
-	
+
 	union Ast_data data;
 	data.num = (yyvsp[0].num);
 	(yyval.tree) = new_ast(0, data, NULL, NULL);
-	
+
 	}
-#line 2123 "main.tab.c"
+#line 2314 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 739 "main.y"
+#line 936 "main.y" /* yacc.c:1646  */
     {
-		(yyval.tree) = (yyvsp[-1].tree);	
+		(yyval.tree) = (yyvsp[-1].tree);
 	}
-#line 2131 "main.tab.c"
+#line 2322 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 745 "main.y"
+#line 942 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		data.str = strdup((yyvsp[0].str));
-		
-		(yyval.tree) = new_ast(1, data, NULL, NULL);		
-		
+
+		(yyval.tree) = new_ast(1, data, NULL, NULL);
+
 
 	}
-#line 2144 "main.tab.c"
+#line 2335 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 754 "main.y"
+#line 951 "main.y" /* yacc.c:1646  */
     {
-		
+
 		(yyval.tree) = (yyvsp[-1].tree);
 	}
-#line 2153 "main.tab.c"
+#line 2344 "main.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2157 "main.tab.c"
-
+#line 2348 "main.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2179,13 +2369,14 @@ yyreduce:
   /* Now 'shift' the result of the reduction.  Determine what state
      that goes to, based on the state we popped back to and the rule
      number reduced by.  */
-  {
-    const int yylhs = yyr1[yyn] - YYNTOKENS;
-    const int yyi = yypgoto[yylhs] + *yyssp;
-    yystate = (0 <= yyi && yyi <= YYLAST && yycheck[yyi] == *yyssp
-               ? yytable[yyi]
-               : yydefgoto[yylhs]);
-  }
+
+  yyn = yyr1[yyn];
+
+  yystate = yypgoto[yyn - YYNTOKENS] + *yyssp;
+  if (0 <= yystate && yystate <= YYLAST && yycheck[yystate] == *yyssp)
+    yystate = yytable[yystate];
+  else
+    yystate = yydefgoto[yyn - YYNTOKENS];
 
   goto yynewstate;
 
@@ -2268,10 +2459,12 @@ yyerrlab:
 | yyerrorlab -- error raised explicitly by YYERROR.  |
 `---------------------------------------------------*/
 yyerrorlab:
-  /* Pacify compilers when the user code never invokes YYERROR and the
-     label yyerrorlab therefore never appears in user code.  */
-  if (0)
-    YYERROR;
+
+  /* Pacify compilers like GCC when the user code never invokes
+     YYERROR and the label yyerrorlab therefore never appears in user
+     code.  */
+  if (/*CONSTCOND*/ 0)
+     goto yyerrorlab;
 
   /* Do not reclaim the symbols of the rule whose action triggered
      this YYERROR.  */
@@ -2333,14 +2526,12 @@ yyacceptlab:
   yyresult = 0;
   goto yyreturn;
 
-
 /*-----------------------------------.
 | yyabortlab -- YYABORT comes here.  |
 `-----------------------------------*/
 yyabortlab:
   yyresult = 1;
   goto yyreturn;
-
 
 #if !defined yyoverflow || YYERROR_VERBOSE
 /*-------------------------------------------------.
@@ -2352,10 +2543,6 @@ yyexhaustedlab:
   /* Fall through.  */
 #endif
 
-
-/*-----------------------------------------------------.
-| yyreturn -- parsing is finished, return the result.  |
-`-----------------------------------------------------*/
 yyreturn:
   if (yychar != YYEMPTY)
     {
@@ -2385,7 +2572,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 761 "main.y"
+#line 958 "main.y" /* yacc.c:1906  */
 
 
 int main(int argc, char **argv)
@@ -2394,7 +2581,7 @@ int main(int argc, char **argv)
 }
 
 void yyerror(char *s)
-{      
+{
 
 
 }
