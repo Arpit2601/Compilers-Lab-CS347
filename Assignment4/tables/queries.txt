@@ -12,4 +12,3 @@ PROJECT<Department.eid>(Department)
 (Department) EQUI_JOIN<Department.eid = student.dept_id>(student)
 
 (test) EQUI_JOIN < test.salary = test2.salary AND test.Age = test2.Age>(test2)
-(test) EQUI_JOIN < test.salary = test2.salary AND test.A = test2.Age>(test2)
