@@ -466,11 +466,11 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    47,    47,    48,    49,    49,    50,    50,    52,   218,
-     405,   500,   697,   701,   707,   712,   721,   726,   731,   736,
-     744,   749,   754,   759,   764,   769,   774,   782,   787,   792,
-     801,   805,   809,   815,   821,   825,   834,   841,   849,   859,
-     873,   878,   885,   903,   910,   919,   927,   935,   941,   950
+       0,    47,    47,    48,    49,    49,    50,    50,    52,   220,
+     409,   504,   701,   705,   711,   716,   725,   730,   735,   740,
+     748,   753,   758,   763,   768,   773,   778,   786,   791,   796,
+     805,   809,   813,   819,   825,   829,   838,   845,   853,   863,
+     877,   882,   889,   907,   914,   923,   931,   939,   945,   954
 };
 #endif
 
@@ -1485,16 +1485,18 @@ yyreduce:
 					printf("\n--------------------------------------\n\n");
 				}
 
+				fclose(file);
+
 
 			}
 
 
 		}
-#line 1494 "main.tab.c" /* yacc.c:1646  */
+#line 1496 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 220 "main.y" /* yacc.c:1646  */
+#line 222 "main.y" /* yacc.c:1646  */
     {
 
 			printf("Syntax is valid \n\n");
@@ -1669,6 +1671,8 @@ yyreduce:
 					printf("\nTotal number of results: %d \n", num_of_results);
 					printf("\n--------------------------------------\n\n");
 				}
+				
+				fclose(file);
 
 
 
@@ -1680,11 +1684,11 @@ yyreduce:
 
 
 		}
-#line 1684 "main.tab.c" /* yacc.c:1646  */
+#line 1688 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 406 "main.y" /* yacc.c:1646  */
+#line 410 "main.y" /* yacc.c:1646  */
     {
 			printf("Syntax is valid \n\n");
 			char filename1[100], filename2[100];
@@ -1777,11 +1781,11 @@ yyreduce:
 			}
 
 		}
-#line 1781 "main.tab.c" /* yacc.c:1646  */
+#line 1785 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 500 "main.y" /* yacc.c:1646  */
+#line 504 "main.y" /* yacc.c:1646  */
     {
 
 			printf("Syntax is valid \n");
@@ -1979,235 +1983,235 @@ yyreduce:
 
 			}
 		}
-#line 1983 "main.tab.c" /* yacc.c:1646  */
+#line 1987 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 702 "main.y" /* yacc.c:1646  */
+#line 706 "main.y" /* yacc.c:1646  */
     {
 			union Ast_data data;
 			struct ast_tree* tr = new_ast(10, data, (yyvsp[-4].tree), (yyvsp[-2].tree));
 			(yyval.tree) = new_ast(15, data, tr, (yyvsp[0].tree));
 		}
-#line 1993 "main.tab.c" /* yacc.c:1646  */
+#line 1997 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 708 "main.y" /* yacc.c:1646  */
+#line 712 "main.y" /* yacc.c:1646  */
     {
 			union Ast_data data;
 			(yyval.tree) = new_ast(10, data, (yyvsp[-2].tree), (yyvsp[0].tree));
 		}
-#line 2002 "main.tab.c" /* yacc.c:1646  */
+#line 2006 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 713 "main.y" /* yacc.c:1646  */
+#line 717 "main.y" /* yacc.c:1646  */
     {
 			(yyval.tree) = (yyvsp[-1].tree);
 		}
-#line 2010 "main.tab.c" /* yacc.c:1646  */
+#line 2014 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 722 "main.y" /* yacc.c:1646  */
+#line 726 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		(yyval.tree) = new_ast(15, data, (yyvsp[-2].tree), (yyvsp[0].tree));
 	}
-#line 2019 "main.tab.c" /* yacc.c:1646  */
+#line 2023 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 727 "main.y" /* yacc.c:1646  */
+#line 731 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		(yyval.tree) = new_ast(16, data, (yyvsp[-2].tree), (yyvsp[0].tree));
 	}
-#line 2028 "main.tab.c" /* yacc.c:1646  */
+#line 2032 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 732 "main.y" /* yacc.c:1646  */
+#line 736 "main.y" /* yacc.c:1646  */
     {
 		(yyval.tree) = (yyvsp[0].tree);
 	}
-#line 2036 "main.tab.c" /* yacc.c:1646  */
+#line 2040 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 737 "main.y" /* yacc.c:1646  */
+#line 741 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		(yyval.tree) = new_ast(17, data, (yyvsp[0].tree), NULL);
 	}
-#line 2045 "main.tab.c" /* yacc.c:1646  */
+#line 2049 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 745 "main.y" /* yacc.c:1646  */
+#line 749 "main.y" /* yacc.c:1646  */
     {
 		((yyvsp[0].tree))->left = (yyvsp[-1].tree);
 		(yyval.tree) = (yyvsp[0].tree);
 	}
-#line 2054 "main.tab.c" /* yacc.c:1646  */
+#line 2058 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 750 "main.y" /* yacc.c:1646  */
+#line 754 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		(yyval.tree) = new_ast((yyvsp[-1].operator_type), data, (yyvsp[-2].tree), (yyvsp[0].tree));
 	}
-#line 2063 "main.tab.c" /* yacc.c:1646  */
+#line 2067 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 755 "main.y" /* yacc.c:1646  */
+#line 759 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		(yyval.tree) = new_ast((yyvsp[-1].operator_type), data, (yyvsp[-2].tree), (yyvsp[0].tree));
 	}
-#line 2072 "main.tab.c" /* yacc.c:1646  */
+#line 2076 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 760 "main.y" /* yacc.c:1646  */
+#line 764 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		(yyval.tree) = new_ast((yyvsp[-1].operator_type), data, (yyvsp[-2].tree), (yyvsp[0].tree));
 	}
-#line 2081 "main.tab.c" /* yacc.c:1646  */
+#line 2085 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 765 "main.y" /* yacc.c:1646  */
+#line 769 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		(yyval.tree) = new_ast((yyvsp[-1].operator_type), data, (yyvsp[-2].tree), (yyvsp[0].tree));
 	}
-#line 2090 "main.tab.c" /* yacc.c:1646  */
+#line 2094 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 770 "main.y" /* yacc.c:1646  */
+#line 774 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		(yyval.tree) = new_ast((yyvsp[-1].operator_type), data, (yyvsp[-2].tree), (yyvsp[0].tree));
 	}
-#line 2099 "main.tab.c" /* yacc.c:1646  */
+#line 2103 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 775 "main.y" /* yacc.c:1646  */
+#line 779 "main.y" /* yacc.c:1646  */
     {
 
 		(yyval.tree) = (yyvsp[-1].tree);
 	}
-#line 2108 "main.tab.c" /* yacc.c:1646  */
+#line 2112 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 783 "main.y" /* yacc.c:1646  */
+#line 787 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		(yyval.tree) = new_ast((yyvsp[-1].operator_type), data, NULL, (yyvsp[0].tree));
 	}
-#line 2117 "main.tab.c" /* yacc.c:1646  */
+#line 2121 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 788 "main.y" /* yacc.c:1646  */
+#line 792 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		(yyval.tree) = new_ast((yyvsp[-1].operator_type), data, NULL, (yyvsp[0].tree));
 	}
-#line 2126 "main.tab.c" /* yacc.c:1646  */
+#line 2130 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 793 "main.y" /* yacc.c:1646  */
+#line 797 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		(yyval.tree) = new_ast((yyvsp[-1].operator_type), data, NULL, (yyvsp[0].tree));
 
 	}
-#line 2136 "main.tab.c" /* yacc.c:1646  */
+#line 2140 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 802 "main.y" /* yacc.c:1646  */
+#line 806 "main.y" /* yacc.c:1646  */
     {
 		(yyval.operator_type) = 6;
 	}
-#line 2144 "main.tab.c" /* yacc.c:1646  */
+#line 2148 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 806 "main.y" /* yacc.c:1646  */
+#line 810 "main.y" /* yacc.c:1646  */
     {
 		(yyval.operator_type) = 7;
 	}
-#line 2152 "main.tab.c" /* yacc.c:1646  */
+#line 2156 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 810 "main.y" /* yacc.c:1646  */
+#line 814 "main.y" /* yacc.c:1646  */
     {
 		(yyval.operator_type) = 8;
 
 	}
-#line 2161 "main.tab.c" /* yacc.c:1646  */
+#line 2165 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 816 "main.y" /* yacc.c:1646  */
+#line 820 "main.y" /* yacc.c:1646  */
     {
 		(yyval.operator_type) = 9;
 	}
-#line 2169 "main.tab.c" /* yacc.c:1646  */
+#line 2173 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 822 "main.y" /* yacc.c:1646  */
+#line 826 "main.y" /* yacc.c:1646  */
     {
 		(yyval.operator_type) = 10;
 	}
-#line 2177 "main.tab.c" /* yacc.c:1646  */
+#line 2181 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 826 "main.y" /* yacc.c:1646  */
+#line 830 "main.y" /* yacc.c:1646  */
     {
 		(yyval.operator_type) = 11;
 	}
-#line 2185 "main.tab.c" /* yacc.c:1646  */
+#line 2189 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 835 "main.y" /* yacc.c:1646  */
+#line 839 "main.y" /* yacc.c:1646  */
     {
 			(yyvsp[0].list)->last->next = malloc(sizeof(struct attr));
 			(yyvsp[0].list)->last->next->str = strdup((yyvsp[-2].tree)->data.str);
 			(yyvsp[0].list)->last =   (yyvsp[0].list)->last->next;
 			(yyval.list) = (yyvsp[0].list);
 		}
-#line 2196 "main.tab.c" /* yacc.c:1646  */
+#line 2200 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 842 "main.y" /* yacc.c:1646  */
+#line 846 "main.y" /* yacc.c:1646  */
     {
 			(yyvsp[0].list)->last->next = malloc(sizeof(struct attr));
 			(yyvsp[0].list)->last->next->str = strdup((yyvsp[-2].tree)->data.str);
 			(yyvsp[0].list)->last =   (yyvsp[0].list)->last->next;
 			(yyval.list) = (yyvsp[0].list);
 		}
-#line 2207 "main.tab.c" /* yacc.c:1646  */
+#line 2211 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 850 "main.y" /* yacc.c:1646  */
+#line 854 "main.y" /* yacc.c:1646  */
     {
 			(yyval.list) = malloc(sizeof(struct attr_list));
 			(yyval.list)->first = malloc(sizeof(struct attr));
@@ -2216,11 +2220,11 @@ yyreduce:
 			(yyval.list)->first->str = strdup((yyvsp[0].tree)->data.str);
 
 		}
-#line 2220 "main.tab.c" /* yacc.c:1646  */
+#line 2224 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 860 "main.y" /* yacc.c:1646  */
+#line 864 "main.y" /* yacc.c:1646  */
     {
 			(yyval.list) = malloc(sizeof(struct attr_list));
 			(yyval.list)->first = malloc(sizeof(struct attr));
@@ -2229,29 +2233,29 @@ yyreduce:
 			(yyval.list)->first->str = strdup((yyvsp[0].tree)->data.str);
 
 		}
-#line 2233 "main.tab.c" /* yacc.c:1646  */
+#line 2237 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 874 "main.y" /* yacc.c:1646  */
+#line 878 "main.y" /* yacc.c:1646  */
     {
 		(yyval.tree) = (yyvsp[0].tree);
 
 	}
-#line 2242 "main.tab.c" /* yacc.c:1646  */
+#line 2246 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 879 "main.y" /* yacc.c:1646  */
+#line 883 "main.y" /* yacc.c:1646  */
     {
 
 		(yyval.tree) = (yyvsp[0].tree);
 	}
-#line 2251 "main.tab.c" /* yacc.c:1646  */
+#line 2255 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 886 "main.y" /* yacc.c:1646  */
+#line 890 "main.y" /* yacc.c:1646  */
     {
 
 		union Ast_data data;
@@ -2269,19 +2273,19 @@ yyreduce:
 		(yyval.tree) = new_ast(2, data, NULL, NULL);
 
 	}
-#line 2273 "main.tab.c" /* yacc.c:1646  */
+#line 2277 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 904 "main.y" /* yacc.c:1646  */
+#line 908 "main.y" /* yacc.c:1646  */
     {
 		(yyval.tree) = (yyvsp[-1].tree);
 	}
-#line 2281 "main.tab.c" /* yacc.c:1646  */
+#line 2285 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 911 "main.y" /* yacc.c:1646  */
+#line 915 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		data.str = strdup((yyvsp[0].str));
@@ -2290,19 +2294,19 @@ yyreduce:
 
 
 	}
-#line 2294 "main.tab.c" /* yacc.c:1646  */
+#line 2298 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 920 "main.y" /* yacc.c:1646  */
+#line 924 "main.y" /* yacc.c:1646  */
     {
 		(yyval.tree) = (yyvsp[-1].tree);
 	}
-#line 2302 "main.tab.c" /* yacc.c:1646  */
+#line 2306 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 928 "main.y" /* yacc.c:1646  */
+#line 932 "main.y" /* yacc.c:1646  */
     {
 
 	union Ast_data data;
@@ -2310,19 +2314,19 @@ yyreduce:
 	(yyval.tree) = new_ast(0, data, NULL, NULL);
 
 	}
-#line 2314 "main.tab.c" /* yacc.c:1646  */
+#line 2318 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 936 "main.y" /* yacc.c:1646  */
+#line 940 "main.y" /* yacc.c:1646  */
     {
 		(yyval.tree) = (yyvsp[-1].tree);
 	}
-#line 2322 "main.tab.c" /* yacc.c:1646  */
+#line 2326 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 942 "main.y" /* yacc.c:1646  */
+#line 946 "main.y" /* yacc.c:1646  */
     {
 		union Ast_data data;
 		data.str = strdup((yyvsp[0].str));
@@ -2331,20 +2335,20 @@ yyreduce:
 
 
 	}
-#line 2335 "main.tab.c" /* yacc.c:1646  */
+#line 2339 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 951 "main.y" /* yacc.c:1646  */
+#line 955 "main.y" /* yacc.c:1646  */
     {
 
 		(yyval.tree) = (yyvsp[-1].tree);
 	}
-#line 2344 "main.tab.c" /* yacc.c:1646  */
+#line 2348 "main.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2348 "main.tab.c" /* yacc.c:1646  */
+#line 2352 "main.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2572,7 +2576,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 958 "main.y" /* yacc.c:1906  */
+#line 962 "main.y" /* yacc.c:1906  */
 
 
 int main(int argc, char **argv)

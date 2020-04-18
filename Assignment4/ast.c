@@ -5,6 +5,9 @@
 // TODO print custom errors using error codes given DONE
 //TODO use string, variable or num as condiiion    NOT DONE
 
+
+// TODO 
+
 int evaluatenum(int nodetype, int left, int right, int *flag)
 { // evaluates number
 

@@ -209,6 +209,8 @@ statement: SELECT L condition G LB BRACK_NAME RB
 					printf("\n--------------------------------------\n\n");
 				}
 
+				fclose(file);
+
 
 			}
 
@@ -391,6 +393,8 @@ statement: SELECT L condition G LB BRACK_NAME RB
 					printf("\nTotal number of results: %d \n", num_of_results);
 					printf("\n--------------------------------------\n\n");
 				}
+				
+				fclose(file);
 
 
 
