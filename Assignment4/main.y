@@ -25,6 +25,7 @@ extern int yylineno;
 
 
 %type <tree> condition_equi
+%type <tree> BRACK_EQ
 %type <tree> condition
 %type <tree> expr
 %type <tree> at
@@ -714,22 +715,28 @@ statement: SELECT L condition G LB BRACK_NAME RB
 
 
 
-condition_equi: Y EQ Y AND condition_equi
+condition_equi: BRACK_EQ AND condition_equi
 		{
 			union Ast_data data;
-			struct ast_tree* tr = new_ast(10, data, $1, $3);
-			$$ = new_ast(15, data, tr, $5);
+			$$ = new_ast(15, data, $1, $3);
 		}
-		| Y EQ Y
+		| BRACK_EQ
 		{
-			union Ast_data data;
-			$$ = new_ast(10, data, $1, $3);
-		}
-		| LB condition_equi RB
-		{
-			$$ = $2;
+			$$ = $1;
 		}
 		;
+
+
+BRACK_EQ: Y EQ Y
+	{
+		union Ast_data data;
+		$$ = new_ast(10, data, $1, $3);
+	}
+	|LB condition_equi RB 
+	{
+		$$ = $2;
+	}
+	;
 
 
 
