@@ -845,6 +845,7 @@ attr_list: BRACK_NAME COMMA attr_list
 			$3->last->next = malloc(sizeof(struct attr));
 			$3->last->next->str = strdup($1->data.str);
 			$3->last =   $3->last->next;
+			$3->last->next = NULL;			
 			$$ = $3;
 		}
 	   	   |Y COMMA attr_list
@@ -852,6 +853,7 @@ attr_list: BRACK_NAME COMMA attr_list
 			$3->last->next = malloc(sizeof(struct attr));
 			$3->last->next->str = strdup($1->data.str);
 			$3->last =   $3->last->next;
+			$3->last->next = NULL;
 			$$ = $3;
 		}
 
