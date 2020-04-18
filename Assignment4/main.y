@@ -631,9 +631,12 @@ statement: SELECT L condition G LB BRACK_NAME RB
 						i++;
 						field1 = strtok(NULL, ",");
 					}
+					int count=0;
 					// now value has the current data row value for table 1
 					fseek(file2,0,SEEK_SET); //to reset file2 to point at beginning of file
 					while(fgets(read2,2000,file2)){
+						if(count>1)
+						{
 						read2[strcspn(read2, "\n")] = 0;
 						field2 = strtok(read2, ",");
 						int i = 0;
@@ -668,6 +671,8 @@ statement: SELECT L condition G LB BRACK_NAME RB
 						}
 							memset(read2, 0, 2000);
 					}
+					count++;
+				}
 					memset(read1,0,2000);
 				}
 

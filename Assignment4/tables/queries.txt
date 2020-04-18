@@ -1,0 +1,12 @@
+SELECT <(Name='John' AND Salary=400) OR Name='Jill'> (Employee)
+
+SELECT <Name='John' AND Salary=400 OR Name='Jill' OR Name='Mishra'> (Employee)
+SELECT<eid=3 OR name='CSE'>(Department)
+
+SELECT<course_id="EE101" OR score>=75>(enroll)
+SELECT<student.dept_id=1 OR name='Shyam'>(student)
+
+PROJECT<Department.eid>(Department)
+(student) CARTESIAN_PRODUCT (Department) 
+(test) EQUI_JOIN < test.salary = test2.salary>(test2)
+(Department) EQUI_JOIN<Department.eid = student.dept_id>(student)
