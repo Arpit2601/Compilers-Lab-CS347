@@ -46,8 +46,8 @@ extern int yylineno;
 
 statement_list: statement NEWLINE statement_list |
 		statement|
-		ER {printf("INVALID Character here");} statement_list  |
-		error NEWLINE {printf("Syntax error at line no  %d\n",yylineno-1);} statement_list;
+		ER {printf("INVALID Character here \n");} statement_list  |
+		error NEWLINE {printf("Syntax error \n");} statement_list;
 
 statement: SELECT L condition G LB BRACK_NAME RB
 		{
@@ -897,7 +897,7 @@ Y: BRACK_NAME DOT BRACK_NAME
 		}
 		data.str[strlen($1->data.str)] = '.';
 
-		for(int i = 0; i < strlen($1->data.str); i++){
+		for(int i = 0; i < strlen($3->data.str); i++){
 			data.str[i+1+strlen($1->data.str)] =  $3->data.str[i];
 		}
 

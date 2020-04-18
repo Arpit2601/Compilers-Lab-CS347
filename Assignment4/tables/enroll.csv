@@ -1,6 +1,6 @@
 student_id,course_id,score,attendance
 int,str,int,int
-1,CS344,90,75
+1,'CS344',90,75
 1,CS345,100,100
 1,EE101,60,75
 1,MA225,0,75

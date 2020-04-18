@@ -1314,13 +1314,13 @@ yyreduce:
     {
         case 4:
 #line 49 "main.y" /* yacc.c:1646  */
-    {printf("INVALID Character here");}
+    {printf("INVALID Character here \n");}
 #line 1319 "main.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
 #line 50 "main.y" /* yacc.c:1646  */
-    {printf("Syntax error at line no  %d\n",yylineno-1);}
+    {printf("Syntax error \n");}
 #line 1325 "main.tab.c" /* yacc.c:1646  */
     break;
 
@@ -2266,7 +2266,7 @@ yyreduce:
 		}
 		data.str[strlen((yyvsp[-2].tree)->data.str)] = '.';
 
-		for(int i = 0; i < strlen((yyvsp[-2].tree)->data.str); i++){
+		for(int i = 0; i < strlen((yyvsp[0].tree)->data.str); i++){
 			data.str[i+1+strlen((yyvsp[-2].tree)->data.str)] =  (yyvsp[0].tree)->data.str[i];
 		}
 

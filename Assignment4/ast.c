@@ -208,10 +208,18 @@ int ast_eval(struct ast_tree *tree, char **variable, char **value, int *type, in
 				char *strleft;
 				int typeleft;
 				int tempflag = 1;
+
+				////// ------------------
+
+
+	//			printf(" Error checking %s", tree->left->data.str);
+
+				///// ----------------------
 				for (int i = 0; i < 2 * num_of_fields; i++)
 				{
 					if (strcmp(variable[i], tree->left->data.str) == 0)
 					{
+					
 						strleft = value[i];
 						typeleft = type[i];
 						tempflag = 0;
