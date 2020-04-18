@@ -5,8 +5,7 @@
 // TODO print custom errors using error codes given DONE
 //TODO use string, variable or num as condiiion    NOT DONE
 
-
-// TODO 
+// TODO
 
 int evaluatenum(int nodetype, int left, int right, int *flag)
 { // evaluates number
@@ -205,22 +204,21 @@ int ast_eval(struct ast_tree *tree, char **variable, char **value, int *type, in
 
 			if (tree->left->nodetype == 2)
 			{ // left node is a variable
-	//			printf("%s  \n", tree->left->data.str);
+				//			printf("%s  \n", tree->left->data.str);
 				char *strleft;
 				int typeleft;
 				int tempflag = 1;
 
 				////// ------------------
 
-
-	//			printf(" Error checking %s", tree->left->data.str);
+				//			printf(" Error checking %s", tree->left->data.str);
 
 				///// ----------------------
 				for (int i = 0; i < 2 * num_of_fields; i++)
 				{
 					if (strcmp(variable[i], tree->left->data.str) == 0)
 					{
-					//	printf("%s %s \n", variable[i], tree->left->data.str);				
+						//	printf("%s %s \n", variable[i], tree->left->data.str);
 						strleft = value[i];
 						typeleft = type[i];
 						tempflag = 0;
@@ -296,17 +294,17 @@ int ast_eval(struct ast_tree *tree, char **variable, char **value, int *type, in
 		{ // AND node
 			int a = ast_eval(tree->left, variable, value, type, num_of_fields, flag);
 			int b = ast_eval(tree->right, variable, value, type, num_of_fields, flag);
-			return (a && b);  
-//			return(ast_eval(tree->left, variable, value, type, num_of_fields, flag) && ast_eval(tree->right, variable, value, type, num_of_fields, flag));
+			return (a && b);
+			//			return(ast_eval(tree->left, variable, value, type, num_of_fields, flag) && ast_eval(tree->right, variable, value, type, num_of_fields, flag));
 		}
 
 		if (tree->nodetype == 16)
 		{ // OR node
 			int a = ast_eval(tree->left, variable, value, type, num_of_fields, flag);
 			int b = ast_eval(tree->right, variable, value, type, num_of_fields, flag);
-			return (a || b);  
+			return (a || b);
 
-//			return(ast_eval(tree->left, variable, value, type, num_of_fields, flag) || ast_eval(tree->right, variable, value, type, num_of_fields, flag));
+			//			return(ast_eval(tree->left, variable, value, type, num_of_fields, flag) || ast_eval(tree->right, variable, value, type, num_of_fields, flag));
 		}
 
 		if (tree->nodetype == 17)
@@ -418,7 +416,9 @@ int ast_eval2(struct ast_tree *tree, char **variable1, char **variable2, char **
 	{ // condition node
 		if (tree->nodetype == 15)
 		{ // AND node
-			return (ast_eval2(tree->left, variable1, variable2, value1, value2, type1, type2, num_of_fields1, num_of_fields2, flag, table1, table2) && ast_eval2(tree->right, variable1, variable2, value1, value2, type1, type2, num_of_fields1, num_of_fields2, flag, table1, table2));
+			int a = ast_eval2(tree->left, variable1, variable2, value1, value2, type1, type2, num_of_fields1, num_of_fields2, flag, table1, table2);
+			int b = ast_eval2(tree->right, variable1, variable2, value1, value2, type1, type2, num_of_fields1, num_of_fields2, flag, table1, table2);
+			return (a && b);
 		}
 	}
 }
