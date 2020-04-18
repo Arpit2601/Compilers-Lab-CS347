@@ -461,8 +461,13 @@ statement: SELECT L condition G LB BRACK_NAME RB
     			ssize_t read_file1, read_file2;
 				int count1=0, count2=0;
 				int total_records=0;
-				while ((read_file1 = getline(&line1, &len1, file1)) != -1)
+				
+				
+				
+				
+				while (fgets(read1, 2000, file1))
 				{
+					read1[strcspn(read1, "\n")] = 0;
 					if(count1==0)
 					{
 
@@ -475,14 +480,16 @@ statement: SELECT L condition G LB BRACK_NAME RB
 						len2=0;
 						read_file2=0;
 						fseek(file2, 0, SEEK_SET);
-						while((read_file2 = getline(&line2, &len2, file2)) != -1)
+						while(fgets(read2, 2000, file2))
 						{
+							read2[strcspn(read2, "\n")] = 0;
 							if(count2==0 || count2==1){count2++;}
 							else
 							{
 								// printf("%c",line1[strlen(line1)-1]);
-								line1[strlen(line1)-1]='\0';
-								printf("%s", line1);printf(",");printf("%s", line2);
+								// line1[strlen(line1)-1]='\0';
+								printf("%s", read1);printf(",");printf("%s", read2);
+								printf("\n");
 								total_records++;
 							}
 
