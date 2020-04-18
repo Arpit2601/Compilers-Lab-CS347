@@ -1,7 +1,6 @@
 Age,salary,C,D
 int,int,int,str
 1,2,3,'hello'
-2,300,400,'bye'
 3,4,5,'eee'
 7,5,3,'eee'
 80,115,45,'ffk'

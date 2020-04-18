@@ -132,7 +132,7 @@ int ast_eval(struct ast_tree *tree, char **variable, char **value, int *type, in
 	}
 
 	else if (tree->nodetype >= 6 && tree->nodetype <= 11)
-	{ // opertor node
+	{ // opertor nodeF
 
 		if (tree->left->nodetype == 2 && tree->right->nodetype == 2)
 		{ // if both the left child and right child are leafs of variable(not constant) type
@@ -205,6 +205,7 @@ int ast_eval(struct ast_tree *tree, char **variable, char **value, int *type, in
 
 			if (tree->left->nodetype == 2)
 			{ // left node is a variable
+	//			printf("%s  \n", tree->left->data.str);
 				char *strleft;
 				int typeleft;
 				int tempflag = 1;
@@ -219,7 +220,7 @@ int ast_eval(struct ast_tree *tree, char **variable, char **value, int *type, in
 				{
 					if (strcmp(variable[i], tree->left->data.str) == 0)
 					{
-					
+					//	printf("%s %s \n", variable[i], tree->left->data.str);				
 						strleft = value[i];
 						typeleft = type[i];
 						tempflag = 0;
@@ -293,12 +294,19 @@ int ast_eval(struct ast_tree *tree, char **variable, char **value, int *type, in
 
 		if (tree->nodetype == 15)
 		{ // AND node
-			return (ast_eval(tree->left, variable, value, type, num_of_fields, flag) && ast_eval(tree->right, variable, value, type, num_of_fields, flag));
+			int a = ast_eval(tree->left, variable, value, type, num_of_fields, flag);
+			int b = ast_eval(tree->right, variable, value, type, num_of_fields, flag);
+			return (a && b);  
+//			return(ast_eval(tree->left, variable, value, type, num_of_fields, flag) && ast_eval(tree->right, variable, value, type, num_of_fields, flag));
 		}
 
 		if (tree->nodetype == 16)
 		{ // OR node
-			return (ast_eval(tree->left, variable, value, type, num_of_fields, flag) || ast_eval(tree->right, variable, value, type, num_of_fields, flag));
+			int a = ast_eval(tree->left, variable, value, type, num_of_fields, flag);
+			int b = ast_eval(tree->right, variable, value, type, num_of_fields, flag);
+			return (a || b);  
+
+//			return(ast_eval(tree->left, variable, value, type, num_of_fields, flag) || ast_eval(tree->right, variable, value, type, num_of_fields, flag));
 		}
 
 		if (tree->nodetype == 17)

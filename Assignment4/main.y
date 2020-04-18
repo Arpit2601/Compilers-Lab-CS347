@@ -770,6 +770,22 @@ expr:   X at
 		union Ast_data data;
 		$$ = new_ast($2, data, $1, $3);
 	}
+
+	|BRACK_NUM op BRACK_NUM
+	{
+		union Ast_data data;
+		$$ = new_ast($2, data, $1, $3);
+	}
+	|BRACK_NUM op2 BRACK_NUM
+	{
+		union Ast_data data;
+		$$ = new_ast($2, data, $1, $3);
+	}
+	|BRACK_STRING op2 BRACK_STRING
+	{
+		union Ast_data data;
+		$$ = new_ast($2, data, $1, $3);
+	}
 	|X op X
 	{
 		union Ast_data data;
