@@ -11,6 +11,7 @@
 
 %}
 
+%x remove_comment_found
 %option yylineno
 %option noyywrap
 
@@ -66,6 +67,14 @@ WHITE_SPACES 					([ \t]+)
 NEW_LINE 						([\n])
 
 %%
+
+
+"/*"                                BEGIN(remove_comment_found);
+<remove_comment_found>"*/"          BEGIN(INITIAL);
+<remove_comment_found>.             ;
+<remove_comment_found>\n           ;
+"//"[^\n]*                          ;
+
 
 {SEMI}			{(yylval.node) = new Node("SEMI", yytext, NULL, NULL, NULL); return SEMI;}
 {EQUAL}			{(yylval.node) = new Node("EQUAL", yytext, NULL, NULL, NULL); return EQUAL;}
