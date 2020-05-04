@@ -8,19 +8,20 @@ extern int yylineno;
 
 
 enum DataType{
-	dt_none,
-	dt_int,
-	dt_char,
-	dt_string,
-	dt_float,
-	dt_bool,
-	dt_func,
-	dt_err
+	_none,
+	_int,
+	// dt_char,
+	// dt_string,
+	_float,
+	_bool,
+	_func,
+	_error
 };
 
 
 // Nodes of the AST
-class Node {
+class Node 
+{
 private:
 	string type;			// lexeme class
 	string value;			// lexeme
@@ -35,10 +36,11 @@ public:
 	Node *child3;
 	Node *child4;
 
-	Node (string t, string v, Node *c1, Node *c2, Node *c3) {
+	Node (string t, string v, Node *c1, Node *c2, Node *c3) 
+	{
 		type = t;
 		value = v;
-		data_type = dt_none;
+		data_type = _none;
 		child3 = c3;
 		child2 = c2;
 		child1 = c1;
@@ -46,24 +48,28 @@ public:
 		line_number = yylineno;
 	}
 
-	void addChild4(Node *c4){
+	void addChild4(Node *c4)
+	{
 		child4 = c4;
 	}
 
-	string getValue(){
+	string getValue()
+	{
 		return value;
 	}
 
-	string getType(){
+	string getType()
+	{
 		return type;
 	}
 
-	DataType getDataType(){
+	DataType getDataType()
+	{
 		return data_type;
 	}
 
-	void setDataType(DataType dt){
+	void setDataType(DataType dt)
+	{
 		data_type = dt;
 	}
-	// ~Node();
 };

@@ -7,7 +7,7 @@
 
 	using namespace std;
 
-	extern bool syntax_success;
+	extern bool syntax_analysis;
 
 %}
 
@@ -15,56 +15,58 @@
 %option yylineno
 %option noyywrap
 
-SEMI	";"
-EQUAL	"="
-ADD		"+"
-SUB		"-"
-MUL		"*"
-DIV		"/"
-MOD		"%"
-GT		">"
-LT		"<"
-GE		">="
-LE		"<="
-EQ		"=="
-NE 		("!="|"<>")
-OR 		"||"
-AND 	"&&"
-LB_CURLY					"{"
-RB_CURLY					"}"
-LB_ROUND					"("
-RB_ROUND					")"
-COMMA 	","
-MAIN	"main"
-INT		"int"
-CHAR	"char"
-STRING	"string"
-VOID	"void"
+NUM_INT 		([-]*[0-9]+)
+NUM_FP			([-]*[0-9]+\.[0-9]+)
+ID		        ([A-Za-z_]([A-Za-z0-9_])*)
+nl 			    [\n]
+sp              [ \n\t]*
+
+INT             "int"
+FLOAT           "float"
+VOID            "void"
+LT              "<"
+GT              ">"
+LTEQ            "<="
+GTEQ            ">="
+EQ              "=="
+NEQ             ("!="|"<>")
+AND             "&&"
+OR              "||"
+NOT             "!"
+ASSIGN          "="
+PLUS            "+"
+MINUS           "-"
+DIVIDE          "/"
+MULT            "*"
+MOD             "%"
+SEMI            ";"
+COLON           ":"
+COMMA           ","
+LB              "("
+RB              ")"
+LCB             "{"
+RCB             "}"
+
+HEADER          (\#include[ \n\t]*\<.+\>)|((\#include[ \t\n]*\".+\"))
+MAIN            "main"
+
+FOR             "for"
+WHILE           "while"
+IF              "if"
+ELSE            "else"
+SWITCH          "switch"
+CASE            "case"
+RETURN          "return"
+GET             "get"
+PUT             "put"
+BREAK           "break"
+CONTINUE        "continue"
+DEFAULT         "default"
+
 TRUE 	"true"
 FALSE	"false"
-FLOAT 	"float"
 BOOL	"bool"
-GET 	"get"
-PUT 	"put"
-PUTS 	"puts"
-RETURN 	"return"
-IN 		"in"
-IF 		"if"
-FOREACH	"foreach"
-FOR		"for"
-WHILE	"while"
-ELSE	"else"
-BREAK   "break"
-CONTINUE 	"continue"
 
-CHARACTERS 						('.')
-STRING_LITERALS					(\".*\")
-INTEGERS 						([0-9]+)
-FLOATING_POINTS					([0-9]+\.[0-9]+)
-LIBRARY 						(\#include[ \n\t]*\<.+\>)|((\#include[ \t\n]*\".+\"))
-IDENTIFIER						([A-Za-z_]([A-Za-z0-9_])*)
-WHITE_SPACES 					([ \t]+)
-NEW_LINE 						([\n])
 
 %%
 
@@ -77,57 +79,55 @@ NEW_LINE 						([\n])
 
 
 {SEMI}			{(yylval.node) = new Node("SEMI", yytext, NULL, NULL, NULL); return SEMI;}
-{EQUAL}			{(yylval.node) = new Node("EQUAL", yytext, NULL, NULL, NULL); return EQUAL;}
-{ADD} 			{(yylval.node) = new Node("ADD", yytext, NULL, NULL, NULL); return ADD;}
-{SUB} 			{(yylval.node) = new Node("SUB", yytext, NULL, NULL, NULL); return SUB;}
-{MUL} 			{(yylval.node) = new Node("MUL", yytext, NULL, NULL, NULL); return MUL;}
-{DIV} 			{(yylval.node) = new Node("DIV", yytext, NULL, NULL, NULL); return DIV;}
+{COLON}			{(yylval.node) = new Node("COLON", yytext, NULL, NULL, NULL); return COLON;}
+{EQ}			{(yylval.node) = new Node("EQ", yytext, NULL, NULL, NULL); return EQ;}
+{PLUS} 			{(yylval.node) = new Node("PLUS", yytext, NULL, NULL, NULL); return PLUS;}
+{MINUS} 			{(yylval.node) = new Node("MINUS", yytext, NULL, NULL, NULL); return MINUS;}
+{MULT} 			{(yylval.node) = new Node("MULT", yytext, NULL, NULL, NULL); return MULT;}
+{DIVIDE} 			{(yylval.node) = new Node("DIVIDE", yytext, NULL, NULL, NULL); return DIVIDE;}
 {MOD} 			{(yylval.node) = new Node("MOD", yytext, NULL, NULL, NULL); return MOD;}
 {GT} 			{(yylval.node) = new Node("GT", yytext, NULL, NULL, NULL); return GT;}
 {LT} 			{(yylval.node) = new Node("LT", yytext, NULL, NULL, NULL); return LT;}
-{GE} 			{(yylval.node) = new Node("GE", yytext, NULL, NULL, NULL); return GE;}
-{LE} 			{(yylval.node) = new Node("LE", yytext, NULL, NULL, NULL); return LE;}
-{EQ} 			{(yylval.node) = new Node("EQ", yytext, NULL, NULL, NULL); return EQ;}
-{NE} 			{(yylval.node) = new Node("NE", yytext, NULL, NULL, NULL); return NE;}
+{GTEQ} 			{(yylval.node) = new Node("GTEQ", yytext, NULL, NULL, NULL); return GTEQ;}
+{LTEQ} 			{(yylval.node) = new Node("LTEQ", yytext, NULL, NULL, NULL); return LTEQ;}
+{ASSIGN} 			{(yylval.node) = new Node("ASSIGN", yytext, NULL, NULL, NULL); return ASSIGN;}
+{NEQ} 			{(yylval.node) = new Node("NEQ", yytext, NULL, NULL, NULL); return NEQ;}
 {MAIN} 			{(yylval.node) = new Node("MAIN", yytext, NULL, NULL, NULL); return MAIN;}
 {INT} 			{(yylval.node) = new Node("INT", yytext, NULL, NULL, NULL); return INT;}
 {VOID} 			{(yylval.node) = new Node("VOID", yytext, NULL, NULL, NULL); return VOID;}
-{CHAR} 			{(yylval.node) = new Node("CHAR", yytext, NULL, NULL, NULL); return CHAR;}
-{STRING} 		{(yylval.node) = new Node("STRING", yytext, NULL, NULL, NULL); return STRING;}
-{TRUE} 			{(yylval.node) = new Node("TRUE", yytext, NULL, NULL, NULL); yylval.node->setDataType(dt_bool); return TRUE;}
-{FALSE} 		{(yylval.node) = new Node("FALSE", yytext, NULL, NULL, NULL); yylval.node->setDataType(dt_bool); return FALSE;}
+{TRUE} 			{(yylval.node) = new Node("TRUE", yytext, NULL, NULL, NULL); yylval.node->setDataType(_bool); return TRUE;}
+{FALSE} 		{(yylval.node) = new Node("FALSE", yytext, NULL, NULL, NULL); yylval.node->setDataType(_bool); return FALSE;}
 {FLOAT} 		{(yylval.node) = new Node("FLOAT", yytext, NULL, NULL, NULL); return FLOAT;}
 {BOOL} 			{(yylval.node) = new Node("BOOL", yytext, NULL, NULL, NULL); return BOOL;}
 {GET} 			{(yylval.node) = new Node("GET", yytext, NULL, NULL, NULL); return GET;}
 {PUT} 			{(yylval.node) = new Node("PUT", yytext, NULL, NULL, NULL); return PUT;}
-{PUTS} 			{(yylval.node) = new Node("PUTS", yytext, NULL, NULL, NULL); return PUTS;}
 {RETURN} 		{(yylval.node) = new Node("RETURN", yytext, NULL, NULL, NULL); return RETURN;}
-{IN} 			{(yylval.node) = new Node("IN", yytext, NULL, NULL, NULL); return IN;}
 {OR} 			{(yylval.node) = new Node("OR", yytext, NULL, NULL, NULL); return OR;}
 {AND} 			{(yylval.node) = new Node("AND", yytext, NULL, NULL, NULL); return AND;}
 {IF} 			{(yylval.node) = new Node("IF", yytext, NULL, NULL, NULL); return IF;}
+{SWITCH} 			{(yylval.node) = new Node("SWITCH", yytext, NULL, NULL, NULL); return SWITCH;}
+{CASE} 			{(yylval.node) = new Node("CASE", yytext, NULL, NULL, NULL); return CASE;}
+{DEFAULT} 			{(yylval.node) = new Node("DEFAULT", yytext, NULL, NULL, NULL); return DEFAULT;}
+
 {FOR} 			{(yylval.node) = new Node("FOR", yytext, NULL, NULL, NULL); return FOR;}
-{FOREACH}		{(yylval.node) = new Node("FOREACH", yytext, NULL, NULL, NULL); return FOREACH;}
 {WHILE} 		{(yylval.node) = new Node("WHILE", yytext, NULL, NULL, NULL); return WHILE;}
 {ELSE} 			{(yylval.node) = new Node("ELSE", yytext, NULL, NULL, NULL); return ELSE;}
 {BREAK} 		{(yylval.node) = new Node("BREAK", yytext, NULL, NULL, NULL); return BREAK;}
 {CONTINUE} 		{(yylval.node) = new Node("CONTINUE", yytext, NULL, NULL, NULL); return CONTINUE;}
-{LB_CURLY}		{(yylval.node) = new Node("LB_CURLY", yytext, NULL, NULL, NULL); return LB_CURLY;}
-{RB_CURLY}		{(yylval.node) = new Node("RB_CURLY", yytext, NULL, NULL, NULL); return RB_CURLY;}
-{LB_ROUND}		{(yylval.node) = new Node("LB_ROUND", yytext, NULL, NULL, NULL); return LB_ROUND;}
-{RB_ROUND}		{(yylval.node) = new Node("RB_ROUND", yytext, NULL, NULL, NULL); return RB_ROUND;}
+{LCB}		{(yylval.node) = new Node("LCB", yytext, NULL, NULL, NULL); return LCB;}
+{RCB}		{(yylval.node) = new Node("RCB", yytext, NULL, NULL, NULL); return RCB;}
+{LB}		{(yylval.node) = new Node("LB", yytext, NULL, NULL, NULL); return LB;}
+{RB}		{(yylval.node) = new Node("RB", yytext, NULL, NULL, NULL); return RB;}
 {COMMA}			{(yylval.node) = new Node("COMMA", yytext, NULL, NULL, NULL); return COMMA;}
 
-{INTEGERS}		{(yylval.node) = new Node("INTEGERS", yytext, NULL, NULL, NULL); yylval.node->setDataType(dt_int); return INTEGERS;}
-{CHARACTERS}		{(yylval.node) = new Node("CHARACTERS", yytext, NULL, NULL, NULL); yylval.node->setDataType(dt_char); return CHARACTERS;}
-{LIBRARY}			{(yylval.node) = new Node("LIBRARY", yytext, NULL, NULL, NULL); return LIBRARY;}
-{STRING_LITERALS}		{(yylval.node) = new Node("STRING_LITERALS", yytext, NULL, NULL, NULL); yylval.node->setDataType(dt_string); return STRING_LITERALS;}
-{FLOATING_POINTS}		{(yylval.node) = new Node("FLOATING_POINTS", yytext, NULL, NULL, NULL); yylval.node->setDataType(dt_float); return FLOATING_POINTS;}
-{IDENTIFIER}			{(yylval.node) = new Node("IDENTIFIER", yytext, NULL, NULL, NULL); return IDENTIFIER;}
+{NUM_INT}		{(yylval.node) = new Node("NUM_INT", yytext, NULL, NULL, NULL); yylval.node->setDataType(_int); return NUM_INT;}
+{HEADER}			{(yylval.node) = new Node("HEADER", yytext, NULL, NULL, NULL); return HEADER;}
+{NUM_FP}		{(yylval.node) = new Node("NUM_FP", yytext, NULL, NULL, NULL); yylval.node->setDataType(_float); return NUM_FP;}
+{ID}			{(yylval.node) = new Node("ID", yytext, NULL, NULL, NULL); return ID;}
 
-{NEW_LINE} 			{}
-{WHITE_SPACES}		{}
+{nl} 			{}
+{sp}		{}
 
-.					{cerr<< "TOKEN CANNOT BE MATCHED :\t"<< yytext <<"\t"<<endl; syntax_success = false;}
+.					{cerr<< "TOKEN CANNOT BE MATCHED :\t"<< yytext <<"\t"<<endl; syntax_analysis = false;}
 
 %%

@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int x = (1);
+int y = (1);
 
 int main()
 {
@@ -13,5 +13,9 @@ int main()
 
     default:
         break;
+    }
+    if(x)
+    {
+        put(x);
     }
 }
