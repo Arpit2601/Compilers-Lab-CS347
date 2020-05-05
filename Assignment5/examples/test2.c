@@ -5,15 +5,14 @@ int main()
     int x = 1;
     switch (x)
     {
-        
+
     case 1:
-        put(1);
+        put(x);
         break;
     case 2:
-        put(2);
-
+        put(x);
     default:
-        put(3);
+        put(x);
         break;
     }
 }

@@ -435,7 +435,7 @@ public:
 					putLabel(switch_labels[count]);
 					intermediate_code << switch_labels[count] << " : " << endl;
 					symtab.addScope();
-					pair<string, DataType> b = generateCode(temp->child2);
+					pair<string, DataType> b = generateCode(temp->child1);
 					symtab.removeScope();
 				}
 				else

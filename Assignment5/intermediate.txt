@@ -1,0 +1,21 @@
+main : 
+temp0 = 1
+int x = temp0
+temp1 = x.int.1 - 1
+if ( temp1 = 0 ) jump label_1
+temp1 = x.int.1 - 2
+if ( temp1 = 0 ) jump label_2
+label_3 : 
+temp2 = x.int.1
+write temp2
+break
+jump label_0
+label_1 : 
+temp3 = x.int.1
+write temp3
+break
+label_2 : 
+temp4 = x.int.1
+write temp4
+label_0 : 
+return
