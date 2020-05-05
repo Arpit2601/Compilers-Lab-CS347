@@ -7,19 +7,20 @@ _temp3:		.word 0
 _temp4:		.word 0
 .text
 main : 
-li	$t0, 1
+li	$t0, 2
 sw	$t0, _temp0
 lw	$t0, _temp0
 sw	$t0, _x.int.1
 lw	$t1, _x.int.1
+li	$t3, 0
 li	$t2, 1
 sub	$t0, $t1, $t2
 sw	$t0, _temp1
-beq	$t0, label_1
+beq	$t0, $t3, label_1
 li	$t2, 2
 sub	$t0, $t1, $t2
 sw	$t0, _temp1
-beq	$t0, label_2
+beq	$t0, $t3, label_2
 label_3 : 
 lw	$t0, _x.int.1
 sw	$t0, _temp2
