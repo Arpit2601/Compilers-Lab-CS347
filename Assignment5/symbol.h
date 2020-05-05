@@ -495,7 +495,7 @@ public:
 			// If we hit break outside loop then error
 			if(node->getValue() == "break")
 			{
-				if (inside_loop)
+				if (inside_loop || inside_switch)
 				{
 					return ;
 				} 
