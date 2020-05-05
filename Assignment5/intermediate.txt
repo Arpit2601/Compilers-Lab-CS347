@@ -1,4 +1,0 @@
-main : 
-temp0 = 1
-float x = temp0
-return
