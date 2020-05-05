@@ -1,21 +1,17 @@
 #include <stdio.h>
 
-int y = (1);
 
 int main()
 {
-    int x = 1;
+    float x =1 ;
     switch (x)
     {
     case 1:
-        put(x);
-        break;
-
+        put(1);
+    case 2:
+        put(2);
+    
     default:
-        break;
-    }
-    if(x)
-    {
-        put(x);
+        put(3);
     }
 }

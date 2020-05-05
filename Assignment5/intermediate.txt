@@ -1,14 +1,4 @@
-temp0 = 1
-temp1 = temp0
-int y = temp1
 main : 
-temp2 = 1
-int x = temp2
-temp3 = x.int.1
-if ( temp3 > 0 ) jump label_0
-jump label_1
-label_0 : 
-temp4 = x.int.1
-write temp4
-label_1 : 
+temp0 = 1
+float x = temp0
 return
