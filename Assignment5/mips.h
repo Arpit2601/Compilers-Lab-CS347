@@ -121,9 +121,9 @@ public:
 		mips_1 << "bgtz\t$" << reg << ", " << label << endl;
 	}
 
-	void conditioneq(string reg, string label)
+	void conditioneq(string reg, string reg2, string label)
 	{
-		mips_1 << "beq\t$" << reg << ", " << label << endl;
+		mips_1 << "beq\t$" << reg << ", $" << reg2 << ", " << label << endl;
 	}
 
 	void functionReturnValue(string reg)
@@ -412,7 +412,10 @@ public:
 			pair<string, DataType> a = generateCode(tree->child_1); // variable
 			// load the expression's value in t1
 			loadInRegister(a.first, "t1", a.second);
-			AstNode *temp = tree->child_2;
+
+			loadInRegister("0", "t3", _int);
+
+			Node *temp = tree->child2;
 			int count = 0;
 			while (temp != NULL)
 			{
@@ -449,7 +452,7 @@ public:
 									  << " " << b.first << endl;
 					intermediate_code << "if ( " << ret.first << " = 0 ) jump " << switch_labels[count] << endl;
 					// branch to switch_labels[count] if $t0>0
-					conditioneq("t0", switch_labels[count]);
+					conditioneq("t0", "t3", switch_labels[count]);
 				}
 				temp = temp->child_3;
 				count++;
