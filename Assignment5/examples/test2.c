@@ -1,11 +1,16 @@
 #include <stdio.h>
-
+// dsfjkdsbfnd fjsbn
 int main()
 {
     int x = 1;
     switch (x)
     {
+        //fdslkkfd
+        // dnslkfd
+        /*
 
+    d hfdjf"
+        */
     case 1:
         put(x);
         break;

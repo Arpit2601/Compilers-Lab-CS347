@@ -8,7 +8,7 @@ extern int yylineno;
 class MIPSCode
 {
 private:
-	SymbolTable symtab, backup_symtab; // backup symtab is used for pushing to stack during backup
+	SymbolTable symtab, backup_symtab; // backup_symtab is used for pushing to stack during function call
 	stringstream mips_1, mips_2, intermediate_code;
 	int label_counter;
 	int string_var_counter;
@@ -20,7 +20,7 @@ private:
 	vector<pair<string, DataType>> allVariables;
 	vector<pair<string, string>> stringLiterals;
 
-	string TYPE2STRING[8] = {"none", "int", "float", "bool", "func", "err"};
+	string data_type_to_string[6] = {"none", "int", "float", "bool", "func", "err"};
 
 public:
 	MIPSCode()
@@ -115,7 +115,7 @@ public:
 	{
 		mips_1 << "j\t" << label << endl;
 	}
-
+	// Branch on greater than zero
 	void condition(string reg, string label)
 	{
 		mips_1 << "bgtz\t$" << reg << ", " << label << endl;
@@ -264,7 +264,7 @@ public:
 		}
 	}
 
-	pair<string, DataType> generateCode(Node *tree)
+	pair<string, DataType> generateCode(AstNode *tree)
 	{
 		if (tree == NULL)
 		{
@@ -282,51 +282,51 @@ public:
 
 		if (node_type == "variable_declaration")
 		{
-			if (tree->child3 == NULL)
+			if (tree->child_3 == NULL)
 			{
-				vector<string> vars = expandVariablesList(tree->child2);
+				vector<string> vars = expand_variable_list(tree->child_2);
 				for (int i = 0; i < vars.size(); i++)
 				{
-					symtab.addVariableInCurrentScope(vars[i], tree->child1->getDataType());
-					intermediate_code << TYPE2STRING[tree->child1->getDataType()] << " " << vars[i] << endl;
+					symtab.add_variable_in_current_scope(vars[i], tree->child_1->getDataType());
+					intermediate_code << data_type_to_string[tree->child_1->getDataType()] << " " << vars[i] << endl;
 				}
 			}
 			else
 			{
 				// add to symtab
-				symtab.addVariableInCurrentScope(tree->child2->getValue(), tree->child1->getDataType());
-				pair<string, DataType> exp = generateCode(tree->child3);
-				intermediate_code << TYPE2STRING[tree->child1->getDataType()] << " " << tree->child2->getValue() << " = " << exp.first << endl;
+				symtab.add_variable_in_current_scope(tree->child_2->getValue(), tree->child_1->getDataType());
+				pair<string, DataType> exp = generateCode(tree->child_3);
+				intermediate_code << data_type_to_string[tree->child_1->getDataType()] << " " << tree->child_2->getValue() << " = " << exp.first << endl;
 				// store the expression register to the memory
 				loadInRegister(exp.first, "t0", exp.second);
-				storeInMemory(symtab.gen_mips(tree->child2->getValue()), tree->child1->getDataType());
+				storeInMemory(symtab.gen_mips(tree->child_2->getValue()), tree->child_1->getDataType());
 			}
 			return make_pair("", _int);
 		}
 		else if (node_type == "variable")
 		{
 			// return name.type.scope
-			return make_pair(symtab.gen_mips(tree->child1->getValue()), tree->child1->getDataType());
+			return make_pair(symtab.gen_mips(tree->child_1->getValue()), tree->child_1->getDataType());
 		}
 		else if (node_type == "function_declaration")
 		{
 
-			vector<Parameter> params = expandParameterList(tree->child2);
+			vector<Parameter> params = expand_parameter_list(tree->child_2);
 
 			string label = putLabel(tree->getValue(), params.size());
 			intermediate_code << tree->getValue() << " : " << endl;
 
-			symtab.addFunction(label, _int, params);
+			symtab.add_function(label, _int, params);
 
-			symtab.addScope();
+			symtab.add_scope();
 			for (int i = 0; i < params.size(); i++)
 			{
-				symtab.addVariableInCurrentScope(params[i].getValue(), params[i].getDataType());
-				intermediate_code << "param " << TYPE2STRING[params[i].getDataType()] << " " << params[i].getValue() << endl;
+				symtab.add_variable_in_current_scope(params[i].getValue(), params[i].getDataType());
+				intermediate_code << "param " << data_type_to_string[params[i].getDataType()] << " " << params[i].getValue() << endl;
 			}
 
-			pair<string, DataType> a = generateCode(tree->child3);
-			symtab.removeScope();
+			pair<string, DataType> a = generateCode(tree->child_3);
+			symtab.remove_scope();
 
 			ReturnFunc();
 			intermediate_code << "return" << endl;
@@ -338,9 +338,9 @@ public:
 			mips_1 << "main : " << endl;
 			intermediate_code << "main : " << endl;
 
-			symtab.addScope();
-			pair<string, DataType> a = generateCode(tree->child2);
-			symtab.removeScope();
+			symtab.add_scope();
+			pair<string, DataType> a = generateCode(tree->child_2);
+			symtab.remove_scope();
 			ReturnFunc();
 			intermediate_code << "return" << endl;
 			return make_pair("", _int);
@@ -359,15 +359,15 @@ public:
 			}
 			else if (tree->getValue() == "scope")
 			{
-				symtab.addScope();
+				symtab.add_scope();
 				intermediate_code << "{" << endl;
-				generateCode(tree->child1);
-				symtab.removeScope();
+				generateCode(tree->child_1);
+				symtab.remove_scope();
 				intermediate_code << "}" << endl;
 			}
 			else
 			{
-				generateCode(tree->child1);
+				generateCode(tree->child_1);
 			}
 			return make_pair("", _int);
 		}
@@ -376,7 +376,7 @@ public:
 			string start = getNextLabel();
 			string end = getNextLabel();
 
-			pair<string, DataType> a = generateCode(tree->child1); // expression
+			pair<string, DataType> a = generateCode(tree->child_1); // expression
 
 			// load the expression's value in t1
 			loadInRegister(a.first, "t1", a.second);
@@ -389,18 +389,18 @@ public:
 			// now add the if code (i.e. the start label)
 			putLabel(start);
 			intermediate_code << start << " : " << endl;
-			symtab.addScope();
-			pair<string, DataType> b = generateCode(tree->child2);
-			symtab.removeScope();
+			symtab.add_scope();
+			pair<string, DataType> b = generateCode(tree->child_2);
+			symtab.remove_scope();
 			putLabel(end);
 			intermediate_code << end << " : " << endl;
 
 			// if else part
-			if (tree->child3 != NULL)
+			if (tree->child_3 != NULL)
 			{
-				symtab.addScope();
-				pair<string, DataType> c = generateCode(tree->child3);
-				symtab.removeScope();
+				symtab.add_scope();
+				pair<string, DataType> c = generateCode(tree->child_3);
+				symtab.remove_scope();
 			}
 			return make_pair("", _int);
 		}
@@ -409,14 +409,14 @@ public:
 			string end = getNextLabel();
 			breaks.push_back(end);
 
-			pair<string, DataType> a = generateCode(tree->child1); // variable
+			pair<string, DataType> a = generateCode(tree->child_1); // variable
 			// load the expression's value in t1
 			loadInRegister(a.first, "t1", a.second);
-			Node *temp = tree->child2;
+			AstNode *temp = tree->child_2;
 			int count = 0;
 			while (temp != NULL)
 			{
-				temp = temp->child3;
+				temp = temp->child_3;
 				count++;
 			}
 			vector<string> switch_labels;
@@ -427,20 +427,20 @@ public:
 			}
 			count = 0;
 			pair<string, DataType> ret = getNextTempVar();
-			temp = tree->child2;
+			temp = tree->child_2;
 			while (temp != NULL)
 			{
 				if (temp->getValue() == "DEFAULT")
 				{
 					putLabel(switch_labels[count]);
 					intermediate_code << switch_labels[count] << " : " << endl;
-					symtab.addScope();
-					pair<string, DataType> b = generateCode(temp->child1);
-					symtab.removeScope();
+					symtab.add_scope();
+					pair<string, DataType> b = generateCode(temp->child_1);
+					symtab.remove_scope();
 				}
 				else
 				{
-					pair<string, DataType> b = generateCode(temp->child1);
+					pair<string, DataType> b = generateCode(temp->child_1);
 					loadInRegister(b.first, "t2", b.second);
 					operate("-");
 					storeInMemory(ret.first, DatatypeCoercible(a.second, b.second));
@@ -451,12 +451,12 @@ public:
 					// branch to switch_labels[count] if $t0>0
 					conditioneq("t0", switch_labels[count]);
 				}
-				temp = temp->child3;
+				temp = temp->child_3;
 				count++;
 			}
 			intermediate_code << "jump " << end << endl;
 			Jump(end);
-			temp = tree->child2;
+			temp = tree->child_2;
 			count = 0;
 			while (temp != NULL)
 			{
@@ -464,11 +464,11 @@ public:
 				{
 					putLabel(switch_labels[count]);
 					intermediate_code << switch_labels[count] << " : " << endl;
-					symtab.addScope();
-					pair<string, DataType> b = generateCode(temp->child2);
-					symtab.removeScope();
+					symtab.add_scope();
+					pair<string, DataType> b = generateCode(temp->child_2);
+					symtab.remove_scope();
 				}
-				temp = temp->child3;
+				temp = temp->child_3;
 				count++;
 			}
 			putLabel(end);
@@ -487,13 +487,13 @@ public:
 			continues.push_back(cond); // Label to jump to on continue
 
 			// code for expression
-			generateCode(tree->child1);
+			generateCode(tree->child_1);
 
 			putLabel(start);
 			intermediate_code << start << " : " << endl;
 
 			// code for condition
-			pair<string, DataType> a = generateCode(tree->child2);
+			pair<string, DataType> a = generateCode(tree->child_2);
 			loadInRegister(a.first, "t0", a.second);
 
 			// if condition true, jump to code statements
@@ -507,11 +507,11 @@ public:
 			putLabel(middle);
 			intermediate_code << middle << " : " << endl;
 
-			generateCode(tree->child4);
+			generateCode(tree->child_4);
 
 			putLabel(cond);
 			intermediate_code << cond << " : " << endl;
-			generateCode(tree->child3);
+			generateCode(tree->child_3);
 
 			// code for jump to start
 			Jump(start);
@@ -530,8 +530,8 @@ public:
 		// 	string con = getNextLabel();		// jump to this label on continue/condition reevaluate
 		// 	string end = getNextLabel();		// end
 
-		// 	pair<string, DataType> a = generateCode(tree->child1);		// variable
-		// 	pair<string, DataType> b = generateCode(tree->child2);		// expression
+		// 	pair<string, DataType> a = generateCode(tree->child_1);		// variable
+		// 	pair<string, DataType> b = generateCode(tree->child_2);		// expression
 
 		// 	breaks.push_back(end);		// Label to jump to on break
 		// 	continues.push_back(con); 	// Label to jump to on continue
@@ -563,9 +563,9 @@ public:
 		// 	putLabel(middle);
 		// 	intermediate_code<< middle << " : " <<endl;
 
-		// 	symtab.addScope();
-		// 	pair<string, DataType> c = generateCode(tree->child3);
-		// 	symtab.removeScope();
+		// 	symtab.add_scope();
+		// 	pair<string, DataType> c = generateCode(tree->child_3);
+		// 	symtab.remove_scope();
 
 		// 	putLabel(con);
 		// 	intermediate_code<< con << " : " <<endl;
@@ -597,7 +597,7 @@ public:
 
 			putLabel(start);
 			intermediate_code << start << " : " << endl;
-			pair<string, DataType> a = generateCode(tree->child1);
+			pair<string, DataType> a = generateCode(tree->child_1);
 
 			loadInRegister(a.first, "t1", a.second);
 			condition("t1", middle);
@@ -606,9 +606,9 @@ public:
 			intermediate_code << "jump " << end << endl;
 			putLabel(middle);
 			intermediate_code << middle << " : " << endl;
-			symtab.addScope();
-			pair<string, DataType> b = generateCode(tree->child2);
-			symtab.removeScope();
+			symtab.add_scope();
+			pair<string, DataType> b = generateCode(tree->child_2);
+			symtab.remove_scope();
 
 			Jump(start);
 			putLabel(end);
@@ -623,9 +623,9 @@ public:
 		}
 		else if (node_type == "return_expr")
 		{
-			if (tree->child2 == NULL)
+			if (tree->child_2 == NULL)
 			{
-				pair<string, DataType> a = generateCode(tree->child2);
+				pair<string, DataType> a = generateCode(tree->child_2);
 
 				loadInRegister(a.first, "t1", a.second);
 				functionReturnValue("t1");
@@ -637,7 +637,7 @@ public:
 		}
 		else if (node_type == "read_input")
 		{
-			pair<string, DataType> a = generateCode(tree->child1);
+			pair<string, DataType> a = generateCode(tree->child_1);
 			loadInRegister(a.first, "t1", a.second);
 			readCode("t1");
 			intermediate_code << "read " << a.first << endl;
@@ -645,7 +645,7 @@ public:
 		}
 		else if (node_type == "print_output")
 		{
-			pair<string, DataType> a = generateCode(tree->child1);
+			pair<string, DataType> a = generateCode(tree->child_1);
 			loadInRegister(a.first, "t1", a.second);
 			writeCode("t1");
 			intermediate_code << "write " << a.first << endl;
@@ -656,15 +656,15 @@ public:
 			pair<string, DataType> b;
 			if (tree->getValue() == "=")
 			{
-				pair<string, DataType> a = generateCode(tree->child2);
-				b = generateCode(tree->child1);
+				pair<string, DataType> a = generateCode(tree->child_2);
+				b = generateCode(tree->child_1);
 				loadInRegister(a.first, "t0", a.second);
 				storeInMemory(b.first, b.second);
 				intermediate_code << b.first << " = " << a.first << endl;
 			}
 			else
 			{
-				b = generateCode(tree->child1);
+				b = generateCode(tree->child_1);
 			}
 			pair<string, DataType> ret = getNextTempVar();
 
@@ -678,8 +678,8 @@ public:
 		{
 			if (tree->getValue() == "or")
 			{
-				pair<string, DataType> a = generateCode(tree->child2);
-				pair<string, DataType> b = generateCode(tree->child1);
+				pair<string, DataType> a = generateCode(tree->child_2);
+				pair<string, DataType> b = generateCode(tree->child_1);
 				pair<string, DataType> ret = getNextTempVar();
 
 				loadInRegister(b.first, "t1", b.second);
@@ -693,15 +693,15 @@ public:
 			}
 			else
 			{
-				return generateCode(tree->child1);
+				return generateCode(tree->child_1);
 			}
 		}
 		else if (node_type == "and_expr")
 		{
 			if (tree->getValue() == "and")
 			{
-				pair<string, DataType> a = generateCode(tree->child2);
-				pair<string, DataType> b = generateCode(tree->child1);
+				pair<string, DataType> a = generateCode(tree->child_2);
+				pair<string, DataType> b = generateCode(tree->child_1);
 				pair<string, DataType> ret = getNextTempVar();
 
 				loadInRegister(b.first, "t1", b.second);
@@ -713,16 +713,16 @@ public:
 			}
 			else
 			{
-				return generateCode(tree->child1);
+				return generateCode(tree->child_1);
 			}
 		}
 		else if (node_type == "relation_expr")
 		{
 			if (tree->getValue() == "op")
 			{
-				pair<string, DataType> a = generateCode(tree->child3);
-				pair<string, DataType> b = generateCode(tree->child1);
-				pair<string, DataType> c = generateCode(tree->child2);
+				pair<string, DataType> a = generateCode(tree->child_3);
+				pair<string, DataType> b = generateCode(tree->child_1);
+				pair<string, DataType> c = generateCode(tree->child_2);
 				pair<string, DataType> ret = getNextTempVar();
 
 				loadInRegister(b.first, "t1", b.second);
@@ -734,16 +734,16 @@ public:
 			}
 			else
 			{
-				return generateCode(tree->child1);
+				return generateCode(tree->child_1);
 			}
 		}
 		else if (node_type == "arithmetic_expr")
 		{
-			if (tree->child3 != NULL)
+			if (tree->child_3 != NULL)
 			{
-				pair<string, DataType> a = generateCode(tree->child3);
-				pair<string, DataType> b = generateCode(tree->child1);
-				pair<string, DataType> c = generateCode(tree->child2);
+				pair<string, DataType> a = generateCode(tree->child_3);
+				pair<string, DataType> b = generateCode(tree->child_1);
+				pair<string, DataType> c = generateCode(tree->child_2);
 				pair<string, DataType> ret = getNextTempVar();
 
 				loadInRegister(b.first, "t1", b.second);
@@ -755,16 +755,16 @@ public:
 			}
 			else
 			{
-				return generateCode(tree->child1);
+				return generateCode(tree->child_1);
 			}
 		}
 		else if (node_type == "divmul_expr")
 		{
-			if (tree->child3 != NULL)
+			if (tree->child_3 != NULL)
 			{
-				pair<string, DataType> a = generateCode(tree->child3);
-				pair<string, DataType> b = generateCode(tree->child1);
-				pair<string, DataType> c = generateCode(tree->child2);
+				pair<string, DataType> a = generateCode(tree->child_3);
+				pair<string, DataType> b = generateCode(tree->child_1);
+				pair<string, DataType> c = generateCode(tree->child_2);
 				pair<string, DataType> ret = getNextTempVar();
 
 				loadInRegister(b.first, "t1", b.second);
@@ -776,16 +776,16 @@ public:
 			}
 			else
 			{
-				return generateCode(tree->child1);
+				return generateCode(tree->child_1);
 			}
 		}
 		else if (node_type == "unary_expr")
 		{
-			if (tree->child3 != NULL)
+			if (tree->child_3 != NULL)
 			{
 
-				pair<string, DataType> a = generateCode(tree->child2);
-				pair<string, DataType> b = generateCode(tree->child1);
+				pair<string, DataType> a = generateCode(tree->child_2);
+				pair<string, DataType> b = generateCode(tree->child_1);
 				pair<string, DataType> ret = getNextTempVar();
 
 				loadInRegister("0", "t1", _int);
@@ -797,12 +797,12 @@ public:
 			}
 			else
 			{
-				return generateCode(tree->child1);
+				return generateCode(tree->child_1);
 			}
 		}
 		else if (node_type == "term")
 		{
-			return generateCode(tree->child1);
+			return generateCode(tree->child_1);
 		}
 		else if (node_type == "constants")
 		{
@@ -813,15 +813,15 @@ public:
 		{
 			//evaluate arguments
 			intermediate_code << "call " << tree->getValue() << endl;
-			vector<string> args = expandArgumentsList(tree->child1);
-			vector<string> pars = symtab.getFunctionParameters("_" + tree->getValue() + "_." + to_string(args.size()));
+			vector<string> args = expand_arguments_list(tree->child_1);
+			vector<string> pars = symtab.get_function_parameters("_" + tree->getValue() + "_." + to_string(args.size()));
 
-			//backup variables
+			//backup symbol table variables
 			// push the return address to stack
 			pushReturnCode();
 
 			// push the current register values to stack
-			vector<string> backvars = symtab.backup();
+			vector<string> backvars = symtab.backup_symbol_table();
 			for (int i = 0; i < backvars.size(); i++)
 			{
 				pushCode(backvars[i]);
@@ -838,20 +838,20 @@ public:
 			//call function
 			functionCall("_" + tree->getValue() + "_." + to_string(args.size()));
 
-			//restore variables
+			//restore_symbol_table variables
 			// pop back the stored register values from stack
 			for (int i = backvars.size() - 1; i >= 0; i--)
 			{
 				popCode(backvars[i]);
 			}
 			// pop back the return address from stack
-			symtab.restore(backvars);
+			symtab.restore_symbol_table(backvars);
 
 			popReturnCode();
 
 			pair<string, DataType> ret = getNextTempVar();
 
-			// restore the return value
+			// restore_symbol_table the return value
 			restoreReturn(ret.first);
 			ReturnFunc();
 
@@ -859,9 +859,9 @@ public:
 		}
 		// else if (node_type == "write_string")
 		// {
-		// 	loadInRegister(tree->child1->getValue(), "t0", dt_string);
+		// 	loadInRegister(tree->child_1->getValue(), "t0", dt_string);
 		// 	writeStringCode("t0");
-		// 	intermediate_code << "puts " << tree->child1->getValue() <<endl;
+		// 	intermediate_code << "puts " << tree->child_1->getValue() <<endl;
 		// 	return make_pair("", _int);
 
 		// }
@@ -871,9 +871,9 @@ public:
 		}
 		else
 		{
-			generateCode(tree->child1);
-			generateCode(tree->child2);
-			generateCode(tree->child3);
+			generateCode(tree->child_1);
+			generateCode(tree->child_2);
+			generateCode(tree->child_3);
 			return make_pair("", _int);
 		}
 		return make_pair("", _int);
@@ -917,21 +917,21 @@ public:
 		return;
 	}
 
-	vector<string> expandVariablesList(Node *tree)
+	vector<string> expand_variable_list(AstNode *tree)
 	{
 		vector<string> res;
 		if (tree->getType() != "variable_list")
 		{
 			return res;
 		}
-		else if (tree->child2 == NULL)
+		else if (tree->child_2 == NULL)
 		{
-			res.push_back(tree->child1->getValue());
+			res.push_back(tree->child_1->getValue());
 		}
 		else
 		{
-			res.push_back(tree->child2->getValue());
-			vector<string> temp = expandVariablesList(tree->child1);
+			res.push_back(tree->child_2->getValue());
+			vector<string> temp = expand_variable_list(tree->child_1);
 			for (std::vector<string>::reverse_iterator i = temp.rbegin(); i != temp.rend(); ++i)
 			{
 				res.insert(res.begin(), *i);
@@ -940,49 +940,49 @@ public:
 		return res;
 	}
 
-	vector<Parameter> expandParameterList(Node *tree)
+	vector<Parameter> expand_parameter_list(AstNode *tree)
 	{
-		if (tree->getType() != "parameters" || tree->child1 == NULL)
+		if (tree->getType() != "parameters" || tree->child_1 == NULL)
 		{
 			return vector<Parameter>();
 		}
 		else
 		{
-			Node *paramlist = tree->child1;
-			return expandParameterListAux(paramlist);
+			AstNode *paramlist = tree->child_1;
+			return meta_expand_parameter_list(paramlist);
 		}
 	}
 
-	vector<Parameter> expandParameterListAux(Node *tree)
+	vector<Parameter> meta_expand_parameter_list(AstNode *tree)
 	{
 		vector<Parameter> res;
 		if (tree->getType() != "parameters_list")
 		{
 			return res;
 		}
-		if (tree->child2 == NULL)
+		if (tree->child_2 == NULL)
 		{
-			res.push_back(Parameter(tree->child1->child2->getValue(), tree->child1->getDataType()));
+			res.push_back(Parameter(tree->child_1->child_2->getValue(), tree->child_1->getDataType()));
 			return res;
 		}
-		res = expandParameterListAux(tree->child1);
-		res.push_back(Parameter(tree->child2->child2->getValue(), tree->child2->getDataType()));
+		res = meta_expand_parameter_list(tree->child_1);
+		res.push_back(Parameter(tree->child_2->child_2->getValue(), tree->child_2->getDataType()));
 		return res;
 	}
 
-	vector<string> expandArgumentsList(Node *Tree)
+	vector<string> expand_arguments_list(AstNode *Tree)
 	{
 		vector<string> v;
 		v.clear();
-		if (Tree->getType() != "args" || Tree->child1 == NULL)
+		if (Tree->getType() != "args" || Tree->child_1 == NULL)
 		{
 			return v;
 		}
-		Node *args_list = Tree->child1;
-		return expandArgumentsListAux(args_list);
+		AstNode *args_list = Tree->child_1;
+		return meta_expand_arguments_list(args_list);
 	}
 
-	vector<string> expandArgumentsListAux(Node *tree)
+	vector<string> meta_expand_arguments_list(AstNode *tree)
 	{
 		vector<string> res;
 		res.clear();
@@ -990,14 +990,14 @@ public:
 		{
 			return res;
 		}
-		if (tree->child2 == NULL)
+		if (tree->child_2 == NULL)
 		{
-			res.push_back(tree->child1->getValue());
+			res.push_back(tree->child_1->getValue());
 			return res;
 		}
 
-		res = expandArgumentsListAux(tree->child1);
-		res.push_back(tree->child2->getValue());
+		res = meta_expand_arguments_list(tree->child_1);
+		res.push_back(tree->child_2->getValue());
 
 		return res;
 	}

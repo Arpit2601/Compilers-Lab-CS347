@@ -1,14 +1,10 @@
 %{
-
 	#include <bits/stdc++.h>
-
 	#include "mips.h"
 	#include "main.tab.h"
-
 	using namespace std;
-
 	extern bool syntax_analysis;
-
+	extern bool lexical_analysis;
 %}
 
 %x remove_comment_found
@@ -63,14 +59,11 @@ BREAK           "break"
 CONTINUE        "continue"
 DEFAULT         "default"
 
-TRUE 	"true"
-FALSE	"false"
-BOOL	"bool"
-
+TRUE 			"true"
+FALSE			"false"
+BOOL			"bool"
 
 %%
-
-
 "/*"                                BEGIN(remove_comment_found);
 <remove_comment_found>"*/"          BEGIN(INITIAL);
 <remove_comment_found>.             ;
@@ -78,56 +71,56 @@ BOOL	"bool"
 "//"[^\n]*                          ;
 
 
-{SEMI}			{(yylval.node) = new Node("SEMI", yytext, NULL, NULL, NULL); return SEMI;}
-{COLON}			{(yylval.node) = new Node("COLON", yytext, NULL, NULL, NULL); return COLON;}
-{EQ}			{(yylval.node) = new Node("EQ", yytext, NULL, NULL, NULL); return EQ;}
-{PLUS} 			{(yylval.node) = new Node("PLUS", yytext, NULL, NULL, NULL); return PLUS;}
-{MINUS} 			{(yylval.node) = new Node("MINUS", yytext, NULL, NULL, NULL); return MINUS;}
-{MULT} 			{(yylval.node) = new Node("MULT", yytext, NULL, NULL, NULL); return MULT;}
-{DIVIDE} 			{(yylval.node) = new Node("DIVIDE", yytext, NULL, NULL, NULL); return DIVIDE;}
-{MOD} 			{(yylval.node) = new Node("MOD", yytext, NULL, NULL, NULL); return MOD;}
-{GT} 			{(yylval.node) = new Node("GT", yytext, NULL, NULL, NULL); return GT;}
-{LT} 			{(yylval.node) = new Node("LT", yytext, NULL, NULL, NULL); return LT;}
-{GTEQ} 			{(yylval.node) = new Node("GTEQ", yytext, NULL, NULL, NULL); return GTEQ;}
-{LTEQ} 			{(yylval.node) = new Node("LTEQ", yytext, NULL, NULL, NULL); return LTEQ;}
-{ASSIGN} 			{(yylval.node) = new Node("ASSIGN", yytext, NULL, NULL, NULL); return ASSIGN;}
-{NEQ} 			{(yylval.node) = new Node("NEQ", yytext, NULL, NULL, NULL); return NEQ;}
-{MAIN} 			{(yylval.node) = new Node("MAIN", yytext, NULL, NULL, NULL); return MAIN;}
-{INT} 			{(yylval.node) = new Node("INT", yytext, NULL, NULL, NULL); return INT;}
-{VOID} 			{(yylval.node) = new Node("VOID", yytext, NULL, NULL, NULL); return VOID;}
-{TRUE} 			{(yylval.node) = new Node("TRUE", yytext, NULL, NULL, NULL); yylval.node->setDataType(_bool); return TRUE;}
-{FALSE} 		{(yylval.node) = new Node("FALSE", yytext, NULL, NULL, NULL); yylval.node->setDataType(_bool); return FALSE;}
-{FLOAT} 		{(yylval.node) = new Node("FLOAT", yytext, NULL, NULL, NULL); return FLOAT;}
-{BOOL} 			{(yylval.node) = new Node("BOOL", yytext, NULL, NULL, NULL); return BOOL;}
-{GET} 			{(yylval.node) = new Node("GET", yytext, NULL, NULL, NULL); return GET;}
-{PUT} 			{(yylval.node) = new Node("PUT", yytext, NULL, NULL, NULL); return PUT;}
-{RETURN} 		{(yylval.node) = new Node("RETURN", yytext, NULL, NULL, NULL); return RETURN;}
-{OR} 			{(yylval.node) = new Node("OR", yytext, NULL, NULL, NULL); return OR;}
-{AND} 			{(yylval.node) = new Node("AND", yytext, NULL, NULL, NULL); return AND;}
-{IF} 			{(yylval.node) = new Node("IF", yytext, NULL, NULL, NULL); return IF;}
-{SWITCH} 			{(yylval.node) = new Node("SWITCH", yytext, NULL, NULL, NULL); return SWITCH;}
-{CASE} 			{(yylval.node) = new Node("CASE", yytext, NULL, NULL, NULL); return CASE;}
-{DEFAULT} 			{(yylval.node) = new Node("DEFAULT", yytext, NULL, NULL, NULL); return DEFAULT;}
+{SEMI}			{(yylval.node) = new AstNode("SEMI", yytext, NULL, NULL, NULL); return SEMI;}
+{COLON}			{(yylval.node) = new AstNode("COLON", yytext, NULL, NULL, NULL); return COLON;}
+{EQ}			{(yylval.node) = new AstNode("EQ", yytext, NULL, NULL, NULL); return EQ;}
+{PLUS} 			{(yylval.node) = new AstNode("PLUS", yytext, NULL, NULL, NULL); return PLUS;}
+{MINUS} 		{(yylval.node) = new AstNode("MINUS", yytext, NULL, NULL, NULL); return MINUS;}
+{MULT} 			{(yylval.node) = new AstNode("MULT", yytext, NULL, NULL, NULL); return MULT;}
+{DIVIDE} 		{(yylval.node) = new AstNode("DIVIDE", yytext, NULL, NULL, NULL); return DIVIDE;}
+{MOD} 			{(yylval.node) = new AstNode("MOD", yytext, NULL, NULL, NULL); return MOD;}
+{GT} 			{(yylval.node) = new AstNode("GT", yytext, NULL, NULL, NULL); return GT;}
+{LT} 			{(yylval.node) = new AstNode("LT", yytext, NULL, NULL, NULL); return LT;}
+{GTEQ} 			{(yylval.node) = new AstNode("GTEQ", yytext, NULL, NULL, NULL); return GTEQ;}
+{LTEQ} 			{(yylval.node) = new AstNode("LTEQ", yytext, NULL, NULL, NULL); return LTEQ;}
+{ASSIGN} 		{(yylval.node) = new AstNode("ASSIGN", yytext, NULL, NULL, NULL); return ASSIGN;}
+{NEQ} 			{(yylval.node) = new AstNode("NEQ", yytext, NULL, NULL, NULL); return NEQ;}
+{MAIN} 			{(yylval.node) = new AstNode("MAIN", yytext, NULL, NULL, NULL); return MAIN;}
+{INT} 			{(yylval.node) = new AstNode("INT", yytext, NULL, NULL, NULL); return INT;}
+{VOID} 			{(yylval.node) = new AstNode("VOID", yytext, NULL, NULL, NULL); return VOID;}
+{TRUE} 			{(yylval.node) = new AstNode("TRUE", yytext, NULL, NULL, NULL); yylval.node->setDataType(_bool); return TRUE;}
+{FALSE} 		{(yylval.node) = new AstNode("FALSE", yytext, NULL, NULL, NULL); yylval.node->setDataType(_bool); return FALSE;}
+{FLOAT} 		{(yylval.node) = new AstNode("FLOAT", yytext, NULL, NULL, NULL); return FLOAT;}
+{BOOL} 			{(yylval.node) = new AstNode("BOOL", yytext, NULL, NULL, NULL); return BOOL;}
+{GET} 			{(yylval.node) = new AstNode("GET", yytext, NULL, NULL, NULL); return GET;}
+{PUT} 			{(yylval.node) = new AstNode("PUT", yytext, NULL, NULL, NULL); return PUT;}
+{RETURN} 		{(yylval.node) = new AstNode("RETURN", yytext, NULL, NULL, NULL); return RETURN;}
+{OR} 			{(yylval.node) = new AstNode("OR", yytext, NULL, NULL, NULL); return OR;}
+{AND} 			{(yylval.node) = new AstNode("AND", yytext, NULL, NULL, NULL); return AND;}
+{IF} 			{(yylval.node) = new AstNode("IF", yytext, NULL, NULL, NULL); return IF;}
+{SWITCH} 		{(yylval.node) = new AstNode("SWITCH", yytext, NULL, NULL, NULL); return SWITCH;}
+{CASE} 			{(yylval.node) = new AstNode("CASE", yytext, NULL, NULL, NULL); return CASE;}
+{DEFAULT} 		{(yylval.node) = new AstNode("DEFAULT", yytext, NULL, NULL, NULL); return DEFAULT;}
 
-{FOR} 			{(yylval.node) = new Node("FOR", yytext, NULL, NULL, NULL); return FOR;}
-{WHILE} 		{(yylval.node) = new Node("WHILE", yytext, NULL, NULL, NULL); return WHILE;}
-{ELSE} 			{(yylval.node) = new Node("ELSE", yytext, NULL, NULL, NULL); return ELSE;}
-{BREAK} 		{(yylval.node) = new Node("BREAK", yytext, NULL, NULL, NULL); return BREAK;}
-{CONTINUE} 		{(yylval.node) = new Node("CONTINUE", yytext, NULL, NULL, NULL); return CONTINUE;}
-{LCB}		{(yylval.node) = new Node("LCB", yytext, NULL, NULL, NULL); return LCB;}
-{RCB}		{(yylval.node) = new Node("RCB", yytext, NULL, NULL, NULL); return RCB;}
-{LB}		{(yylval.node) = new Node("LB", yytext, NULL, NULL, NULL); return LB;}
-{RB}		{(yylval.node) = new Node("RB", yytext, NULL, NULL, NULL); return RB;}
-{COMMA}			{(yylval.node) = new Node("COMMA", yytext, NULL, NULL, NULL); return COMMA;}
+{FOR} 			{(yylval.node) = new AstNode("FOR", yytext, NULL, NULL, NULL); return FOR;}
+{WHILE} 		{(yylval.node) = new AstNode("WHILE", yytext, NULL, NULL, NULL); return WHILE;}
+{ELSE} 			{(yylval.node) = new AstNode("ELSE", yytext, NULL, NULL, NULL); return ELSE;}
+{BREAK} 		{(yylval.node) = new AstNode("BREAK", yytext, NULL, NULL, NULL); return BREAK;}
+{CONTINUE} 		{(yylval.node) = new AstNode("CONTINUE", yytext, NULL, NULL, NULL); return CONTINUE;}
+{LCB}			{(yylval.node) = new AstNode("LCB", yytext, NULL, NULL, NULL); return LCB;}
+{RCB}			{(yylval.node) = new AstNode("RCB", yytext, NULL, NULL, NULL); return RCB;}
+{LB}			{(yylval.node) = new AstNode("LB", yytext, NULL, NULL, NULL); return LB;}
+{RB}			{(yylval.node) = new AstNode("RB", yytext, NULL, NULL, NULL); return RB;}
+{COMMA}			{(yylval.node) = new AstNode("COMMA", yytext, NULL, NULL, NULL); return COMMA;}
 
-{NUM_INT}		{(yylval.node) = new Node("NUM_INT", yytext, NULL, NULL, NULL); yylval.node->setDataType(_int); return NUM_INT;}
-{HEADER}			{(yylval.node) = new Node("HEADER", yytext, NULL, NULL, NULL); return HEADER;}
-{NUM_FP}		{(yylval.node) = new Node("NUM_FP", yytext, NULL, NULL, NULL); yylval.node->setDataType(_float); return NUM_FP;}
-{ID}			{(yylval.node) = new Node("ID", yytext, NULL, NULL, NULL); return ID;}
+{NUM_INT}		{(yylval.node) = new AstNode("NUM_INT", yytext, NULL, NULL, NULL); yylval.node->setDataType(_int); return NUM_INT;}
+{HEADER}		{(yylval.node) = new AstNode("HEADER", yytext, NULL, NULL, NULL); return HEADER;}
+{NUM_FP}		{(yylval.node) = new AstNode("NUM_FP", yytext, NULL, NULL, NULL); yylval.node->setDataType(_float); return NUM_FP;}
+{ID}			{(yylval.node) = new AstNode("ID", yytext, NULL, NULL, NULL); return ID;}
 
 {nl} 			{}
-{sp}		{}
+{sp}			{}
 
-.					{cerr<< "TOKEN CANNOT BE MATCHED :\t"<< yytext <<"\t"<<endl; syntax_analysis = false;}
+.				{cerr<< "TOKEN CANNOT BE MATCHED :\t"<< yytext <<"\t"<<endl; lexical_analysis = false;}
 
 %%

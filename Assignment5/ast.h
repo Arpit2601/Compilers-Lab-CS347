@@ -1,17 +1,11 @@
 #include <bits/stdc++.h>
-
 #define DEBUG if(0)
-
 using namespace std;
 
 extern int yylineno;
-
-
 enum DataType{
 	_none,
 	_int,
-	// dt_char,
-	// dt_string,
 	_float,
 	_bool,
 	_func,
@@ -20,37 +14,43 @@ enum DataType{
 
 
 // Nodes of the AST
-class Node 
+class AstNode 
 {
 private:
-	string type;			// lexeme class
-	string value;			// lexeme
-	DataType data_type;		// datatype of the node(if required)
+	// lexeme class
+	string type;		
+	// lexeme value	
+	string value;			
+	// datatype of the node
+	DataType data_type;		
 
 public:
-	int line_number;		// line number where the node is occuring
+	// line number of the node in .c file
+	int line_number;		
 
 	// Children of the Nodes
-	Node *child1;
-	Node *child2;
-	Node *child3;
-	Node *child4;
+	// A node can have maximum 4 children because of the given features to be implemented as given in question
+	AstNode *child_1;
+	AstNode *child_2;
+	AstNode *child_3;
+	AstNode *child_4;
 
-	Node (string t, string v, Node *c1, Node *c2, Node *c3) 
+	AstNode (string tp, string val, AstNode *c1, AstNode *c2, AstNode *c3) 
 	{
-		type = t;
-		value = v;
+		type = tp;
+		value = val;
 		data_type = _none;
-		child3 = c3;
-		child2 = c2;
-		child1 = c1;
-		child4 = NULL;
+		child_3 = c3;
+		child_2 = c2;
+		child_1 = c1;
+		child_4 = NULL;
 		line_number = yylineno;
 	}
 
-	void addChild4(Node *c4)
+	// Since only one rule in grammar had 4 children
+	void addChild4(AstNode *c4)
 	{
-		child4 = c4;
+		child_4 = c4;
 	}
 
 	string getValue()
@@ -68,8 +68,8 @@ public:
 		return data_type;
 	}
 
-	void setDataType(DataType dt)
+	void setDataType(DataType dtype)
 	{
-		data_type = dt;
+		data_type = dtype;
 	}
 };

@@ -10,4 +10,4 @@ main.tab.c main.tab.h :	main.y
 	bison -d -v main.y
 
 clean:
-	rm lex.yy.c main.tab.c main.tab.h main.output main mips.s intermediate.txt tree.txt
+	rm lex.yy.c main.tab.c main.tab.h main.output main mips.s intermediate.txt
