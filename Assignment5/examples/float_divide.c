@@ -1,7 +1,8 @@
-#include<bits/stdc++.h>
-int main(){
-	float y,r;
+#include <stdio.h>
+int main()
+{
+	float y, r;
 	y = 5.0;
 	r = 2.0;
-	r = y/r;
+	r = y / r;
 }

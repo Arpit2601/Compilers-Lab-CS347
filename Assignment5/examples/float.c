@@ -1,14 +1,14 @@
-#include<bits/stdc++.h>
+#include <stdio.h>
 
 int main()
 {
-	int x,y;
+	int x, y;
 	x = 5;
 	y = 7;
-	if((x<y)&&(x==y)){
-		int e;
-		x =15;
+	float e;
+	if ((x < y) && (x == y))
+	{
+		e = x;
 	}
 	int p;
-	e=x;
 }

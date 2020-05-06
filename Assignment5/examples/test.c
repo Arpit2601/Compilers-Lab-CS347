@@ -1,30 +1,34 @@
 #include <stdio.h>
 
-int y;
 /* asdad 
 asdasd
 */
 
 //+4656asd
-int main(){
+int main()
+{
 	float y;
-	y  = 2.0;
+	y = 2.0;
 	int x;
 	x = 5;
 	float ans;
 	ans = 0.0;
-	if(x < 4){
+	if (x < 4)
+	{
 		int i;
-		for(i=0;i<5;i=i+1){
+		for (i = 0; i < 5; i = i + 1)
+		{
 			ans = ans + y;
 		}
 	}
-	else{
+	else
+	{
 		int i;
 		i = 0;
-		while(i < 5){
+		while (i < 5)
+		{
 			ans = ans + y;
-			i = i + 1 ;
+			i = i + 1;
 		}
 	}
 }

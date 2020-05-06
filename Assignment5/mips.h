@@ -71,6 +71,10 @@ public:
 		{
 			mips_1 << "li\t$" << reg << ", " << var << endl;
 		}
+		else if (var[0] == '-' and (var[1] <= '9' and var[1] >= '0'))
+		{
+			mips_1 << "li\t$" << reg << ", " << var << endl;
+		}
 		else if (var[0] == '\'')
 		{
 			mips_1 << "li\t$" << reg << ", " << var << endl;
@@ -289,6 +293,8 @@ public:
 				{
 					symtab.add_variable_in_current_scope(vars[i], tree->child_1->getDataType());
 					intermediate_code << data_type_to_string[tree->child_1->getDataType()] << " " << vars[i] << endl;
+					loadInRegister("0", "t0", tree->child_1->getDataType());
+					storeInMemory(symtab.gen_mips(vars[i]), tree->child_1->getDataType());
 				}
 			}
 			else
@@ -822,12 +828,17 @@ public:
 			//backup symbol table variables
 			// push the return address to stack
 			pushReturnCode();
-
+			cout << symtab.scope << endl;
+			cout << endl;
+			symtab.printsymtable(symtab.scope);
 			// push the current register values to stack
 			vector<string> backvars = symtab.backup_symbol_table();
+			symtab.printsymtable(symtab.scope);
+			cout << symtab.scope << endl;
 			for (int i = 0; i < backvars.size(); i++)
 			{
-				pushCode(backvars[i]);
+				cout << "debug" << backvars[i] << endl;
+				pushCode("_" + backvars[i]);
 			}
 
 			//set arguments
@@ -835,9 +846,9 @@ public:
 			// copy args[i] to pars[i]
 			for (int i = 0; i < args.size(); i++)
 			{
-				copy(args[i], pars[i]);
-			}
 
+				copy(args[i], "_" + pars[i]);
+			}
 			//call function
 			functionCall("_" + tree->getValue() + "_." + to_string(args.size()));
 
@@ -845,7 +856,8 @@ public:
 			// pop back the stored register values from stack
 			for (int i = backvars.size() - 1; i >= 0; i--)
 			{
-				popCode(backvars[i]);
+				popCode("_" + backvars[i]);
+				cout << backvars[i] << endl;
 			}
 			// pop back the return address from stack
 			symtab.restore_symbol_table(backvars);
@@ -892,7 +904,11 @@ public:
 
 		for (vector<pair<string, DataType>>::iterator i = allVariables.begin(); i != allVariables.end(); i++)
 		{
-			if (i->second == _none || i->second == _int || i->second == _bool)
+			if (i->second == _none)
+			{
+				mips_2 << i->first << ":\t\t.word 0" << endl;
+			}
+			if (i->second == _int || i->second == _bool)
 			{
 				mips_2 << i->first << ":\t\t.word 0" << endl;
 			}

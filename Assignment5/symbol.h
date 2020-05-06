@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #include "ast.h"
 
-#define DEBUG if(0)
+#define DEBUG if (0)
 
 using namespace std;
 
@@ -12,13 +12,13 @@ class Parameter
 {
 private:
 	// parameter name
-	string name;		
+	string name;
 	// parameter data type
-	DataType data_type;	
+	DataType data_type;
+
 public:
 	Parameter()
 	{
-
 	}
 
 	Parameter(string id, DataType dt)
@@ -36,39 +36,35 @@ public:
 	{
 		return name;
 	}
-
 };
-
 
 // Symbol table for a given scope
 class MetaSymbolTable
 {
 private:
 	// If identifier is a variable then we just need its datatype
-	DataType data_type;		
+	DataType data_type;
 
 	// if identifier is a function, then following are also required - return data type, parameter list, number of parameters
 	// i.e. data_type = _func
 	DataType return_data_type;
-	vector <Parameter> parameter_list;
+	vector<Parameter> parameter_list;
 	int parameter_count;
 
 public:
-
 	// Used when initialising a new scope
 	MetaSymbolTable()
 	{
-
 	}
 
 	// for variable
-	MetaSymbolTable(DataType dt) 
+	MetaSymbolTable(DataType dt)
 	{
 		data_type = dt;
 	}
 
 	// For function
-	MetaSymbolTable(DataType dt, DataType return_dt, vector <Parameter> params_list)
+	MetaSymbolTable(DataType dt, DataType return_dt, vector<Parameter> params_list)
 	{
 		data_type = dt;
 		return_data_type = return_dt;
@@ -97,39 +93,43 @@ public:
 	}
 };
 
-
 class SymbolTable
 {
-private:
+public:
 	// Current scope
 	// Global scope is 0
 	// All the function declarations will be in scope 0
-	int scope;	
+	int scope;
 
 	// vector of maps at different scopes. vector[i] => map of symbol_table at scope i
 	// for e.g. int x in scope 1 wiil be present as symbol_table[1][x]
-	vector < map < string, MetaSymbolTable > > symbol_table, backup_symtab;
+	vector<map<string, MetaSymbolTable>> symbol_table, backup_symtab;
 
 	string data_type_to_string[6] = {"none", "int", "float", "bool", "func", "err"};
 
-
-public:
 	SymbolTable()
 	{
 		// global
-		scope = 0;	
+		scope = 0;
 		// empty symbol_table table at global scope
-		symbol_table.push_back(map<string, MetaSymbolTable>());	
+		symbol_table.push_back(map<string, MetaSymbolTable>());
 	}
 
+	void printsymtable(int n)
+	{
+		for (auto i : symbol_table[n])
+		{
+			cout << i.first << " " << endl;
+		}
+	}
 	// check if identifier id is present in current scope or not
 	bool find_in_current_scope(string id)
 	{
-		if(symbol_table[scope].find(id) !=  symbol_table[scope].end())
+		if (symbol_table[scope].find(id) != symbol_table[scope].end())
 		{
 			return true;
-		} 
-		else 
+		}
+		else
 		{
 			return false;
 		}
@@ -140,7 +140,7 @@ public:
 	{
 		for (int i = scope; i >= 0; i--)
 		{
-			if(symbol_table[i].find(id) !=  symbol_table[i].end())
+			if (symbol_table[i].find(id) != symbol_table[i].end())
 			{
 				return true;
 			}
@@ -155,7 +155,7 @@ public:
 	}
 
 	// Add a function in scope 0 and return its address
-	MetaSymbolTable* add_function(string id, DataType return_dt, vector<Parameter> params_list)
+	MetaSymbolTable *add_function(string id, DataType return_dt, vector<Parameter> params_list)
 	{
 		symbol_table[0][id] = MetaSymbolTable(_func, return_dt, params_list);
 		return &symbol_table[0][id];
@@ -173,7 +173,8 @@ public:
 	// Remove a scope
 	void remove_scope()
 	{
-		if(scope == 0)	return ;
+		if (scope == 0)
+			return;
 		scope--;
 		symbol_table.pop_back();
 	}
@@ -183,7 +184,7 @@ public:
 	{
 		for (int i = scope; i >= 0; i--)
 		{
-			if(symbol_table[i].find(id) !=  symbol_table[i].end())
+			if (symbol_table[i].find(id) != symbol_table[i].end())
 			{
 				return (symbol_table[i].find(id))->second.getDataType();
 			}
@@ -192,10 +193,11 @@ public:
 	}
 
 	// Check if function id is present in any scope and return its return datatype
-	DataType getFunctionDataType(string id){
+	DataType getFunctionDataType(string id)
+	{
 		for (int i = scope; i >= 0; i--)
 		{
-			if(symbol_table[i].find(id) !=  symbol_table[i].end())
+			if (symbol_table[i].find(id) != symbol_table[i].end())
 			{
 				return (symbol_table[i].find(id))->second.getReturnDataType();
 			}
@@ -204,26 +206,26 @@ public:
 	}
 
 	// Check if the function "id" has been provided with correct arguments i.e. matches with its parameter list
-	bool check_function_args(string id, vector<DataType> args_list) 
+	bool check_function_args(string id, vector<DataType> args_list)
 	{
 		for (int i = scope; i >= 0; i--)
 		{
-			if(symbol_table[i].find(id) !=  symbol_table[i].end())
+			if (symbol_table[i].find(id) != symbol_table[i].end())
 			{
 				MetaSymbolTable temp = symbol_table[i].find(id)->second;
 				// If id not a function
-				if(temp.getDataType() != _func)
+				if (temp.getDataType() != _func)
 				{
 					continue;
 				}
 				// If number of paramters don't match
-				if(temp.getParameterCount() != args_list.size())
+				if (temp.getParameterCount() != args_list.size())
 				{
 					continue;
 				}
 				bool flag = true;
 				int x = 0;
-				for(auto it = temp.getParameterList().begin(); it != temp.getParameterList().end() && x < args_list.size(); it++, x++)
+				for (auto it = temp.getParameterList().begin(); it != temp.getParameterList().end() && x < args_list.size(); it++, x++)
 				{
 					// If data type of argument does not match
 					if (it->getDataType() != args_list[x])
@@ -233,7 +235,7 @@ public:
 					}
 				}
 				// If every thing matches
-				if(flag)
+				if (flag)
 				{
 					return true;
 				}
@@ -248,9 +250,9 @@ public:
 	{
 		for (int i = scope; i >= 0; i--)
 		{
-			if(symbol_table[i].find(id) !=  symbol_table[i].end())
+			if (symbol_table[i].find(id) != symbol_table[i].end())
 			{
-				vector<Parameter> param_list =  symbol_table[i].find(id)->second.getParameterList();
+				vector<Parameter> param_list = symbol_table[i].find(id)->second.getParameterList();
 				vector<string> res;
 				for (std::vector<Parameter>::iterator x = param_list.begin(); x != param_list.end(); ++x)
 				{
@@ -259,16 +261,18 @@ public:
 				return res;
 			}
 		}
-		vector<string>temp ; 
-		return temp ;
+		vector<string> temp;
+		return temp;
 	}
 
 	// return name.datatype.scope
-	string gen_mips(string id){
-		for (int i = scope; i >= 0; i--) {
-			if(symbol_table[i].find(id) !=  symbol_table[i].end())
+	string gen_mips(string id)
+	{
+		for (int i = scope; i >= 0; i--)
+		{
+			if (symbol_table[i].find(id) != symbol_table[i].end())
 			{
-				return id + "." +  data_type_to_string[symbol_table[i].find(id)->second.getDataType()] + "." + to_string(i);
+				return id + "." + data_type_to_string[symbol_table[i].find(id)->second.getDataType()] + "." + to_string(i);
 			}
 		}
 		return "";
@@ -283,15 +287,15 @@ public:
 		backup_symtab = symbol_table;
 
 		// backup symbol table symbol names as mips code for scope >= 1
-		for(int i = 1; i <= scope; i++)
+		for (int i = 1; i <= scope; i++)
 		{
-			for(auto it = symbol_table[i].begin(); it != symbol_table[i].end(); ++it)
+			for (auto it = symbol_table[i].begin(); it != symbol_table[i].end(); ++it)
 			{
 				back_var.push_back(gen_mips(it->first));
 			}
 		}
 		// pop the symbol_table of scope >0 from the symbol table
-		for(int i = scope ; i >= 1; i--)
+		for (int i = scope; i >= 1; i--)
 		{
 			symbol_table.pop_back();
 		}
@@ -307,7 +311,6 @@ public:
 		scope = symbol_table.size() - 1;
 	}
 };
-
 
 class SemanticAnalysis
 {
@@ -333,7 +336,6 @@ private:
 	bool inside_switch;
 
 public:
-
 	SemanticAnalysis(AstNode *TreeRoot)
 	{
 		error_count = 0;
@@ -347,31 +349,33 @@ public:
 
 	bool check_case_constant(string c)
 	{
-		for(auto it=case_constants.begin();it!=case_constants.end();it++)
+		for (auto it = case_constants.begin(); it != case_constants.end(); it++)
 		{
-			if(*it==c){return true;}
+			if (*it == c)
+			{
+				return true;
+			}
 		}
 		return false;
-
 	}
 
-	// Function to get variable list 
-	// For e.g. get x,y,z from int x,y,z; 
+	// Function to get variable list
+	// For e.g. get x,y,z from int x,y,z;
 	vector<string> expand_variable_list(AstNode *tree)
 	{
 		vector<string> res;
-		if(tree->getType() != "variable_list")
+		if (tree->getType() != "variable_list")
 		{
 			return res;
-		} 
-		else if(tree->child_2 == NULL)
+		}
+		else if (tree->child_2 == NULL)
 		{
 			res.push_back(tree->child_1->getValue());
-		} 
-		else 
+		}
+		else
 		{
 			res.push_back(tree->child_2->getValue());
-			vector <string> temp = expand_variable_list(tree->child_1);
+			vector<string> temp = expand_variable_list(tree->child_1);
 			for (auto it = temp.rbegin(); it != temp.rend(); it++)
 			{
 				res.insert(res.begin(), *it);
@@ -381,13 +385,13 @@ public:
 	}
 
 	// Get parameters of the function
-	vector <Parameter> expand_parameter_list(AstNode *tree)
+	vector<Parameter> expand_parameter_list(AstNode *tree)
 	{
-		if(tree->getType() != "parameters" || tree->child_1 == NULL)
+		if (tree->getType() != "parameters" || tree->child_1 == NULL)
 		{
 			return vector<Parameter>();
-		} 
-		else 
+		}
+		else
 		{
 			return meta_expand_parameter_list(tree->child_1);
 		}
@@ -396,11 +400,11 @@ public:
 	vector<Parameter> meta_expand_parameter_list(AstNode *tree)
 	{
 		vector<Parameter> res;
-		if(tree->getType() != "parameters_list")
+		if (tree->getType() != "parameters_list")
 		{
 			return res;
 		}
-		if(tree->child_2 == NULL)
+		if (tree->child_2 == NULL)
 		{
 			res.push_back(Parameter(tree->child_1->child_2->getValue(), tree->child_1->getDataType()));
 			return res;
@@ -415,7 +419,7 @@ public:
 	{
 		vector<DataType> v;
 		v.clear();
-		if(Tree->getType() != "args" || Tree->child_1 == NULL)
+		if (Tree->getType() != "args" || Tree->child_1 == NULL)
 		{
 			return v;
 		}
@@ -427,11 +431,11 @@ public:
 	{
 		vector<DataType> res;
 		res.clear();
-		if(tree->getType() != "args_list")
+		if (tree->getType() != "args_list")
 		{
 			return res;
 		}
-		if(tree->child_2 == NULL)
+		if (tree->child_2 == NULL)
 		{
 			Analyse(tree->child_1);
 			res.push_back(tree->child_1->getDataType());
@@ -446,125 +450,122 @@ public:
 	// Check if data type of the two variable or constants or variable + constant can be used together
 	bool check_datatype_matches(DataType dt1, DataType dt2)
 	{
-		if (dt1 == dt2) 
+		if (dt1 == dt2)
 		{
 			return true;
 		}
-		else if((dt1 == _int || dt1 == _float) && ((dt2 == _int || dt2 == _float)))
+		else if ((dt1 == _int || dt1 == _float) && ((dt2 == _int || dt2 == _float)))
 		{
 			return true;
 		}
-		else 
+		else
 		{
 			return false;
 		}
 	}
-	
+
 	void Analyse(AstNode *node)
 	{
-		if(node == NULL)	return;
+		if (node == NULL)
+			return;
 
 		string node_type = node->getType();
 
 		if (node_type == "program")
 		{
 			// global declaration list
-			Analyse(node->child_1);	
+			Analyse(node->child_1);
 
 			// main function
-			Analyse(node->child_2);	
-
+			Analyse(node->child_2);
 		}
-		else if (node_type == "global_declaration_list" ) 
+		else if (node_type == "global_declaration_list")
 		{
 			// global declaration list
-			Analyse(node->child_1);	
+			Analyse(node->child_1);
 
 			// global declaration
-			Analyse(node->child_2);	
-
-		} 
-		else if (node_type == "declaration" )
+			Analyse(node->child_2);
+		}
+		else if (node_type == "declaration")
 		{
 			// global variable/function declaration
-			Analyse(node->child_1);	
-
+			Analyse(node->child_1);
 		}
-		else if (node_type == "variable_declaration" )
+		else if (node_type == "variable_declaration")
 		{
 			// type variablelist
 			// of the form int x,y,z;
 			// Get all the variables from list and check if they are already declared in current scope
 			// If not then add them in current scope
-			if(node->child_3 == NULL)
-			{ 		
+			if (node->child_3 == NULL)
+			{
 				vector<string> vars = expand_variable_list(node->child_2);
 
 				for (auto it = vars.begin(); it != vars.end(); it++)
 				{
-					if(symtab.find_in_current_scope(*it))
+					if (symtab.find_in_current_scope(*it))
 					{
-						error_message<<"Line Number "<< node->line_number << " : Variable '"<< *it <<"' already declared." <<endl;
+						error_message << "Line Number " << node->line_number << " : Variable '" << *it << "' already declared." << endl;
 						error_count++;
 						node->setDataType(_error);
-					} 
-					else 
+					}
+					else
 					{
 						symtab.add_variable_in_current_scope(*it, node->child_1->getDataType());
 					}
 				}
 			}
 
-			// Of the form int x=1; 
+			// Of the form int x=1;
 			// Check if variable not already declared in current scope
 			// Then check if the data types of identier and expression can be used together
-			else 
-			{ 	
+			else
+			{
 				Analyse(node->child_3);
-				if(symtab.find_in_current_scope(node->child_2->getValue())) 
+				if (symtab.find_in_current_scope(node->child_2->getValue()))
 				{
-					error_message<<"Line Number "<< node->line_number << " : Variable '"<< node->child_2->getValue() <<"' already declared." <<endl;
+					error_message << "Line Number " << node->line_number << " : Variable '" << node->child_2->getValue() << "' already declared." << endl;
 					error_count++;
 					node->setDataType(_error);
-				} 
-				else if (!check_datatype_matches(node->child_3->getDataType(), node->child_1->getDataType())) 
+				}
+				else if (!check_datatype_matches(node->child_3->getDataType(), node->child_1->getDataType()))
 				{
-					error_message<<"Line Number "<< node->line_number << " : Type mismatch. Expected "<< node->child_1->getDataType() << " but passed " << node->child_3->getDataType()<<endl;
+					error_message << "Line Number " << node->line_number << " : Type mismatch. Expected " << node->child_1->getDataType() << " but passed " << node->child_3->getDataType() << endl;
 					error_count++;
 					node->setDataType(_error);
-				} 
-				else 
+				}
+				else
 				{
 					symtab.add_variable_in_current_scope(node->child_2->getValue(), node->child_1->getDataType());
 				}
 			}
-
-		} 
+		}
 		// of the form "x"
 		// Check if not aready use din current scope
 		// If not then add to symbol table
-		else if (node_type == "variable" )
+		else if (node_type == "variable")
 		{
-			if(!symtab.find(node->child_1->getValue())) 
+			if (!symtab.find(node->child_1->getValue()))
 			{
 				error_count++;
-				error_message<<"Line Number "<< node->line_number<< " : Variable " << node->child_1->getValue() <<" used before declaration."<<endl;
+				error_message << "Line Number " << node->line_number << " : Variable " << node->child_1->getValue() << " used before declaration." << endl;
 				node->setDataType(_error);
 			}
-			else 
+			else
 			{
 				node->setDataType(symtab.getDataType(node->child_1->getValue()));
 			}
+		}
 
-		} 
-
-		// Function declaration 
+		// Function declaration
 		// declare the function if not already declared
 		// Set the active function pointer to current function
-		else if (node_type == "function_declaration" )
+		else if (node_type == "function_declaration")
 		{
-			if(!symtab.find(node->getValue())){ 	
-				vector <Parameter> params = expand_parameter_list(node->child_2);
+			if (!symtab.find(node->getValue()))
+			{
+				vector<Parameter> params = expand_parameter_list(node->child_2);
 
 				active_fun_ptr = symtab.add_function(node->getValue(), node->child_1->getDataType(), params);
 
@@ -577,58 +578,55 @@ public:
 				Analyse(node->child_3);
 				// Remove scope so that variables which were used in this function can be used in later functions.
 				symtab.remove_scope();
-
 			}
-			else 
+			else
 			{
 				error_count++;
-				error_message << "Line Number "<< node->line_number<<" : Function Already declared."<<endl;
+				error_message << "Line Number " << node->line_number << " : Function Already declared." << endl;
 				node->setDataType(_error);
 			}
-
-		} 
+		}
 
 		// Main function has no parameters
-		else if (node_type == "main_function" )
+		else if (node_type == "main_function")
 		{
-			active_fun_ptr = symtab.add_function("main", node->child_1->getDataType(), vector<Parameter> ());
+			active_fun_ptr = symtab.add_function("main", node->child_1->getDataType(), vector<Parameter>());
 			Analyse(node->child_2);
-
-		} 
-		else if (node_type == "statements" )
+		}
+		else if (node_type == "statements")
 		{
 			Analyse(node->child_1);
 			Analyse(node->child_2);
-		} 
+		}
 
-		else if (node_type == "statement" )
+		else if (node_type == "statement")
 		{
 			// If we hit break outside loop then error
-			if(node->getValue() == "break")
+			if (node->getValue() == "break")
 			{
 				if (inside_loop || inside_switch)
 				{
-					return ;
-				} 
-				else 
+					return;
+				}
+				else
 				{
 					error_count++;
 					error_message << "Line Number " << node->line_number << " : 'break' can only be used inside a loop." << endl;
 				}
-			} 
+			}
 			// same as break
 			else if (node->getValue() == "continue")
 			{
 				if (inside_loop)
 				{
-					return ;
-				} 
-				else 
+					return;
+				}
+				else
 				{
 					error_count++;
 					error_message << "Line Number " << node->line_number << " : 'continue' can only be used inside a loop." << endl;
 				}
-			} 
+			}
 			// For e.g. {statements}
 			else if (node->getValue() == "scope")
 			{
@@ -636,17 +634,16 @@ public:
 				Analyse(node->child_1);
 				symtab.remove_scope();
 			}
-			else 
+			else
 			{
 				Analyse(node->child_1);
 			}
-
 		}
-		else if(node_type == "conditional_expr")
+		else if (node_type == "conditional_expr")
 		{
 			Analyse(node->child_1);
 		}
-		else if (node_type == "if_expr" )
+		else if (node_type == "if_expr")
 		{
 			// Analyse the children
 			Analyse(node->child_1);
@@ -655,20 +652,19 @@ public:
 			Analyse(node->child_2);
 			symtab.remove_scope();
 
-			if(node->child_3 != NULL)
+			if (node->child_3 != NULL)
 			{
 				symtab.add_scope();
 				Analyse(node->child_3);
 				symtab.remove_scope();
 			}
-
-		} 
-		else if (node_type=="switch_expr")
+		}
+		else if (node_type == "switch_expr")
 		{
-			// Check if the variable is already declared or not 
+			// Check if the variable is already declared or not
 			// If not then error
 			// Else continue to case expressions
-			if(symtab.find_in_current_scope(node->child_1->getValue()))
+			if (symtab.find_in_current_scope(node->child_1->getValue()))
 			{
 				inside_switch = true;
 				switch_datatype = symtab.getDataType(node->child_1->getValue());
@@ -678,34 +674,32 @@ public:
 			else
 			{
 				error_count++;
-				error_message << "Line Number "<< node->line_number<<" : Variable "<<node->child_1->getValue()<<": used in switch statement not declared before."<<endl;
+				error_message << "Line Number " << node->line_number << " : Variable " << node->child_1->getValue() << ": used in switch statement not declared before." << endl;
 				node->setDataType(_error);
 			}
-			
-
-		} 
-		else if(node_type=="switch_cases")
+		}
+		else if (node_type == "switch_cases")
 		{
-			if(node->getValue()=="")
+			if (node->getValue() == "")
 			{
 				// First check if data type of case constant and variable matches
 				// Check if case is not duplicate
 				// If not then error else move forward with statements
 				// cout<<"a"<<endl;
 				// cout<<node->child_1->getValue()<<" "<<node->child_1->getDataType()<<endl;
-				if(!check_datatype_matches(switch_datatype, node->child_1->getDataType()))
+				if (!check_datatype_matches(switch_datatype, node->child_1->getDataType()))
 				{
 					error_count++;
-					error_message << "Line Number "<< node->line_number<<" : Data type of case constant and swtich variable does not match "<<endl;
+					error_message << "Line Number " << node->line_number << " : Data type of case constant and swtich variable does not match " << endl;
 					node->setDataType(_error);
 				}
-				else if(check_case_constant(node->child_1->getValue()))
+				else if (check_case_constant(node->child_1->getValue()))
 				{
 					error_count++;
-					error_message << "Line Number "<< node->line_number<<" : duplicate case."<<endl;
+					error_message << "Line Number " << node->line_number << " : duplicate case." << endl;
 					node->setDataType(_error);
 				}
-				else 
+				else
 				{
 					case_constants.push_back(node->child_1->getValue());
 					symtab.add_scope();
@@ -714,29 +708,28 @@ public:
 					Analyse(node->child_3);
 				}
 				// Analyse(node->child_1);
-				
 			}
 			// last case statement
-			else if(node->getValue()=="COLON")
+			else if (node->getValue() == "COLON")
 			{
 				// First check if data type of case constant and variable matches
 				// Check if case is not duplicate
 				// If not then error else move forward with statements
 				// cout<<"b"<<endl;
 				// cout<<node->child_1->getValue()<<" "<<node->child_1->getDataType()<<endl;
-				if(!check_datatype_matches(switch_datatype, node->child_1->getDataType()))
+				if (!check_datatype_matches(switch_datatype, node->child_1->getDataType()))
 				{
 					error_count++;
-					error_message << "Line Number "<< node->line_number<<" : Data type of case constant and swtich variable does not match "<<endl;
+					error_message << "Line Number " << node->line_number << " : Data type of case constant and swtich variable does not match " << endl;
 					node->setDataType(_error);
 				}
-				else if(check_case_constant(node->child_1->getValue()))
+				else if (check_case_constant(node->child_1->getValue()))
 				{
 					error_count++;
-					error_message << "Line Number "<< node->line_number<<" : duplicate case."<<endl;
+					error_message << "Line Number " << node->line_number << " : duplicate case." << endl;
 					node->setDataType(_error);
 				}
-				else 
+				else
 				{
 					case_constants.push_back(node->child_1->getValue());
 					symtab.add_scope();
@@ -745,31 +738,29 @@ public:
 				}
 			}
 			// defaule statement
-			else if(node->getValue()=="DEFAULT")
-			{				
+			else if (node->getValue() == "DEFAULT")
+			{
 				// No need to check the data type just move forward with statments
 				symtab.add_scope();
 				Analyse(node->child_1);
 				symtab.remove_scope();
 			}
-			
 		}
 		else if (node_type == "read_input")
 		{
 			Analyse(node->child_1);
-		} 
-		else if(node_type=="print_output")
+		}
+		else if (node_type == "print_output")
 		{
 			Analyse(node->child_1);
-		} 
-		else if (node_type == "looping_expr" )
+		}
+		else if (node_type == "looping_expr")
 		{
 			inside_loop = true;
 			Analyse(node->child_1);
 			inside_loop = false;
-
-		} 
-		else if (node_type == "for_expr" )
+		}
+		else if (node_type == "for_expr")
 		{
 			symtab.add_scope();
 			Analyse(node->child_1);
@@ -777,255 +768,245 @@ public:
 			Analyse(node->child_3);
 			Analyse(node->child_4);
 			symtab.remove_scope();
-
-		} 
-		else if (node_type == "while_expr" )
+		}
+		else if (node_type == "while_expr")
 		{
 			Analyse(node->child_1);
 			symtab.add_scope();
 			Analyse(node->child_2);
 			symtab.remove_scope();
-
-		} 
-		else if (node_type == "expression" )
+		}
+		else if (node_type == "expression")
 		{
 			// For e.g. x = (1+2);
-			if(node->child_2 != NULL){
+			if (node->child_2 != NULL)
+			{
 				Analyse(node->child_2);
 				Analyse(node->child_1);
 
 				// Data types of variable and expression does not match
-				if(!check_datatype_matches(node->child_1->getDataType(), node->child_2->getDataType()))
+				if (!check_datatype_matches(node->child_1->getDataType(), node->child_2->getDataType()))
 				{
 					error_count++;
-					error_message<<"Line Number "<<node->line_number<<" : Type mismatch. Unable to type cast implicitly.(expression)"<<endl;
+					error_message << "Line Number " << node->line_number << " : Type mismatch. Unable to type cast implicitly.(expression)" << endl;
 					node->setDataType(_error);
-				} 
-				else 
+				}
+				else
 				{
 					node->setDataType(node->child_1->getDataType());
 				}
-			} 
-			else 
-			{
-				Analyse(node->child_1);
-				node->setDataType(node->child_1->getDataType());
 			}
-
-		} 
-		else if (node_type == "logical_expr" || node_type == "and_expr")
-		{
-			if(node->child_2 != NULL)
-			{
-				Analyse(node->child_1);
-				Analyse(node->child_2);
-				node->setDataType(_bool);
-			} 
-			else 
-			{
-				Analyse(node->child_1);
-				node->setDataType(node->child_1->getDataType());
-			}
-
-		} 
-		// For e.g x>=1
-		else if (node_type == "relation_expr" )
-		{
-			Analyse(node->child_1);
-
-			if(node->child_3 != NULL)
-			{
-				Analyse(node->child_3);
-				if(check_datatype_matches(node->child_1->getDataType(), node->child_3->getDataType()))
-				{
-					Analyse(node->child_2);
-					node->setDataType(_bool);
-				} 
-				else 
-				{
-					error_count++;
-					error_message<<"Line Number "<<node->line_number<<" : Data type mismatch. Unable to type cast implicitly.(relational_expression)"<<endl;
-					node->setDataType(_error);
-				}
-			} 
-			else 
-			{
-				node->setDataType(node->child_1->getDataType());
-			}
-
-		} 
-		// For e.g. 1+2*(2+3)
-		else if (node_type == "arithmetic_expr" || node_type == "divmul_expr" )
-		{
-			Analyse(node->child_1);
-			if(node->child_2 != NULL)
-			{
-				Analyse(node->child_3);
-				Analyse(node->child_2);
-				if(!check_datatype_matches(node->child_1->getDataType(), node->child_3->getDataType()))
-				{
-					error_count++;
-					error_message<<"Line Number "<<node->line_number<<" : Data type mismatch. Unable to type cast implicitly.(arithmetic_expr/divmul_expr)"<<endl;
-					node->setDataType(_error);
-				} 
-				else 
-				{
-					DataType dt1 = node->child_1->getDataType();
-					DataType dt2 = node->child_3->getDataType();
-
-					if((dt1 == _int) && (dt2 == _int))
-					{
-						node->setDataType(_int);
-					} 
-					else if((dt1 == _int || dt1 == _float) && ((dt2 == _int || dt2 == _float)))
-					{
-						node->setDataType(_float);
-					} 
-					else 
-					{
-						error_count++;
-						error_message<<"Line Number : "<<node->line_number<<" : Invalid operands provided to '"<<node->child_2->getValue()<<"' operator."<<endl;
-						node->setDataType(_error);
-					}
-				}
-			}else
-			{
-				node->setDataType(node->child_1->getDataType());
-			}
-
-		} 
-		// For e.g 1 or -1
-		else if (node_type == "unary_expr" )
-		{
-			if (node->child_2 != NULL)
-			{
-				Analyse(node->child_2);
-				if(node->child_2->getDataType() != _int && node->child_2->getDataType() != _float)
-				{
-					error_count++;
-					error_message<<"Line Number : "<<node->line_number<<" : Invalid operands provided to '"<<node->child_2->getValue()<<"' unary operator."<<endl;
-					node->setDataType(_error);
-				} 
-				else 
-				{
-					node->setDataType(node->child_2->getDataType());
-				}
-			} 
 			else
 			{
 				Analyse(node->child_1);
 				node->setDataType(node->child_1->getDataType());
 			}
+		}
+		else if (node_type == "logical_expr" || node_type == "and_expr")
+		{
+			if (node->child_2 != NULL)
+			{
+				Analyse(node->child_1);
+				Analyse(node->child_2);
+				node->setDataType(_bool);
+			}
+			else
+			{
+				Analyse(node->child_1);
+				node->setDataType(node->child_1->getDataType());
+			}
+		}
+		// For e.g x>=1
+		else if (node_type == "relation_expr")
+		{
+			Analyse(node->child_1);
 
-		} 
-		else if (node_type == "term" )
+			if (node->child_3 != NULL)
+			{
+				Analyse(node->child_3);
+				if (check_datatype_matches(node->child_1->getDataType(), node->child_3->getDataType()))
+				{
+					Analyse(node->child_2);
+					node->setDataType(_bool);
+				}
+				else
+				{
+					error_count++;
+					error_message << "Line Number " << node->line_number << " : Data type mismatch. Unable to type cast implicitly.(relational_expression)" << endl;
+					node->setDataType(_error);
+				}
+			}
+			else
+			{
+				node->setDataType(node->child_1->getDataType());
+			}
+		}
+		// For e.g. 1+2*(2+3)
+		else if (node_type == "arithmetic_expr" || node_type == "divmul_expr")
+		{
+			Analyse(node->child_1);
+			if (node->child_2 != NULL)
+			{
+				Analyse(node->child_3);
+				Analyse(node->child_2);
+				if (!check_datatype_matches(node->child_1->getDataType(), node->child_3->getDataType()))
+				{
+					error_count++;
+					error_message << "Line Number " << node->line_number << " : Data type mismatch. Unable to type cast implicitly.(arithmetic_expr/divmul_expr)" << endl;
+					node->setDataType(_error);
+				}
+				else
+				{
+					DataType dt1 = node->child_1->getDataType();
+					DataType dt2 = node->child_3->getDataType();
+
+					if ((dt1 == _int) && (dt2 == _int))
+					{
+						node->setDataType(_int);
+					}
+					else if ((dt1 == _int || dt1 == _float) && ((dt2 == _int || dt2 == _float)))
+					{
+						node->setDataType(_float);
+					}
+					else
+					{
+						error_count++;
+						error_message << "Line Number : " << node->line_number << " : Invalid operands provided to '" << node->child_2->getValue() << "' operator." << endl;
+						node->setDataType(_error);
+					}
+				}
+			}
+			else
+			{
+				node->setDataType(node->child_1->getDataType());
+			}
+		}
+		// For e.g 1 or -1
+		else if (node_type == "unary_expr")
+		{
+			if (node->child_2 != NULL)
+			{
+				Analyse(node->child_2);
+				if (node->child_2->getDataType() != _int && node->child_2->getDataType() != _float)
+				{
+					error_count++;
+					error_message << "Line Number : " << node->line_number << " : Invalid operands provided to '" << node->child_2->getValue() << "' unary operator." << endl;
+					node->setDataType(_error);
+				}
+				else
+				{
+					node->setDataType(node->child_2->getDataType());
+				}
+			}
+			else
+			{
+				Analyse(node->child_1);
+				node->setDataType(node->child_1->getDataType());
+			}
+		}
+		else if (node_type == "term")
 		{
 			Analyse(node->child_1);
 			node->setDataType(node->child_1->getDataType());
-
-		} 
+		}
 		// First check if function with this name exists or not
 		// If exisis then get the argument list and check if it matches with the paramter list
-		else if (node_type == "function_call" )
+		else if (node_type == "function_call")
 		{
 			node->setDataType(_none);
-			if(!symtab.find(node->getValue()))
+			if (!symtab.find(node->getValue()))
 			{
 				error_count++;
-				error_message<<"Line Number "<<node->line_number<<" : Function '"<< node->getValue() <<"' not declared."<<endl;
+				error_message << "Line Number " << node->line_number << " : Function '" << node->getValue() << "' not declared." << endl;
 				node->setDataType(_error);
 			}
-			else 
+			else
 			{
 				vector<DataType> args_list = expand_arguments_list(node->child_1);
 
-				if(!symtab.check_function_args(node->getValue(), args_list))
+				if (!symtab.check_function_args(node->getValue(), args_list))
 				{
 					error_count++;
-					error_message<<"Line Number "<<node->line_number<<" : Incorrect arguments passed to the function '"<< node->getValue() <<"'."<<endl;
+					error_message << "Line Number " << node->line_number << " : Incorrect arguments passed to the function '" << node->getValue() << "'." << endl;
 					node->setDataType(_error);
-				} 
-				else 
+				}
+				else
 				{
 					node->setDataType(symtab.getFunctionDataType(node->getValue()));
 				}
 			}
-
-		} 
+		}
 		else if (node_type == "op1")
 		{
-			return ;
-		} 
-		else if(node_type=="op2")
-		{
-			return ;
+			return;
 		}
-		else if(node_type=="op3")
+		else if (node_type == "op2")
 		{
-			return ;
+			return;
 		}
-		else if(node_type=="unary_operator")
+		else if (node_type == "op3")
 		{
-			return ;
+			return;
 		}
-		else if(node_type=="constants")
+		else if (node_type == "unary_operator")
 		{
-			return ;
+			return;
 		}
-		else if (node_type == "return_expr" )
+		else if (node_type == "constants")
+		{
+			return;
+		}
+		else if (node_type == "return_expr")
 		{
 			// return outside a function
 			if (active_fun_ptr == NULL)
 			{
 				error_count++;
-				error_message<<"Line Number "<<node->line_number<<" : Return statement can only be used inside a function."<<endl;
+				error_message << "Line Number " << node->line_number << " : Return statement can only be used inside a function." << endl;
 				node->setDataType(_error);
-			} 
-			else 
+			}
+			else
 			{
 				Analyse(node->child_2);
 				// Datatype of function and return expression matches
-				if (node->child_2->getDataType() == active_fun_ptr->getReturnDataType()) 
+				if (node->child_2->getDataType() == active_fun_ptr->getReturnDataType())
 				{
 					active_fun_ptr = NULL;
 				}
-				// void function i.e. nothing to return 
+				// void function i.e. nothing to return
 				else if (node->child_2 == NULL && active_fun_ptr->getReturnDataType() == _none)
 				{
 					active_fun_ptr = NULL;
-				} 
-				else 
+				}
+				else
 				{
 					error_count++;
-					error_message<<"Line Number "<<node->line_number<<" : Function returns wrong data type."<<endl;
+					error_message << "Line Number " << node->line_number << " : Function returns wrong data type." << endl;
 				}
 			}
-
-		} 
-		else 
+		}
+		else
 		{
-			cout<<"Shivang"<<endl;
-			cout<<node->getValue()<<endl;
-			cout<<node->getType()<<endl;
-			cout<<node->getDataType()<<endl;
-			cout<<"Shivang"<<endl;
+			cout << "Shivang" << endl;
+			cout << node->getValue() << endl;
+			cout << node->getType() << endl;
+			cout << node->getDataType() << endl;
+			cout << "Shivang" << endl;
 		}
 	}
 
 	// Function to print errors found during semantic analysis
 	void generate_errors()
 	{
-		if(error_count == 0)
+		if (error_count == 0)
 		{
-			cout<<"No Semantic Errors!"<<endl;
-		} 
-		else 
+			cout << "No Semantic Errors!" << endl;
+		}
+		else
 		{
-			cout<<error_count<<"  error(s) found during semantic analysis!"<<endl;
-			cout<<error_message.str()<<endl;
+			cout << error_count << "  error(s) found during semantic analysis!" << endl;
+			cout << error_message.str() << endl;
 			exit(2);
 		}
 	}
 };
-
-
