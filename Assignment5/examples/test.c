@@ -6,22 +6,25 @@ asdasd
 */
 
 //+4656asd
-int main()
-{
-    int n = 0;
-    get(n);
-    //adasdadad
-
-    int t = 1;
-    int x = 2;
-    if (t == x)
-    {
-        put(1);
-    }
-    else
-    {
-        /* code */
-    }
-
-    /*sdadsadad*/
+int main(){
+	float y;
+	y  = 2.0;
+	int x;
+	x = 5;
+	float ans;
+	ans = 0.0;
+	if(x < 4){
+		int i;
+		for(i=0;i<5;i=i+1){
+			ans = ans + y;
+		}
+	}
+	else{
+		int i;
+		i = 0;
+		while(i < 5){
+			ans = ans + y;
+			i = i + 1 ;
+		}
+	}
 }
