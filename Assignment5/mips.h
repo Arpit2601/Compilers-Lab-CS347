@@ -415,7 +415,7 @@ public:
 
 			loadInRegister("0", "t3", _int);
 
-			Node *temp = tree->child2;
+			AstNode *temp = tree->child_2;
 			int count = 0;
 			while (temp != NULL)
 			{
