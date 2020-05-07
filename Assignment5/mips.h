@@ -458,7 +458,7 @@ public:
 				pair<string, DataType> exp = generateCode(tree->child_3);
 				intermediate_code << get_string_from_data_type[tree->child_1->getDataType()] << " " << tree->child_2->getValue() << " = " << exp.first << endl;
 				// store the expression register to the memory
-				cout << exp.second << " " << exp.first << endl;
+				// cout << exp.second << " " << exp.first << endl;
 				if (tree->child_1->getDataType() == 2)
 				{
 					loadInRegister(exp.first, "f0", _int);
@@ -492,6 +492,16 @@ public:
 			{
 				symtab.add_variable_in_current_scope(params[i].getValue(), params[i].getDataType());
 				intermediate_code << "param " << get_string_from_data_type[params[i].getDataType()] << " " << params[i].getValue() << endl;
+				if( params[i].getDataType()==2)
+				{
+					loadInRegister(params[i].getValue(), "f0",  params[i].getDataType());
+					storeInMemory(symtab.gen_mips(params[i].getValue()), params[i].getDataType());
+				}
+				else 
+				{
+					loadInRegister(params[i].getValue(), "t1",  params[i].getDataType());
+					storeInMemory(symtab.gen_mips(params[i].getValue()), params[i].getDataType());
+				}
 			}
 
 			pair<string, DataType> a = generateCode(tree->child_3);
@@ -1088,12 +1098,12 @@ public:
 		}
 		else if (node_type == "term")
 		{
-			cout << "term" << tree->child_1->getValue() << endl;
+			// cout << "term" << tree->child_1->getValue() << endl;
 			return generateCode(tree->child_1);
 		}
 		else if (node_type == "constants")
 		{
-			cout << "constants: " << tree->getValue() << " " << tree->getDataType() << endl;
+			// cout << "constants: " << tree->getValue() << " " << tree->getDataType() << endl;
 			return make_pair(tree->getValue(), tree->getDataType());
 		}
 		else if (node_type == "function_call")
@@ -1108,10 +1118,10 @@ public:
 			pushReturnCode();
 			// cout << symtab.scope << endl;
 			// cout << endl;
-			symtab.printsymtable(symtab.scope);
+			// symtab.printsymtable(symtab.scope);
 			// push the current register values to stack
 			vector<string> backvars = symtab.backup_symbol_table();
-			symtab.printsymtable(symtab.scope);
+			// symtab.printsymtable(symtab.scope);
 			// cout << symtab.scope << endl;
 			for (int i = 0; i < backvars.size(); i++)
 			{

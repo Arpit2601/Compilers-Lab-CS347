@@ -1,34 +1,21 @@
-fib : 
-param int x
-int b
-int p
-int q
-temp0 = 1 == x.int.1
-temp1 = temp0
-if ( temp1 > 0 ) jump label_0
-jump label_1
-label_0 : 
-temp2 = 1
-b.int.1 = temp2
-temp3 = b.int.1
-label_1 : 
-call fib
-temp5 = temp4
-b.int.1 = temp5
-temp6 = b.int.1
-temp7 = x.int.1 * b.int.1
-temp8 = temp7
-b.int.1 = temp8
-temp9 = b.int.1
-return
 main : 
-int y
-int r
-temp10 = 5
-y.int.1 = temp10
-temp11 = y.int.1
-call fib
-temp13 = temp12
-r.int.1 = temp13
-temp14 = r.int.1
+temp0 = 2
+int x = temp0
+temp1 = x.int.1 - 1
+if ( temp1 = 0 ) jump label_1
+temp1 = x.int.1 - 2
+if ( temp1 = 0 ) jump label_2
+label_3 : 
+temp2 = x.int.1
+write temp2
+break
+jump label_0
+label_1 : 
+temp3 = x.int.1
+write temp3
+break
+label_2 : 
+temp4 = x.int.1
+write temp4
+label_0 : 
 return
