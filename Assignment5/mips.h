@@ -68,21 +68,21 @@ public:
 		// check if var is variable (load word) or number (load immediate)
 		// cout<<var<<" "<<type<<endl;
 
-		if (type==1 && var[0] <= '9' && var[0] >= '0') // if number
-		{
-			mips_1 << "li\t$" << reg << ", " << var << endl;
-		}
-		else if(type==2 && var[0] <= '9' && var[0] >= '0')
+		if (type==2 && var[0] <= '9' && var[0] >= '0') // if number
 		{
 			mips_1 << "li.s\t$" << reg << ", " << var << endl;
 		}
-		else if (type==1 && var[0] == '-' and (var[1] <= '9' and var[1] >= '0'))
+		else if(var[0] <= '9' && var[0] >= '0')
 		{
 			mips_1 << "li\t$" << reg << ", " << var << endl;
 		}
-		else if(type==2 && var[0] == '-' and (var[1] <= '9' and var[1] >= '0'))
+		else if (type==2 && var[0] == '-' and (var[1] <= '9' and var[1] >= '0'))
 		{
 			mips_1 << "li.s\t$" << reg << ", " << var << endl;
+		}
+		else if(var[0] == '-' and (var[1] <= '9' and var[1] >= '0'))
+		{
+			mips_1 << "li\t$" << reg << ", " << var << endl;
 		}
 		else if (var[0] == '\'')
 		{
@@ -97,11 +97,11 @@ public:
 		else
 		{ // variable name
 			var = "_" + var;
-			if(reg=="t1")
+			if(reg[0]=='t')
 			{
 				mips_1 << "lw\t$" << reg << ", " << var << endl;
 			}
-			else if(reg=="f0")
+			else if(reg[0]=='f')
 			{
 				mips_1 << "l.s\t$" << reg << ", " << var << endl;
 			}
@@ -118,13 +118,13 @@ public:
 	void storeInMemory(string var, DataType type)
 	{
 		var = "_" + var;
-		if(type==1)
+		if(type==2)
 		{
-			mips_1 << "sw\t$t0, " << var << endl;
+			mips_1 << "s.s\t$f0, " << var << endl;
 		}
 		else
 		{
-			mips_1 << "s.s\t$f0, " << var << endl;
+			mips_1 << "sw\t$t0, " << var << endl;
 		}
 		for (std::vector<pair<string, DataType>>::iterator i = allVariables.begin(); i != allVariables.end(); ++i)
 		{
@@ -321,26 +321,26 @@ public:
 		}
 		else if (op == "+")
 		{
-			mips_1 << "add\t$f0, $f1, $f2" << endl;
+			mips_1 << "add.s\t$f0, $f1, $f2" << endl;
 		}
 		else if (op == "-")
 		{
-			mips_1 << "sub\t$f0, $f1, $f2" << endl;
+			mips_1 << "sub.s\t$f0, $f1, $f2" << endl;
 		}
 		else if (op == "*")
 		{
-			mips_1 << "mult\t$f1, $f2" << endl; // store the result in $LO
-			mips_1 << "mflo\t$f0" << endl;		// load the contents of $LO to $t0
+			mips_1 << "mul.s\t$f0,$f1, $f2" << endl; // store the result in $LO
+			// mips_1 << "mflo\t$f0" << endl;		// load the contents of $LO to $t0
 		}
 		else if (op == "/")
 		{
-			mips_1 << "div\t$f1, $f2" << endl;
-			mips_1 << "mflo\t$f0" << endl;
+			mips_1 << "div.s\t$f0,$f1, $f2" << endl;
+			// mips_1 << "mflo\t$f0" << endl;
 		}
 		else if (op == "%")
 		{
-			mips_1 << "div\t$f1, $f2" << endl;
-			mips_1 << "mfhi\t$f0" << endl;
+			mips_1 << "div.s\t$f1, $f2" << endl;
+			mips_1 << "mfhi.s\t$f0" << endl;
 		}
 		else if (op == ">=")
 		{
@@ -404,14 +404,14 @@ public:
 				{
 					symtab.add_variable_in_current_scope(vars[i], tree->child_1->getDataType());
 					intermediate_code << data_type_to_string[tree->child_1->getDataType()] << " " << vars[i] << endl;
-					if(tree->child_1->getDataType()==1)
+					if(tree->child_1->getDataType()==2)
 					{
-						loadInRegister("0", "t0", tree->child_1->getDataType());
+						loadInRegister("0.0", "f0", tree->child_1->getDataType());
 						storeInMemory(symtab.gen_mips(vars[i]), tree->child_1->getDataType());
 					}
 					else
 					{
-						loadInRegister("0.0", "f0", tree->child_1->getDataType());
+						loadInRegister("0", "t0", tree->child_1->getDataType());
 						storeInMemory(symtab.gen_mips(vars[i]), tree->child_1->getDataType());
 					}
 					
@@ -426,15 +426,15 @@ public:
 				intermediate_code << data_type_to_string[tree->child_1->getDataType()] << " " << tree->child_2->getValue() << " = " << exp.first << endl;
 				// store the expression register to the memory
 				cout<<exp.second<<" "<<exp.first<<endl;
-				if(tree->child_1->getDataType()==1)
+				if(tree->child_1->getDataType()==2)
 				{
-					loadInRegister(exp.first, "t0", _int);
+					loadInRegister(exp.first, "f0", _int);
 					storeInMemory(symtab.gen_mips(tree->child_2->getValue()), tree->child_1->getDataType());
 					return make_pair("", _int);
 				}
 				else
 				{
-					loadInRegister(exp.first, "f0", _float);
+					loadInRegister(exp.first, "t0", _float);
 					storeInMemory(symtab.gen_mips(tree->child_2->getValue()), tree->child_1->getDataType());
 					return make_pair("", _float);
 				}
@@ -446,8 +446,9 @@ public:
 		else if (node_type == "variable")
 		{
 			// return name.type.scope
-			// cout<<tree->child_1->getDataType()<<endl;
-			return make_pair(symtab.gen_mips(tree->child_1->getValue()), tree->child_1->getDataType());
+			// cout<<"variable: "<<tree->child_1->getValue()<<" "<<tree->child_1->getDataType()<<endl;
+			// cout<<"variable: "<<symtab.getDataType(tree->child_1->getValue())<<endl;
+			return make_pair(symtab.gen_mips(tree->child_1->getValue()), symtab.getDataType(tree->child_1->getValue()));
 		}
 		else if (node_type == "function_declaration")
 		{
@@ -585,23 +586,10 @@ public:
 				else
 				{
 					pair<string, DataType> b = generateCode(temp->child_1);
-					if(b.second==1)
+					if(b.second==2)
 					{
 
 					
-						loadInRegister(b.first, "t2", b.second);
-						operateInt("-");
-						storeInMemory(ret.first, DatatypeCoercible(a.second, b.second));
-						intermediate_code << ret.first << " = " << a.first << " "
-										<< "-"
-										<< " " << b.first << endl;
-						intermediate_code << "if ( " << ret.first << " = 0 ) jump " << switch_labels[count] << endl;
-						// branch to switch_labels[count] if $t0>0
-						conditioneq("t0", "t3", switch_labels[count]);
-					}
-					else
-					{
-						/* code */
 						loadInRegister(b.first, "f2", b.second);
 						operateFloat("-");
 						storeInMemory(ret.first, DatatypeCoercible(a.second, b.second));
@@ -611,6 +599,19 @@ public:
 						intermediate_code << "if ( " << ret.first << " = 0 ) jump " << switch_labels[count] << endl;
 						// branch to switch_labels[count] if $t0>0
 						conditioneq("f0", "f3", switch_labels[count]);
+					}
+					else
+					{
+						/* code */
+						loadInRegister(b.first, "t2", b.second);
+						operateInt("-");
+						storeInMemory(ret.first, DatatypeCoercible(a.second, b.second));
+						intermediate_code << ret.first << " = " << a.first << " "
+										<< "-"
+										<< " " << b.first << endl;
+						intermediate_code << "if ( " << ret.first << " = 0 ) jump " << switch_labels[count] << endl;
+						// branch to switch_labels[count] if $t0>0
+						conditioneq("t0", "t3", switch_labels[count]);
 					}
 					
 				}
@@ -803,7 +804,14 @@ public:
 			pair<string, DataType> a = generateCode(tree->child_1);
 			
 			// cout<<tree->child_1->getDataType()<<endl;
-			if(tree->child_1->getDataType()==1)
+			if(tree->child_1->getDataType()==2)
+			{
+				loadInRegister(a.first, "f0", a.second);
+				readCodeFloat("f0", a.first);
+				intermediate_code << "read " << a.first << endl;
+				return a;
+			}
+			else 
 			{
 				loadInRegister(a.first, "t1", a.second);
 				// cout<<a.second<<" "<<a.first<<endl;
@@ -812,13 +820,7 @@ public:
 				intermediate_code << "read " << a.first << endl;
 				return a;
 			}
-			else 
-			{
-				loadInRegister(a.first, "f0", a.second);
-				readCodeFloat("f0", a.first);
-				intermediate_code << "read " << a.first << endl;
-				return a;
-			}
+			
 			
 		}
 		else if (node_type == "print_output")
@@ -826,21 +828,22 @@ public:
 			pair<string, DataType> a = generateCode(tree->child_1);
 			
 			
-			if(tree->child_1->getDataType()==1)
+			if(tree->child_1->getDataType()==2)
+			{
+				// cout<<a.second<<" "<<a.first<<endl;
+				loadInRegister(a.first, "f0", a.second);
+				writeCodeFloat("f0");
+				intermediate_code << "write " << a.first << endl;
+				return a;
+			}
+			else 
 			{
 				loadInRegister(a.first, "t1", a.second);
 				writeCodeInt("t1");
 				intermediate_code << "write " << a.first << endl;
 				return a;
 			}
-			else 
-			{
-				cout<<a.second<<" "<<a.first<<endl;
-				loadInRegister(a.first, "f0", a.second);
-				writeCodeFloat("f0");
-				intermediate_code << "write " << a.first << endl;
-				return a;
-			}
+			
 		}
 		else if (node_type == "expression")
 		{
@@ -849,15 +852,15 @@ public:
 			{
 				pair<string, DataType> a = generateCode(tree->child_2);
 				b = generateCode(tree->child_1);
-				if(b.second==1)
+				if(b.second==2)
 				{
-					loadInRegister(a.first, "t0", a.second);
+					loadInRegister(a.first, "f0", a.second);
 					storeInMemory(b.first, b.second);
 					intermediate_code << b.first << " = " << a.first << endl;
 				}
 				else
 				{
-					loadInRegister(a.first, "f0", a.second);
+					loadInRegister(a.first, "t0", a.second);
 					storeInMemory(b.first, b.second);
 					intermediate_code << b.first << " = " << a.first << endl;
 				}
@@ -870,15 +873,15 @@ public:
 			}
 			pair<string, DataType> ret = getNextTempVar();
 			
-			if(b.second==1)
+			if(b.second==2)
 			{
-				loadInRegister(b.first, "t0", b.second);
+				loadInRegister(b.first, "f0", b.second);
 				storeInMemory(ret.first, b.second);
 				intermediate_code << ret.first << " = " << b.first << endl;
 			}
 			else
 			{
-				loadInRegister(b.first, "f0", b.second);
+				loadInRegister(b.first, "t0", b.second);
 				storeInMemory(ret.first, b.second);
 				intermediate_code << ret.first << " = " << b.first << endl;
 			}
@@ -895,7 +898,7 @@ public:
 				pair<string, DataType> b = generateCode(tree->child_1);
 				pair<string, DataType> ret = getNextTempVar();
 
-				if(a.second==2 || b.second==2 )
+				if(a.second==2 || b.second==2)
 				{
 					loadInRegister(b.first, "f1", b.second);
 					loadInRegister(a.first, "f2", a.second);
@@ -1014,13 +1017,15 @@ public:
 		{
 			if (tree->child_3 != NULL)
 			{
+				// cout<<tree->child_3->getValue()<<endl;
 				pair<string, DataType> a = generateCode(tree->child_3);
 				pair<string, DataType> b = generateCode(tree->child_1);
 				pair<string, DataType> c = generateCode(tree->child_2);
 				pair<string, DataType> ret = getNextTempVar();
-
+				// cout<<a.second<<" "<<b.second<<" "<<a.first<<" "<<b.first<<endl;
 				if(a.second==2 || b.second==2 || c.second==2)
 				{
+					// cout<<"A"<<endl;
 					loadInRegister(b.first, "f1", b.second);
 					loadInRegister(a.first, "f2", a.second);
 					operateFloat(c.first);
@@ -1084,6 +1089,7 @@ public:
 			}
 			else
 			{
+				// cout<<tree->child_1->getValue()<<endl;
 				return generateCode(tree->child_1);
 			}
 		}
@@ -1130,12 +1136,13 @@ public:
 		}
 		else if (node_type == "term")
 		{
+			cout<<"term"<<tree->child_1->getValue()<<endl;
 			return generateCode(tree->child_1);
 		}
 		else if (node_type == "constants")
 		{
+			cout<<"constants: "<<tree->getValue()<<" "<<tree->getDataType()<<endl;
 			return make_pair(tree->getValue(), tree->getDataType());
-			;
 		}
 		else if (node_type == "function_call")
 		{

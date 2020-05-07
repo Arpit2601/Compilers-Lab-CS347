@@ -26,6 +26,7 @@ int main()
 	{
 		int i;
 		ans = (-10);
+		// put(ans);
 		break;
 	}
 	}

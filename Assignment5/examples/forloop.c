@@ -7,7 +7,7 @@ int main()
     {
         int x = 10;
         put(x);
-        put(i);
+        // put(i);
     }
     return 0;
 }
