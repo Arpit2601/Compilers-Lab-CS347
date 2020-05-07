@@ -30,30 +30,17 @@ Compiler for a subset of C language
 
 * Logical Expressions involving '&&' and '||'
 
-* Relational operators : '>', '<', '>=', '<=', '==', '!='
+* Relational operators : '>', '<', '>=', '<=', '=='
 
 * Arithmatic operators : '+', '-', '*', '/', '%'
 
-* Unary Operators : '+', '-'
-
 * For Loop
-    int i;
-    for (i = 0; i < 5; i = i + 1)
-    {
-        int x = 10;
-        put(x);
-        // put(i);
-    }
 
 * While Loop
-    int i = 0;
-    while (i <= 10)
-    {
-        put(i);
-        i = i + 1;
-    }
 
-* Conditional statements
+* Conditional statements using if-else 
+
+* Conditional statements using switch-case
 
 * Nested code blocks
 
