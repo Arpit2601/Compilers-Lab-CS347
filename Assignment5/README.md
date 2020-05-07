@@ -1,6 +1,6 @@
 # Compiler For Mini C
 
-Compiler for a subset of C language 
+Compiler for a subset of **C language** 
 
 ## To generate Intermediate File and MIPS Code
 
@@ -10,9 +10,9 @@ Compiler for a subset of C language
 
 ## Output files after above procedure 
 
-intermediate.txt : Intermediate code for ./examples/test.c
+***intermediate.txt*** : Intermediate code for ./examples/test.c
 
-mips.s : MIPS code for ./examples/test.c
+***mips.s*** : MIPS code for ./examples/test.c
 
 
 ## To Execute MIPS code
@@ -21,7 +21,7 @@ mips.s : MIPS code for ./examples/test.c
 
 ## Features of the compiler 
 
-* Data types : void, int, float
+* Data types : *void, int, float*
 
 * Variable Declaration
 
@@ -39,16 +39,16 @@ mips.s : MIPS code for ./examples/test.c
 
 * Arithmatic operators : '+', '-', '*', '/', '%'
 
-* For Loop
+* *for* Loop
 
-* While Loop
+* *while* Loop
 
-* Conditional statements using if-else 
+* Conditional statements using *if-else* 
 
-* Conditional statements using switch-case
+* Conditional statements using *switch-case*
 
 * Nested code blocks
 
-* break in loops
+* *break* in loops
 
-* continue in loops
+* *continue* in loops
