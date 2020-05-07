@@ -101,7 +101,7 @@ public:
 			{
 				mips_1 << "lw\t$" << reg << ", " << var << endl;
 			}
-			else
+			else if(reg=="f0")
 			{
 				mips_1 << "l.s\t$" << reg << ", " << var << endl;
 			}

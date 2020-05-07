@@ -1,6 +1,18 @@
 main : 
-float x
-read x.float.1
-temp0 = x.float.1
-write temp0
+temp0 = 0
+int i = temp0
+label_0 : 
+temp1 = 10 <= i.int.1
+temp2 = temp1
+if ( temp2 > 0 ) jump label_1
+jump label_2
+label_1 : 
+temp3 = i.int.1
+write temp3
+temp4 = 1 + i.int.1
+temp5 = temp4
+i.int.1 = temp5
+temp6 = i.int.1
+jump label_0
+label_2 : 
 return
