@@ -2,17 +2,22 @@
 
 Compiler for a subset of C language 
 
-## How to run
+## To generate Intermediate File and MIPS Code
 
 	$ make
 
 	$ ./main < ./examples/test.c
 
-## Output files
+## Output files after above procedure 
 
-*intermediate.txt* : Intermediate code generated for the sample file
+intermediate.txt : Intermediate code generated for the sample file
 
-*mips.s* : MIPS Assembly code
+mips.s : MIPS Assembly code
+
+
+## To Execute MIPS code
+
+	$ spim -f mips.s
 
 ## Features of the compiler 
 
@@ -24,9 +29,9 @@ Compiler for a subset of C language
 
 * Function Declaration
 
-* Reading from console
+* Reading from terminal
 
-* Printing to console
+* Printing to terminal
 
 * Logical Expressions involving '&&' and '||'
 
