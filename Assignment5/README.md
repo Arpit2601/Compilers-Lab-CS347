@@ -10,9 +10,9 @@ Compiler for a subset of C language
 
 ## Output files after above procedure 
 
-intermediate.txt : Intermediate code generated for the sample file
+intermediate.txt : Intermediate code for ./examples/test.c
 
-mips.s : MIPS Assembly code
+mips.s : MIPS code for ./examples/test.c
 
 
 ## To Execute MIPS code
