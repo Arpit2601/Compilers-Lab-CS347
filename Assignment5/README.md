@@ -1,4 +1,4 @@
-# Compiler Final Submission
+# Compiler For Mini C
 
 Compiler for a subset of C language 
 
@@ -14,7 +14,7 @@ Compiler for a subset of C language
 
 *mips.s* : MIPS Assembly code
 
-## Features of the Language
+## Features of the compiler 
 
 * Data types : void, int, float
 
@@ -37,15 +37,26 @@ Compiler for a subset of C language
 * Unary Operators : '+', '-'
 
 * For Loop
+    int i;
+    for (i = 0; i < 5; i = i + 1)
+    {
+        int x = 10;
+        put(x);
+        // put(i);
+    }
 
 * While Loop
+    int i = 0;
+    while (i <= 10)
+    {
+        put(i);
+        i = i + 1;
+    }
 
 * Conditional statements
 
 * Nested code blocks
 
-* Explicit Scope specifiers
+* break in loops
 
-* breaks in loops
-
-* continues in loops
+* continue in loops
