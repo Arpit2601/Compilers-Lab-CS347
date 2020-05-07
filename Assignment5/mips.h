@@ -66,14 +66,23 @@ public:
 	void loadInRegister(string var, string reg, DataType type)
 	{
 		// check if var is variable (load word) or number (load immediate)
+		// cout<<var<<" "<<type<<endl;
 
-		if (var[0] <= '9' and var[0] >= '0') // if number
+		if (type==1 && var[0] <= '9' && var[0] >= '0') // if number
 		{
 			mips_1 << "li\t$" << reg << ", " << var << endl;
 		}
-		else if (var[0] == '-' and (var[1] <= '9' and var[1] >= '0'))
+		else if(type==2 && var[0] <= '9' && var[0] >= '0')
+		{
+			mips_1 << "li.s\t$" << reg << ", " << var << endl;
+		}
+		else if (type==1 && var[0] == '-' and (var[1] <= '9' and var[1] >= '0'))
 		{
 			mips_1 << "li\t$" << reg << ", " << var << endl;
+		}
+		else if(type==2 && var[0] == '-' and (var[1] <= '9' and var[1] >= '0'))
+		{
+			mips_1 << "li.s\t$" << reg << ", " << var << endl;
 		}
 		else if (var[0] == '\'')
 		{
@@ -88,7 +97,15 @@ public:
 		else
 		{ // variable name
 			var = "_" + var;
-			mips_1 << "lw\t$" << reg << ", " << var << endl;
+			if(reg=="t1")
+			{
+				mips_1 << "lw\t$" << reg << ", " << var << endl;
+			}
+			else
+			{
+				mips_1 << "l.s\t$" << reg << ", " << var << endl;
+			}
+			
 			for (std::vector<pair<string, DataType>>::iterator i = allVariables.begin(); i != allVariables.end(); ++i)
 			{
 				if (i->first == var)
@@ -101,7 +118,14 @@ public:
 	void storeInMemory(string var, DataType type)
 	{
 		var = "_" + var;
-		mips_1 << "sw\t$t0, " << var << endl;
+		if(type==1)
+		{
+			mips_1 << "sw\t$t0, " << var << endl;
+		}
+		else
+		{
+			mips_1 << "s.s\t$f0, " << var << endl;
+		}
 		for (std::vector<pair<string, DataType>>::iterator i = allVariables.begin(); i != allVariables.end(); ++i)
 		{
 			if (i->first == var)
@@ -135,19 +159,36 @@ public:
 		mips_1 << "move\t$v0, $" << reg << endl;
 	}
 
-	void readCode(string reg)
+	void readCodeInt(string reg, string var)
 	{
 		mips_1 << "li\t$v0, 5" << endl;
 		mips_1 << "syscall" << endl;
-		mips_1 << "sw\t$v0, $" << reg << endl;
+		mips_1 << "move\t$" << reg <<",$v0"<< endl;
+		mips_1 << "sw\t$t0,_" << var<<endl;
 	}
 
-	void writeCode(string reg)
+	void readCodeFloat(string reg, string var)
+	{
+		mips_1 << "li\t$v0, 6" << endl;
+		mips_1 << "syscall" << endl;
+		mips_1 << "mov.s\t$" << reg <<",$f0"<< endl;
+		mips_1 << "s.s\t$f0,_" << var<<endl;
+	}
+
+	void writeCodeInt(string reg)
 	{
 		mips_1 << "li\t$v0, 1" << endl;
 		mips_1 << "move\t$a0, $" << reg << endl;
 		mips_1 << "syscall" << endl;
 	}
+
+	void writeCodeFloat(string reg)
+	{
+		mips_1 << "li\t$v0, 2" << endl;
+		mips_1 << "mov.s\t$f12, $" << reg << endl;
+		mips_1 << "syscall" << endl;
+	}
+
 
 	void writeStringCode(string str_var)
 	{
@@ -198,7 +239,7 @@ public:
 		mips_1 << "sw\t$v0, _" << ret << endl;
 	}
 
-	void operate(string op)
+	void operateInt(string op)
 	{
 		if (op == "&&")
 		{
@@ -268,6 +309,76 @@ public:
 		}
 	}
 
+	void operateFloat(string op)
+	{
+		if (op == "&&")
+		{
+			mips_1 << "and\t$f0, $f1, $f2" << endl;
+		}
+		else if (op == "||")
+		{
+			mips_1 << "or\t$f0, $f1, $f2" << endl;
+		}
+		else if (op == "+")
+		{
+			mips_1 << "add\t$f0, $f1, $f2" << endl;
+		}
+		else if (op == "-")
+		{
+			mips_1 << "sub\t$f0, $f1, $f2" << endl;
+		}
+		else if (op == "*")
+		{
+			mips_1 << "mult\t$f1, $f2" << endl; // store the result in $LO
+			mips_1 << "mflo\t$f0" << endl;		// load the contents of $LO to $t0
+		}
+		else if (op == "/")
+		{
+			mips_1 << "div\t$f1, $f2" << endl;
+			mips_1 << "mflo\t$f0" << endl;
+		}
+		else if (op == "%")
+		{
+			mips_1 << "div\t$f1, $f2" << endl;
+			mips_1 << "mfhi\t$f0" << endl;
+		}
+		else if (op == ">=")
+		{
+			mips_1 << "slt\t$f3, $f1, $f2" << endl; // set t3 if t1 less than t2
+			mips_1 << "xori\t$f0, $f3, 1" << endl;	// compliment t3
+		}
+		else if (op == "<=")
+		{
+			mips_1 << "slt\t$f3, $f2, $f1" << endl; // set t3 if t2 less than t1
+			mips_1 << "xori\t$f0, $f3, 1" << endl;	// compliment t3
+		}
+		else if (op == ">")
+		{
+			mips_1 << "slt\t$f0, $f2, $f1" << endl; // set t0 if t2 less than t1
+		}
+		else if (op == "<")
+		{
+			mips_1 << "slt\t$f0, $f1, $f2" << endl;
+		}
+		else if (op == "==")
+		{
+			mips_1 << "slt\t$f3, $f1, $f2" << endl;
+			mips_1 << "slt\t$f4, $f2, $f1" << endl;
+			mips_1 << "or\t$f5, $f3, $f4" << endl;
+			mips_1 << "xori\t$f0, $f5, 1" << endl;
+		}
+		else if (op == "!=")
+		{
+			mips_1 << "slt\t$f3, $f1, $f2" << endl;
+			mips_1 << "slt\t$f4, $f2, $f1" << endl;
+			mips_1 << "or\t$f0, $f3, $f4" << endl;
+		}
+		else
+		{
+			cerr << "WRONG OPERATOR PASSED!";
+		}
+	}
+
 	pair<string, DataType> generateCode(AstNode *tree)
 	{
 		if (tree == NULL)
@@ -293,8 +404,18 @@ public:
 				{
 					symtab.add_variable_in_current_scope(vars[i], tree->child_1->getDataType());
 					intermediate_code << data_type_to_string[tree->child_1->getDataType()] << " " << vars[i] << endl;
-					loadInRegister("0", "t0", tree->child_1->getDataType());
-					storeInMemory(symtab.gen_mips(vars[i]), tree->child_1->getDataType());
+					if(tree->child_1->getDataType()==1)
+					{
+						loadInRegister("0", "t0", tree->child_1->getDataType());
+						storeInMemory(symtab.gen_mips(vars[i]), tree->child_1->getDataType());
+					}
+					else
+					{
+						loadInRegister("0.0", "f0", tree->child_1->getDataType());
+						storeInMemory(symtab.gen_mips(vars[i]), tree->child_1->getDataType());
+					}
+					
+					
 				}
 			}
 			else
@@ -304,14 +425,28 @@ public:
 				pair<string, DataType> exp = generateCode(tree->child_3);
 				intermediate_code << data_type_to_string[tree->child_1->getDataType()] << " " << tree->child_2->getValue() << " = " << exp.first << endl;
 				// store the expression register to the memory
-				loadInRegister(exp.first, "t0", exp.second);
-				storeInMemory(symtab.gen_mips(tree->child_2->getValue()), tree->child_1->getDataType());
+				cout<<exp.second<<" "<<exp.first<<endl;
+				if(tree->child_1->getDataType()==1)
+				{
+					loadInRegister(exp.first, "t0", _int);
+					storeInMemory(symtab.gen_mips(tree->child_2->getValue()), tree->child_1->getDataType());
+					return make_pair("", _int);
+				}
+				else
+				{
+					loadInRegister(exp.first, "f0", _float);
+					storeInMemory(symtab.gen_mips(tree->child_2->getValue()), tree->child_1->getDataType());
+					return make_pair("", _float);
+				}
+				
+				
 			}
-			return make_pair("", _int);
+			
 		}
 		else if (node_type == "variable")
 		{
 			// return name.type.scope
+			// cout<<tree->child_1->getDataType()<<endl;
 			return make_pair(symtab.gen_mips(tree->child_1->getValue()), tree->child_1->getDataType());
 		}
 		else if (node_type == "function_declaration")
@@ -450,15 +585,34 @@ public:
 				else
 				{
 					pair<string, DataType> b = generateCode(temp->child_1);
-					loadInRegister(b.first, "t2", b.second);
-					operate("-");
-					storeInMemory(ret.first, DatatypeCoercible(a.second, b.second));
-					intermediate_code << ret.first << " = " << a.first << " "
-									  << "-"
-									  << " " << b.first << endl;
-					intermediate_code << "if ( " << ret.first << " = 0 ) jump " << switch_labels[count] << endl;
-					// branch to switch_labels[count] if $t0>0
-					conditioneq("t0", "t3", switch_labels[count]);
+					if(b.second==1)
+					{
+
+					
+						loadInRegister(b.first, "t2", b.second);
+						operateInt("-");
+						storeInMemory(ret.first, DatatypeCoercible(a.second, b.second));
+						intermediate_code << ret.first << " = " << a.first << " "
+										<< "-"
+										<< " " << b.first << endl;
+						intermediate_code << "if ( " << ret.first << " = 0 ) jump " << switch_labels[count] << endl;
+						// branch to switch_labels[count] if $t0>0
+						conditioneq("t0", "t3", switch_labels[count]);
+					}
+					else
+					{
+						/* code */
+						loadInRegister(b.first, "f2", b.second);
+						operateFloat("-");
+						storeInMemory(ret.first, DatatypeCoercible(a.second, b.second));
+						intermediate_code << ret.first << " = " << a.first << " "
+										<< "-"
+										<< " " << b.first << endl;
+						intermediate_code << "if ( " << ret.first << " = 0 ) jump " << switch_labels[count] << endl;
+						// branch to switch_labels[count] if $t0>0
+						conditioneq("f0", "f3", switch_labels[count]);
+					}
+					
 				}
 				temp = temp->child_3;
 				count++;
@@ -647,18 +801,46 @@ public:
 		else if (node_type == "read_input")
 		{
 			pair<string, DataType> a = generateCode(tree->child_1);
-			loadInRegister(a.first, "t1", a.second);
-			readCode("t1");
-			intermediate_code << "read " << a.first << endl;
-			return a;
+			
+			// cout<<tree->child_1->getDataType()<<endl;
+			if(tree->child_1->getDataType()==1)
+			{
+				loadInRegister(a.first, "t1", a.second);
+				// cout<<a.second<<" "<<a.first<<endl;
+				// mips_1<<"debug";
+				readCodeInt("t0", a.first);
+				intermediate_code << "read " << a.first << endl;
+				return a;
+			}
+			else 
+			{
+				loadInRegister(a.first, "f0", a.second);
+				readCodeFloat("f0", a.first);
+				intermediate_code << "read " << a.first << endl;
+				return a;
+			}
+			
 		}
 		else if (node_type == "print_output")
 		{
 			pair<string, DataType> a = generateCode(tree->child_1);
-			loadInRegister(a.first, "t1", a.second);
-			writeCode("t1");
-			intermediate_code << "write " << a.first << endl;
-			return a;
+			
+			
+			if(tree->child_1->getDataType()==1)
+			{
+				loadInRegister(a.first, "t1", a.second);
+				writeCodeInt("t1");
+				intermediate_code << "write " << a.first << endl;
+				return a;
+			}
+			else 
+			{
+				cout<<a.second<<" "<<a.first<<endl;
+				loadInRegister(a.first, "f0", a.second);
+				writeCodeFloat("f0");
+				intermediate_code << "write " << a.first << endl;
+				return a;
+			}
 		}
 		else if (node_type == "expression")
 		{
@@ -667,19 +849,41 @@ public:
 			{
 				pair<string, DataType> a = generateCode(tree->child_2);
 				b = generateCode(tree->child_1);
-				loadInRegister(a.first, "t0", a.second);
-				storeInMemory(b.first, b.second);
-				intermediate_code << b.first << " = " << a.first << endl;
+				if(b.second==1)
+				{
+					loadInRegister(a.first, "t0", a.second);
+					storeInMemory(b.first, b.second);
+					intermediate_code << b.first << " = " << a.first << endl;
+				}
+				else
+				{
+					loadInRegister(a.first, "f0", a.second);
+					storeInMemory(b.first, b.second);
+					intermediate_code << b.first << " = " << a.first << endl;
+				}
+				
+				
 			}
 			else
 			{
 				b = generateCode(tree->child_1);
 			}
 			pair<string, DataType> ret = getNextTempVar();
-
-			loadInRegister(b.first, "t0", b.second);
-			storeInMemory(ret.first, b.second);
-			intermediate_code << ret.first << " = " << b.first << endl;
+			
+			if(b.second==1)
+			{
+				loadInRegister(b.first, "t0", b.second);
+				storeInMemory(ret.first, b.second);
+				intermediate_code << ret.first << " = " << b.first << endl;
+			}
+			else
+			{
+				loadInRegister(b.first, "f0", b.second);
+				storeInMemory(ret.first, b.second);
+				intermediate_code << ret.first << " = " << b.first << endl;
+			}
+			
+			
 
 			return ret;
 		}
@@ -691,14 +895,34 @@ public:
 				pair<string, DataType> b = generateCode(tree->child_1);
 				pair<string, DataType> ret = getNextTempVar();
 
-				loadInRegister(b.first, "t1", b.second);
-				loadInRegister(a.first, "t2", a.second);
-				operate("||");
-				storeInMemory(ret.first, _bool);
+				if(a.second==2 || b.second==2 )
+				{
+					loadInRegister(b.first, "f1", b.second);
+					loadInRegister(a.first, "f2", a.second);
+					operateFloat("||");
+					storeInMemory(ret.first, _bool);
+					intermediate_code << ret.first << " = " << a.first << " || " << b.first << endl;
+					return ret;
+				}
+				else
+				{
+					/* code */
+					loadInRegister(b.first, "t1", b.second);
+					loadInRegister(a.first, "t2", a.second);
+					operateInt("||");
+					storeInMemory(ret.first, _bool);
+					intermediate_code << ret.first << " = " << a.first << " || " << b.first << endl;
+					return ret;
+				}
 
-				intermediate_code << ret.first << " = " << a.first << " || " << b.first << endl;
+				// loadInRegister(b.first, "t1", b.second);
+				// loadInRegister(a.first, "t2", a.second);
+				// operateInt("||");
+				// storeInMemory(ret.first, _bool);
 
-				return ret;
+				// intermediate_code << ret.first << " = " << a.first << " || " << b.first << endl;
+
+				// return ret;
 			}
 			else
 			{
@@ -713,12 +937,32 @@ public:
 				pair<string, DataType> b = generateCode(tree->child_1);
 				pair<string, DataType> ret = getNextTempVar();
 
-				loadInRegister(b.first, "t1", b.second);
-				loadInRegister(a.first, "t2", a.second);
-				operate("&&");
-				storeInMemory(ret.first, _bool);
-				intermediate_code << ret.first << " = " << a.first << " && " << b.first << endl;
-				return ret;
+				if(a.second==2 || b.second==2)
+				{
+					loadInRegister(b.first, "f1", b.second);
+					loadInRegister(a.first, "f2", a.second);
+					operateFloat("&&");
+					storeInMemory(ret.first, _bool);
+					intermediate_code << ret.first << " = " << a.first << " && " << b.first << endl;
+					return ret;
+				}
+				else
+				{
+					/* code */
+					loadInRegister(b.first, "t1", b.second);
+					loadInRegister(a.first, "t2", a.second);
+					operateInt("&&");
+					storeInMemory(ret.first, _bool);
+					intermediate_code << ret.first << " = " << a.first << " && " << b.first << endl;
+					return ret;
+				}
+
+				// loadInRegister(b.first, "t1", b.second);
+				// loadInRegister(a.first, "t2", a.second);
+				// operate("&&");
+				// storeInMemory(ret.first, _bool);
+				// intermediate_code << ret.first << " = " << a.first << " && " << b.first << endl;
+				// return ret;
 			}
 			else
 			{
@@ -734,12 +978,32 @@ public:
 				pair<string, DataType> c = generateCode(tree->child_2);
 				pair<string, DataType> ret = getNextTempVar();
 
-				loadInRegister(b.first, "t1", b.second);
-				loadInRegister(a.first, "t2", a.second);
-				operate(c.first);
-				storeInMemory(ret.first, _bool);
-				intermediate_code << ret.first << " = " << a.first << " " << c.first << " " << b.first << endl;
-				return ret;
+				if(a.second==2 || b.second==2 || c.second==2)
+				{
+					loadInRegister(b.first, "f1", b.second);
+					loadInRegister(a.first, "f2", a.second);
+					operateFloat(c.first);
+					storeInMemory(ret.first, _bool);
+					intermediate_code << ret.first << " = " << a.first << " " << c.first << " " << b.first << endl;
+					return ret;
+				}
+				else
+				{
+					/* code */
+					loadInRegister(b.first, "t1", b.second);
+					loadInRegister(a.first, "t2", a.second);
+					operateInt(c.first);
+					storeInMemory(ret.first, _bool);
+					intermediate_code << ret.first << " = " << a.first << " " << c.first << " " << b.first << endl;
+					return ret;
+				}
+
+				// loadInRegister(b.first, "t1", b.second);
+				// loadInRegister(a.first, "t2", a.second);
+				// operate(c.first);
+				// storeInMemory(ret.first, _bool);
+				// intermediate_code << ret.first << " = " << a.first << " " << c.first << " " << b.first << endl;
+				// return ret;
 			}
 			else
 			{
@@ -755,12 +1019,27 @@ public:
 				pair<string, DataType> c = generateCode(tree->child_2);
 				pair<string, DataType> ret = getNextTempVar();
 
-				loadInRegister(b.first, "t1", b.second);
-				loadInRegister(a.first, "t2", a.second);
-				operate(c.first);
-				storeInMemory(ret.first, DatatypeCoercible(a.second, b.second));
-				intermediate_code << ret.first << " = " << a.first << " " << c.first << " " << b.first << endl;
-				return ret;
+				if(a.second==2 || b.second==2 || c.second==2)
+				{
+					loadInRegister(b.first, "f1", b.second);
+					loadInRegister(a.first, "f2", a.second);
+					operateFloat(c.first);
+					storeInMemory(ret.first, DatatypeCoercible(a.second, b.second));
+					intermediate_code << ret.first << " = " << a.first << " " << c.first << " " << b.first << endl;
+					return ret;
+				}
+				else
+				{
+					/* code */
+					loadInRegister(b.first, "t1", b.second);
+					loadInRegister(a.first, "t2", a.second);
+					operateInt(c.first);
+					storeInMemory(ret.first, DatatypeCoercible(a.second, b.second));
+					intermediate_code << ret.first << " = " << a.first << " " << c.first << " " << b.first << endl;
+					return ret;
+				}
+				
+				
 			}
 			else
 			{
@@ -776,12 +1055,32 @@ public:
 				pair<string, DataType> c = generateCode(tree->child_2);
 				pair<string, DataType> ret = getNextTempVar();
 
-				loadInRegister(b.first, "t1", b.second);
-				loadInRegister(a.first, "t2", a.second);
-				operate(c.first);
-				storeInMemory(ret.first, DatatypeCoercible(a.second, b.second));
-				intermediate_code << ret.first << " = " << a.first << " " << c.first << " " << b.first << endl;
-				return ret;
+				if(a.second==2 || b.second==2 || c.second==2)
+				{
+					loadInRegister(b.first, "f1", b.second);
+					loadInRegister(a.first, "f2", a.second);
+					operateFloat(c.first);
+					storeInMemory(ret.first, DatatypeCoercible(a.second, b.second));
+					intermediate_code << ret.first << " = " << a.first << " " << c.first << " " << b.first << endl;
+					return ret;
+				}
+				else
+				{
+					/* code */
+					loadInRegister(b.first, "t1", b.second);
+					loadInRegister(a.first, "t2", a.second);
+					operateInt(c.first);
+					storeInMemory(ret.first, DatatypeCoercible(a.second, b.second));
+					intermediate_code << ret.first << " = " << a.first << " " << c.first << " " << b.first << endl;
+					return ret;
+				}
+
+				// loadInRegister(b.first, "t1", b.second);
+				// loadInRegister(a.first, "t2", a.second);
+				// operate(c.first);
+				// storeInMemory(ret.first, DatatypeCoercible(a.second, b.second));
+				// intermediate_code << ret.first << " = " << a.first << " " << c.first << " " << b.first << endl;
+				// return ret;
 			}
 			else
 			{
@@ -797,12 +1096,32 @@ public:
 				pair<string, DataType> b = generateCode(tree->child_1);
 				pair<string, DataType> ret = getNextTempVar();
 
-				loadInRegister("0", "t1", _int);
-				loadInRegister(a.first, "t2", a.second);
-				operate(b.first);
-				storeInMemory(ret.first, DatatypeCoercible(a.second, b.second));
-				intermediate_code << ret.first << " = " << a.first << " " << b.first << " 0" << endl;
-				return make_pair(ret.first, ret.second);
+				if(a.second==2 || b.second==2 )
+				{
+					loadInRegister(b.first, "f1", b.second);
+					loadInRegister(a.first, "f2", a.second);
+					operateFloat(b.first);
+					storeInMemory(ret.first, DatatypeCoercible(a.second, b.second));
+					intermediate_code << ret.first << " = " << a.first << " " << b.first << " 0" << endl;
+					return ret;
+				}
+				else
+				{
+					/* code */
+					loadInRegister(b.first, "t1", b.second);
+					loadInRegister(a.first, "t2", a.second);
+					operateInt(b.first);
+					storeInMemory(ret.first, DatatypeCoercible(a.second, b.second));
+					intermediate_code << ret.first << " = " << a.first << " " << b.first << " 0" << endl;
+					return ret;
+				}
+
+				// loadInRegister("0", "t1", _int);
+				// loadInRegister(a.first, "t2", a.second);
+				// operate(b.first);
+				// storeInMemory(ret.first, DatatypeCoercible(a.second, b.second));
+				// intermediate_code << ret.first << " = " << a.first << " " << b.first << " 0" << endl;
+				// return make_pair(ret.first, ret.second);
 			}
 			else
 			{
@@ -828,16 +1147,16 @@ public:
 			//backup symbol table variables
 			// push the return address to stack
 			pushReturnCode();
-			cout << symtab.scope << endl;
-			cout << endl;
+			// cout << symtab.scope << endl;
+			// cout << endl;
 			symtab.printsymtable(symtab.scope);
 			// push the current register values to stack
 			vector<string> backvars = symtab.backup_symbol_table();
 			symtab.printsymtable(symtab.scope);
-			cout << symtab.scope << endl;
+			// cout << symtab.scope << endl;
 			for (int i = 0; i < backvars.size(); i++)
 			{
-				cout << "debug" << backvars[i] << endl;
+				// cout << "debug" << backvars[i] << endl;
 				pushCode("_" + backvars[i]);
 			}
 
@@ -857,7 +1176,7 @@ public:
 			for (int i = backvars.size() - 1; i >= 0; i--)
 			{
 				popCode("_" + backvars[i]);
-				cout << backvars[i] << endl;
+				// cout << backvars[i] << endl;
 			}
 			// pop back the return address from stack
 			symtab.restore_symbol_table(backvars);

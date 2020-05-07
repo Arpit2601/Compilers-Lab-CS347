@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #include "ast.h"
 
-#define DEBUG if (0)
+// #define DEBUG if (0)
 
 using namespace std;
 
