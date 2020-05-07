@@ -19,7 +19,7 @@ Compiler for a subset of **C language**
 
 	$ spim -f mips.s
 
-## Features of the compiler 
+## What we have implemented 
 
 * Data types : *void, int, float*
 
