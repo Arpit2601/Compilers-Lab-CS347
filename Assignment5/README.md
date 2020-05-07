@@ -1,18 +1,14 @@
-# Compiler
+# Compiler Final Submission
 
-Compiler for a C-like language. Converts the code to MIPS Assembly Language which can be run using SPIM.
+Compiler for a subset of C language 
 
 ## How to run
 
-	$ cd src
-
 	$ make
 
-	$ ./compiler < sample.c
+	$ ./main < ./examples/test.c
 
 ## Output files
-
-*tree.txt* : Parse Tree of the sample code
 
 *intermediate.txt* : Intermediate code generated for the sample file
 
@@ -20,7 +16,7 @@ Compiler for a C-like language. Converts the code to MIPS Assembly Language whic
 
 ## Features of the Language
 
-* Data types : void, int, float, bool, char, string
+* Data types : void, int, float
 
 * Variable Declaration
 
@@ -34,15 +30,13 @@ Compiler for a C-like language. Converts the code to MIPS Assembly Language whic
 
 * Logical Expressions involving '&&' and '||'
 
-* Relational operators : '>', '<', '>=', '<=', '==', '<>', '!='
+* Relational operators : '>', '<', '>=', '<=', '==', '!='
 
 * Arithmatic operators : '+', '-', '*', '/', '%'
 
 * Unary Operators : '+', '-'
 
 * For Loop
-
-* Foreach loop
 
 * While Loop
 
